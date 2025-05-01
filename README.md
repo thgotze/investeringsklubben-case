@@ -1,5 +1,7 @@
-Case: Investeringsklubben
-Gruppenavn: Osmans Disciple
+# Case: Investeringsklubben
 
-Gruppemedlemmer: Isak, Nikolaj, Oliver, Sebastian & Thor
-GitHubs: @Isak1525, @NikolajPedersen29, @CodeSpitterKea, @Sebastianvij, @Gotze
+**Gruppenavn:** Osmans Disciple
+
+**Gruppemedlemmer:** Isak, Nikolaj, Oliver, Sebastian & Thor
+
+**GitHubs:** @Isak1525, @NikolajPedersen29, @CodeSpitterKea, @Sebastianvij, @Gotze
