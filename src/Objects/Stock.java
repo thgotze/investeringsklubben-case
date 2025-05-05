@@ -90,6 +90,6 @@ public class Stock {
 
     @Override
     public String toString() {
-        return ("Detaljer:" + "\n " + name + "\n " + "" + sector + " " );
+        return ("Tickernavn: " + tickerName + "Navn: " + name + "Sektor: " + sector + "Pris: " + price + "Valuta: " + currency + "Udbytte: " + dividendYield + "Marked: " + market + "Sidst updateret: " + lastUpdated);
     }
 }
