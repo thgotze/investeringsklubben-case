@@ -8,12 +8,12 @@ public class Stock {
     private String sector;
     private double price;
     private Currency currency;
-    private String dividendYield;
+    private double dividendYield;
     private String market;
     private LocalDate lastUpdated;
 
     //Constructor
-    public Stock(String tickerName, String name, String sector, double price, Currency currency, String dividendYield, String market, LocalDate lastUpdated) {
+    public Stock(String tickerName, String name, String sector, double price, Currency currency, double dividendYield, String market, LocalDate lastUpdated) {
         this.tickerName = tickerName;
         this.name = name;
         this.sector = sector;
