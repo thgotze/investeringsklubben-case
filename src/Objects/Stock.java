@@ -24,5 +24,72 @@ public class Stock {
         this.lastUpdated = lastUpdated;
     }
 
+    public String getTickerName() {
+        return tickerName;
+    }
 
+    public void setTickerName(String tickerName) {
+        this.tickerName = tickerName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public String getDividendYield() {
+        return dividendYield;
+    }
+
+    public void setDividendYield(String dividendYield) {
+        this.dividendYield = dividendYield;
+    }
+
+    public String getMarket() {
+        return market;
+    }
+
+    public void setMarket(String market) {
+        this.market = market;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDate lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public String toString() {
+        return ("Detaljer:" + "\n " + name + "\n " + "" + sector + " " );
+    }
 }
