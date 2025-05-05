@@ -14,6 +14,6 @@ public class Transaction {
     private int quantity;
 
     public Transaction(int id, User user, LocalDate date, Stock stock, double price, Currency currency, String orderType, int quantity) {
-
+        
     }
 }
