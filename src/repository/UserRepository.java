@@ -15,11 +15,18 @@ public class UserRepository {
         List<User> users = new ArrayList<>();
 
         try {
-            File userFile = new File("src/files/users.csv");
-            Scanner reader = new Scanner(userFile);
+            File usersFile = new File("src/files/users.csv");
+            Scanner reader = new Scanner(usersFile);
 
+            boolean isFirstLine = true;
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
+
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+
                 String[] data = line.split(";");
 
                 try {
@@ -31,28 +38,16 @@ public class UserRepository {
                     LocalDate createdDate = LocalDate.parse(data[5].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     LocalDate lastUpdated = LocalDate.parse(data[6].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-                    // Since `admin` and `password` fields are not in the file, use defaults
-                    boolean admin = false; // Default value
-                    String password = ""; // Default empty password
-
-                    //                int userId = Integer.parseInt(data[0].trim());
-                    //                String fullName = data[1].trim();
-                    //                String email = data[2].trim();
-                    //                LocalDate birthDate = LocalDate.parse(data[3].trim());
-                    //                double initialCashDKK = Double.parseDouble(data[4].trim());
-                    //                LocalDate createdDate = LocalDate.parse(data[5].trim());
-                    //                LocalDate lastUpdated = LocalDate.parse(data[6].trim());
-                    //                boolean admin = Boolean.parseBoolean(data[7].trim());
-                    //                String password = data[8].trim();
+                    boolean admin = false;
+                    String password = "";
 
                     User user = new User(userId, fullName, email, birthDate, initialCashDKK, createdDate, lastUpdated, admin, password);
                     users.add(user);
 
-
                     // TODO: Temp debug besked
                     System.out.println("User: " + fullName + " added to list!");
-                }
-                catch (NumberFormatException e) {
+
+                } catch (NumberFormatException e) {
                     System.out.println("Could not read line " + line);
                 }
             }
