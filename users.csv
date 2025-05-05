@@ -1,0 +1,11 @@
+﻿user_id;full_name;email;birth_date;initial_cash_DKK;created_at;last_updated
+1;Maria Jensen;maria.jensen@email.com;12-04-1990;100000;01-03-2025;01-03-2025
+2;Lars Petersen;lars.p@email.com;19-07-1985;100000;02-03-2025;02-03-2025
+3;Jakob Madsen;jakob.madsen@email.com;03-11-1992;100000;03-03-2025;03-03-2025
+4;Sofie Sørensen;sofie.sorensen@email.com;27-02-1994;100000;04-03-2025;04-03-2025
+5;Anders Holm;anders.holm@email.com;22-05-1988;100000;05-03-2025;05-03-2025
+6;Camilla Kristensen;camilla.k@email.com;09-08-1995;100000;05-03-2025;05-03-2025
+7;Emil Thomsen;emil.thomsen@email.com;14-01-1983;100000;06-03-2025;06-03-2025
+8;Freja Østergaard;freja.ostergaard@email.com;02-12-1991;100000;06-03-2025;06-03-2025
+9;Malthe Lauridsen;malthe.l@email.com;25-09-1986;100000;07-03-2025;07-03-2025
+10;Ida Høeg;ida.hoeg@email.com;17-06-1993;100000;07-03-2025;07-03-2025
