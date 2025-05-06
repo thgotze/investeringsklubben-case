@@ -5,19 +5,19 @@ import java.time.LocalDate;
 public class Transaction {
 
     private int id;
-    private User user;
+    private int userId;
     private LocalDate date;
-    private Stock stock;
+    private String ticker;
     private double price;
-    private Currency currency;
+    private String currency;
     private String orderType;
     private int quantity;
 
-    public Transaction(int id, User user, LocalDate date, Stock stock, double price, Currency currency, String orderType, int quantity) {
+    public Transaction(int id, int userId, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
         this.id = id;
-        this.user = user;
+        this.userId = userId;
         this.date = date;
-        this.stock = stock;
+        this.ticker = ticker;
         this.price = price;
         this.currency = currency;
         this.orderType = orderType;
@@ -32,12 +32,12 @@ public class Transaction {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public LocalDate getDate() {
@@ -48,12 +48,12 @@ public class Transaction {
         this.date = date;
     }
 
-    public Stock getStock() {
-        return stock;
+    public String getTicker() {
+        return ticker;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
     }
 
     public double getPrice() {
@@ -64,11 +64,11 @@ public class Transaction {
         this.price = price;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
@@ -90,6 +90,6 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaktions ID: " + id + ", Bruger ID: " + user.getUserId() + ", Dato: " + date + ", Ticker: " + stock.getTickerName() + ", Valuta: " + currency.getQuoteCurrency() + ", Ordre type: " + orderType + ", Antal: " + quantity;
+        return "Transaktions ID: " + id + ", Bruger ID: " + userId + ", Dato: " + date + ", Ticker: " + ticker + ", Valuta: " + currency + ", Ordre type: " + orderType + ", Antal: " + quantity;
     }
 }

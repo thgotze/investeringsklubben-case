@@ -24,14 +24,12 @@ public class StockRepository {
                 String ticker = data1[0];
                 String name = data1[1];
                 String sector = data1[2].trim();
-                int price = Integer.parseInt(data1[3].trim());
+                double price = Double.parseDouble(data1[3].trim());
                 String currency = data1[4].trim();
                 String rating = data1[5].trim();
                 int dividendYield = Integer.parseInt(data1[6].trim());
                 String market = data1[7].trim();
                 LocalDate lastUpdated = LocalDate.parse(data1[8].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");

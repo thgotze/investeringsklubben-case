@@ -11,9 +11,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserRepository {
+    public static List<User> users = new ArrayList<>();
     public static void readUserFile() {
-        List<User> users = new ArrayList<>();
-
         try {
             File usersFile = new File("src/files/users.csv");
             Scanner reader = new Scanner(usersFile);
