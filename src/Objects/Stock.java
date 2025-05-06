@@ -64,11 +64,11 @@ public class Stock {
         this.currency = currency;
     }
 
-    public String getDividendYield() {
+    public double getDividendYield() {
         return dividendYield;
     }
 
-    public void setDividendYield(String dividendYield) {
+    public void setDividendYield(double dividendYield) {
         this.dividendYield = dividendYield;
     }
 
