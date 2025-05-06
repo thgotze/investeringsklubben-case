@@ -1,8 +1,6 @@
 package repository;
 
 import Objects.Transaction;
-import Objects.User;
-import service.UserService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,10 +12,8 @@ import java.util.Scanner;
 
 public class TransactionRepository {
 
-    public static List<Transaction> transactions = new ArrayList<>();
-
-    public static void readTransactionFile() {
-
+    public static List<Transaction> readTransactionFile() {
+        List<Transaction> transactions = new ArrayList<>();
         try {
             File transactionsFile = new File("src/files/transactions.csv");
             Scanner reader = new Scanner(transactionsFile);
@@ -37,7 +33,7 @@ public class TransactionRepository {
                     int userId = Integer.parseInt(data2[1].trim());
                     LocalDate transactionDate = LocalDate.parse(data2[2].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     String ticker = data2[3].trim();
-                    double pricePerStock = Double.parseDouble(data2[4].trim());
+                    double pricePerStock = Double.parseDouble(data2[4].trim().replace(",", "."));
                     String currency = data2[5].trim();
                     String orderType = data2[6].trim();
                     int quantity = Integer.parseInt(data2[7].trim());
@@ -45,14 +41,14 @@ public class TransactionRepository {
                     Transaction transaction = new Transaction(transactionId, userId, transactionDate, ticker, pricePerStock, currency, orderType, quantity);
                     transactions.add(transaction);
 
-                    System.out.println("Transaction: " + transaction.toString() + " added!");
+
                 } catch (NumberFormatException e) {
                     System.out.println("Could not read line " + line);
                 }
             }
-            System.out.println(transactions.size() + " total transactions read!");
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
         }
+        return transactions;
     }
 }

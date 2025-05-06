@@ -3,21 +3,23 @@ package Objects;
 import java.time.LocalDate;
 
 public class Stock {
-    private String tickerName;
+    private String ticker;
     private String name;
     private String sector;
     private double price;
-    private Currency currency;
+    private String rating;
+    private String currency;
     private double dividendYield;
     private String market;
     private LocalDate lastUpdated;
 
     //Constructor
-    public Stock(String tickerName, String name, String sector, double price, Currency currency, double dividendYield, String market, LocalDate lastUpdated) {
-        this.tickerName = tickerName;
+    public Stock(String ticker, String name, String sector, double price, String rating, String currency, double dividendYield, String market, LocalDate lastUpdated) {
+        this.ticker = ticker;
         this.name = name;
         this.sector = sector;
         this.price = price;
+        this.rating = rating;
         this.currency = currency;
         this.dividendYield = dividendYield;
         this.market = market;
@@ -25,11 +27,11 @@ public class Stock {
     }
 
     public String getTickerName() {
-        return tickerName;
+        return ticker;
     }
 
-    public void setTickerName(String tickerName) {
-        this.tickerName = tickerName;
+    public void setTickerName(String ticker) {
+        this.ticker = ticker;
     }
 
     public String getName() {
@@ -56,11 +58,19 @@ public class Stock {
         this.price = price;
     }
 
-    public Currency getCurrency() {
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
@@ -90,6 +100,6 @@ public class Stock {
 
     @Override
     public String toString() {
-        return ("Tickernavn: " + tickerName + "Navn: " + name + "Sektor: " + sector + "Pris: " + price + "Valuta: " + currency + "Udbytte: " + dividendYield + "Marked: " + market + "Sidst updateret: " + lastUpdated);
+        return ("Ticker: " + ticker + "Navn: " + name + "Sektor: " + sector + "Pris: " + price + "Rate: " + rating + "Valuta: " + currency + "Udbytte: " + dividendYield + "Marked: " + market + "Sidst updateret: " + lastUpdated);
     }
 }

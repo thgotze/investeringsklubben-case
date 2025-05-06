@@ -106,6 +106,11 @@ public class User implements Comparable<User>{
     }
 
     @Override
+    public String toString() {
+        return ("Fulde Navn: " + fullName + ", Email: " + email + ", Saldo: " + initialCashDKK);
+    }
+
+    @Override
     public int compareTo(User o) {
         return this.userId - o.getUserId();
     }

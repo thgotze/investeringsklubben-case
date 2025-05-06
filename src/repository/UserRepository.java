@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserRepository {
-    public static List<User> users = new ArrayList<>();
-    public static void readUserFile() {
+
+    public static List<User> readUsersFile() {
+        List<User> users = new ArrayList<>();
         try {
             File usersFile = new File("src/files/users.csv");
             Scanner reader = new Scanner(usersFile);
@@ -43,17 +44,14 @@ public class UserRepository {
                     User user = new User(userId, fullName, email, birthDate, initialCashDKK, createdDate, lastUpdated, admin, password);
                     users.add(user);
 
-                    // TODO: Temp debug besked
-                    System.out.println("User: " + fullName + " added to list!");
-
                 } catch (NumberFormatException e) {
                     System.out.println("Could not read line " + line);
                 }
             }
-            System.out.println(users.size() + " total users read!");
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
         }
+        return users;
     }
 }

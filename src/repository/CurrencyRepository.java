@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CurrencyRepository {
-    public static List<Currency> getAllCurrencies() {
-        List<Currency> currencies = new ArrayList<>();
 
+    public static List<Currency> readCurrencyFile() {
+        List<Currency> currencies = new ArrayList<>();
         try {
             File currencyFile = new File("src/files/currency.csv");
             Scanner reader = new Scanner(currencyFile);
@@ -40,27 +40,11 @@ public class CurrencyRepository {
 
                 } catch (NumberFormatException e) {
                     System.out.println("Kan ikke aflæse: " + line);
-
                 }
-
             }
-
         } catch (FileNotFoundException e) {
             System.out.println("Filen blev ikke fundet!");
         }
         return currencies;
     }
-
-
-
-    public static Currency findByBaseCurrency(String baseCurrency) {
-        for (Currency currency : getAllCurrencies()) {
-            if (currency.getBaseCurrency().equalsIgnoreCase(baseCurrency)) {
-                return currency;
-            }
-        }
-        return null;
-
-    }
-
 }
