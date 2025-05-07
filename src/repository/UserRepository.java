@@ -57,6 +57,11 @@ public class UserRepository {
     public static void addUserToFile(User user) {
         List<User> users = readUsersFile();
         users.add(user);
-        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv", true))) {
+            writer.newLine();
+            writer.write(user.toString());
+        } catch (IOException e) {
+            System.out.println("Failed to add user: " + e.getMessage());
+        }
     }
 }

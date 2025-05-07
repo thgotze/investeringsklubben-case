@@ -29,12 +29,22 @@ public class Controller {
         }
     }
 
-    public static void showMenu(User user, Scanner scanner) {
-        while (true) {
-            System.out.println("> 1. køb aktier");
-            if (user.isAdmin()) {
-                System.out.println("> 2. Sælg aktier");
-            }
+    public static void showMenu() {
+        System.out.println("           -*-*- THORNET -*-*-");
+        System.out.println("> 1. Se aktiemarkedet & Kurs");
+        System.out.println("> 2. Se min portefølje");
+        System.out.println("> 3. Køb/Sælg aktier ");
+        System.out.println("> 4. Se tidligere handler ");
+        System.out.println("> 0. Afslut program");
+
+
+//        For admin:
+//        System.out.println("> 5. Se brugernes porteføljeværdi");
+//        System.out.println("> 6. Se rangliste");
+//        System.out.println("> 7. Se fordeling af aktier & sektorer");
+//        System.out.println("> 0. Afslut program");
+
+
 
             userChoice(scanner, user);
         }

@@ -17,11 +17,19 @@ public class Main {
         // TODO: Køb Aktie - Skal rykkes videre til transaction history (Oliver)
         // TODO: Sælg Aktie - Skal rykkes videre til transaction history (Oliver)
 
-        //TODO:
+        User user = new User(50, "Peter", "Bastian", LocalDate.now(), 1.0, LocalDate.now(), LocalDate.now(), false, "1231312");
+        UserRepository.addUserToFile(user);
 
-        Controller.logIn(scanner);
-        List<Stock> stocks = StockRepository.readStockFile();
-        StockService.showTop10Stocks(stocks);
+        Currency currency = new Currency("EUR", "DKK", 1.21, LocalDate.now());
+        Transaction transaction = new Transaction(11, 56, LocalDate.now(), "APPL", 678.65,  currency, "KØB", 4);
+        TransactionRepository.addTransactionToFile(transaction);
+        List<Stock> stocks = sto
+        StockService.showWholeStockList();
+        Controller.logIn();
+
+
+
+
 
     }
 }
@@ -102,19 +110,5 @@ public class Main {
 //                System.out.println("Ugyldigt input! Prøv igen");
 //        }
 //        showMainMenu(scanner);
-//    }
-//
-//    public static void returnToMainMenuPrompt(Scanner scanner) {
-//        while (true) {
-//            System.out.println("> 0. Returner til hovedmenu");
-//            String input = scanner.nextLine();
-//
-//            if (input.equals("0")) {
-//                Main.showMainMenu(scanner);
-//                return;
-//            } else {
-//                System.out.println("Prøv igen");
-//            }
-//        }
 //    }
 //}
