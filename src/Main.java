@@ -17,7 +17,9 @@ public class Main {
         // TODO: Køb Aktie - Skal rykkes videre til transaction history (Oliver)
         // TODO: Sælg Aktie - Skal rykkes videre til transaction history (Oliver)
 
-        User user = new User(50, "Peter", "Bastian", LocalDate.now(), 1.0, LocalDate.now(), LocalDate.now(), false, "1231312");
+
+
+         User user = new User(50, "Peter", "Bastian", LocalDate.now(), 1.0, LocalDate.now(), LocalDate.now(), false, "1231312");
         UserRepository.addUserToFile(user);
 
         Currency currency = new Currency("EUR", "DKK", 1.21, LocalDate.now());
