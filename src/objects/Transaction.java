@@ -1,4 +1,4 @@
-package Objects;
+package objects;
 
 import java.time.LocalDate;
 
@@ -12,6 +12,7 @@ public class Transaction {
     private String currency;
     private String orderType;
     private int quantity;
+
 
     public Transaction(int id, int userId, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
         this.id = id;

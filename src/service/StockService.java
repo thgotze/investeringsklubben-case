@@ -1,10 +1,10 @@
 package service;
 
-import Objects.Stock;
+import objects.Stock;
 import repository.StockRepository;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class StockService {
@@ -37,4 +37,18 @@ public class StockService {
         return sectors;
     }
 
+    public static void showTop10Stocks (List<Stock> stocks) {
+        stocks.sort(Comparator.comparing(Stock::getPrice).reversed());
+        int limit = Math.min(stocks.size(), 10);
+        for (int i = 0; i < limit; i++) {
+            System.out.println(stocks.get(i));
+        }
+    }
+    public static void sellStock () {
+
+    }
+
+    public static void buyStock () {
+
+    }
 }

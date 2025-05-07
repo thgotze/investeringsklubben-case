@@ -1,7 +1,7 @@
 package repository;
 
-import Objects.Currency;
-import Objects.Stock;
+import objects.Currency;
+import objects.Stock;
 import service.CurrencyService;
 
 import java.io.File;
@@ -18,7 +18,7 @@ public class StockRepository {
         List<Stock> stocks = new ArrayList<>();
 
         try {
-            File stockFile = new File("src/files/stockMarket.csv");
+            File stockFile = new File("resources/stockMarket.csv");
             Scanner scanner = new Scanner(stockFile);
 
             boolean isFirstLine = true;
@@ -56,6 +56,5 @@ public class StockRepository {
                 System.out.println("File not found!");
             }
         return stocks;
-
     }
 }

@@ -1,6 +1,6 @@
 package service;
 
-import Objects.User;
+import objects.User;
 import repository.UserRepository;
 
 public class UserService {

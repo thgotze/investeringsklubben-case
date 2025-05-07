@@ -1,6 +1,6 @@
 package service;
 
-import Objects.Currency;
+import objects.Currency;
 import repository.CurrencyRepository;
 
 
@@ -14,6 +14,5 @@ public class CurrencyService {
         }
         return null;
     }
-
     // TODO: Tilføj valutaomregner
 }

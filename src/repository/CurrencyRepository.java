@@ -1,6 +1,6 @@
 package repository;
 
-import Objects.Currency;
+import objects.Currency;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ public class CurrencyRepository {
     public static List<Currency> readCurrencyFile() {
         List<Currency> currencies = new ArrayList<>();
         try {
-            File currencyFile = new File("src/files/currency.csv");
+            File currencyFile = new File("resources/currency.csv");
             Scanner reader = new Scanner(currencyFile);
 
             boolean isFirstLine = true;

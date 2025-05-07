@@ -1,6 +1,6 @@
 package repository;
 
-import Objects.User;
+import objects.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ public class UserRepository {
     public static List<User> readUsersFile() {
         List<User> users = new ArrayList<>();
         try {
-            File usersFile = new File("src/files/users.csv");
+            File usersFile = new File("resources/users.csv");
             Scanner reader = new Scanner(usersFile);
 
             boolean isFirstLine = true;
@@ -37,9 +37,8 @@ public class UserRepository {
                     double initialCashDKK = Double.parseDouble(data[4].trim());
                     LocalDate createdDate = LocalDate.parse(data[5].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     LocalDate lastUpdated = LocalDate.parse(data[6].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-
-                    boolean admin = false;
-                    String password = "";
+                    boolean admin = Boolean.parseBoolean(data[7]);
+                    String password = data[8].trim();
 
                     User user = new User(userId, fullName, email, birthDate, initialCashDKK, createdDate, lastUpdated, admin, password);
                     users.add(user);
@@ -53,5 +52,11 @@ public class UserRepository {
             System.out.println("File not found!");
         }
         return users;
+    }
+
+    public static void addUserToFile(User user) {
+        List<User> users = readUsersFile();
+        users.add(user);
+        
     }
 }

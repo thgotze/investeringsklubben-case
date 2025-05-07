@@ -1,6 +1,6 @@
 package repository;
 
-import Objects.Transaction;
+import objects.Transaction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ public class TransactionRepository {
     public static List<Transaction> readTransactionFile() {
         List<Transaction> transactions = new ArrayList<>();
         try {
-            File transactionsFile = new File("src/files/transactions.csv");
+            File transactionsFile = new File("resources/transactions.csv");
             Scanner reader = new Scanner(transactionsFile);
 
             boolean isFirstLine = true;

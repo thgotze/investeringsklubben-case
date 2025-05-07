@@ -1,4 +1,4 @@
-package Objects;
+package objects;
 
 import java.time.LocalDate;
 
@@ -100,6 +100,6 @@ public class Stock {
 
     @Override
     public String toString() {
-        return ("Ticker: " + ticker + "Navn: " + name + "Sektor: " + sector + "Pris: " + price + "Rate: " + rating + "Valuta: " + currency.getBaseCurrency() + "Udbytte: " + dividendYield + "Marked: " + market + "Sidst updateret: " + lastUpdated);
+        return ("Ticker: " + ticker + " Navn: " + name + " Sektor: " + sector + " Pris: " + price + " Rate: " + rating + " Valuta: " + currency.getBaseCurrency() + " Udbytte: " + dividendYield + " Marked: " + market + " Sidst updateret: " + lastUpdated);
     }
 }
