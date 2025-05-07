@@ -36,11 +36,11 @@ public class Controller {
                 System.out.println("> 2. Sælg aktier");
             }
 
-            userChoice(scanner);
+            userChoice(scanner, user);
         }
     }
 
-    public static void userChoice(Scanner scanner) {
+    public static void userChoice(Scanner scanner, User user) {
         int input = scanner.nextInt();
         switch (input) {
             case 1:
@@ -49,7 +49,12 @@ public class Controller {
                 break;
 
             case 2:
-                System.out.println("Nu sælger du aktier");
+                if (user.isAdmin()) {
+                    System.out.println("Nu sælger du aktier");
+                } else {
+                    System.out.println("Ugyldigt input");
+                }
+                break;
         }
     }
 }
