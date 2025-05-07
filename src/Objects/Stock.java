@@ -8,13 +8,13 @@ public class Stock {
     private String sector;
     private double price;
     private String rating;
-    private String currency;
+    private Currency currency;
     private double dividendYield;
     private String market;
     private LocalDate lastUpdated;
 
     //Constructor
-    public Stock(String ticker, String name, String sector, double price, String rating, String currency, double dividendYield, String market, LocalDate lastUpdated) {
+    public Stock(String ticker, String name, String sector, double price, String rating, Currency currency, double dividendYield, String market, LocalDate lastUpdated) {
         this.ticker = ticker;
         this.name = name;
         this.sector = sector;
@@ -66,11 +66,11 @@ public class Stock {
         this.rating = rating;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
@@ -100,6 +100,6 @@ public class Stock {
 
     @Override
     public String toString() {
-        return ("Ticker: " + ticker + "Navn: " + name + "Sektor: " + sector + "Pris: " + price + "Rate: " + rating + "Valuta: " + currency + "Udbytte: " + dividendYield + "Marked: " + market + "Sidst updateret: " + lastUpdated);
+        return ("Ticker: " + ticker + "Navn: " + name + "Sektor: " + sector + "Pris: " + price + "Rate: " + rating + "Valuta: " + currency.getBaseCurrency() + "Udbytte: " + dividendYield + "Marked: " + market + "Sidst updateret: " + lastUpdated);
     }
 }

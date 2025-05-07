@@ -12,8 +12,8 @@ import service.TransactionService;
 public class Main {
     public static void main(String[] args) {
 
-        for (Transaction transaction : TransactionService.findAllByUserId(2)) {
-            System.out.println(transaction);
+        for (Stock stock : StockRepository.readStockFile()) {
+            System.out.println(stock);
         }
 
     }
