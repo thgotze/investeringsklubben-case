@@ -44,7 +44,14 @@ public class StockService {
             System.out.println(stocks.get(i));
         }
     }
+    public static void showWholeStockList (List<Stock> stocks) {
+        for (Stock stock : stocks) {
+            System.out.println(stocks.get(stocks.size()));
+        }
+    }
+
     public static void sellStock () {
+
 
     }
 

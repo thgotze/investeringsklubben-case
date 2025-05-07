@@ -9,12 +9,12 @@ public class Transaction {
     private LocalDate date;
     private String ticker;
     private double price;
-    private String currency;
+    private Currency currency;
     private String orderType;
     private int quantity;
 
 
-    public Transaction(int id, int userId, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
+    public Transaction(int id, int userId, LocalDate date, String ticker, double price, Currency currency, String orderType, int quantity) {
         this.id = id;
         this.userId = userId;
         this.date = date;
@@ -65,11 +65,11 @@ public class Transaction {
         this.price = price;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

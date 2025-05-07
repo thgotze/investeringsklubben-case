@@ -13,18 +13,21 @@ import java.util.List;
 
 public class TransactionService {
 
-    public static void createTransaction(Stock stock, User user, Currency currency, int , int quantity) {
+    public static void createTransaction(Stock stock, User user, Currency currency, String orderType, int quantity) {
 
         // vi snakker om når man har valgt om man vil købe eller sælge stock om det skal være en
         // boolean eller int eller hvad det skal være
         int transactionId = TransactionRepository.readTransactionFile().getLast().getId() + 1;
         int userId = user.getUserId();
         LocalDate date = LocalDate.now();
-        String ticker =
+        String ticker = stock.getTickerName();
+        double price = stock.getPrice();
+
+        Transaction transaction = new Transaction(transactionId, userId, date, ticker, price, currency, orderType, quantity);
+
 
 //        Transaction(int transactionId, int userId, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
 
-        Transaction transaction = new Transaction(transactionId, user.getUserId(), LocalDateTime.now(), stock.getTickerName(), stock.getPrice(), currency, orderType, quantity);
 
         // id = counter bullshit (Ikke user input)
         // user_id = får user id'et på den der er logget ind (Ikke user input)

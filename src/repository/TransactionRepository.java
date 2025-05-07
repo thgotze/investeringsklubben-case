@@ -1,9 +1,10 @@
 package repository;
 
+import objects.Currency;
 import objects.Transaction;
+import objects.User;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TransactionRepository {
                     LocalDate transactionDate = LocalDate.parse(data2[2].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
                     String ticker = data2[3].trim();
                     double pricePerStock = Double.parseDouble(data2[4].trim().replace(",", "."));
-                    String currency = data2[5].trim();
+                    Currency currency = new Currency(data2[5].trim(), "DKK", 10515.20, LocalDate.now()); // TODO: Fix denne linje senere
                     String orderType = data2[6].trim();
                     int quantity = Integer.parseInt(data2[7].trim());
 
@@ -50,5 +51,17 @@ public class TransactionRepository {
             System.out.println("File not found!");
         }
         return transactions;
+    }
+
+
+    public static void addTransactionToFile(Transaction transaction) {
+        List<Transaction> transactions = readTransactionFile();
+        transactions.add(transaction);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/transactions.csv", true))) {
+            writer.newLine();
+            writer.write(transaction.toString());
+        } catch (IOException e) {
+            System.out.println("Failed to add transaction: " + e.getMessage());
+        }
     }
 }

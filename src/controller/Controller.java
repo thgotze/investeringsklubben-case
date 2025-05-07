@@ -1,30 +1,39 @@
 package controller;
 
 import objects.User;
-import org.w3c.dom.ls.LSOutput;
 import service.UserService;
 
 import java.util.Scanner;
 
 public class Controller {
 
-    public static void logIn(Scanner scanner) {
+    public static void logIn() {
+        Scanner scanner = new Scanner(System.in);
+
+        User user;
+        String name;
+        String password;
+
         while (true) {
             System.out.println("Indtast fulde navn:");
-            String name = scanner.nextLine();
-            User user = UserService.findByFullName(name);
+            name = scanner.nextLine();
+            user = UserService.findByFullName(name);
             if (user == null) {
                 System.out.println("Bruger ikke fundet, prøv igen! ");
             } else {
-                System.out.println("Indtast adgangskode: ");
-                String password = scanner.nextLine();
+                break;
+            }
+        }
 
-                if (password.equals(user.getPassword())) {
-                    showMenu(user, scanner);
-                    break;
-                } else {
-                    System.out.println("Forkert adgangskode! Prøv igen.");
-                }
+        while (true) {
+            System.out.println("Indtast adgangskode: ");
+            password = scanner.nextLine();
+
+            if (password.equals(user.getPassword())) {
+                showMenu();
+                break;
+            } else {
+                System.out.println("Forkert adgangskode! Prøv igen.");
             }
         }
     }
@@ -46,11 +55,10 @@ public class Controller {
 
 
 
-            userChoice(scanner, user);
         }
-    }
 
-    public static void userChoice(Scanner scanner, User user) {
+    public static void handleUserChoice(Scanner scanner, User user) {
+
         int input = scanner.nextInt();
         switch (input) {
             case 1:
@@ -61,8 +69,6 @@ public class Controller {
             case 2:
                 if (user.isAdmin()) {
                     System.out.println("Nu sælger du aktier");
-                } else {
-                    System.out.println("Ugyldigt input");
                 }
                 break;
 

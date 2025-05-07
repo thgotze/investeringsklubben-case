@@ -1,19 +1,19 @@
 import controller.Controller;
+import objects.Currency;
 import objects.Stock;
-import repository.StockRepository;
+import objects.Transaction;
+import objects.User;
+import repository.TransactionRepository;
+import repository.UserRepository;
 import service.StockService;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        // TODO: Login funktion (Isak)
-        // TODO: Opret bruger funktion (Nikolaj)
-        // TODO: Tilføje linjer til users og transactions filerne (Thor)
-        // TODO: Vis top 10 aktier (Oliver) DONE.
+        // TODO: Admin opret bruger funktion (Nikolaj)
         // TODO: Køb Aktie - Skal rykkes videre til transaction history (Oliver)
         // TODO: Sælg Aktie - Skal rykkes videre til transaction history (Oliver)
 
@@ -33,13 +33,7 @@ public class Main {
 
     }
 }
-
-//    public class Main {
-//        public static void main(String[] args) {
-//        Scanner scanner = new Scanner(System.in);
-//        showMainMenu(scanner);
-//    }
-//    
+//
 //    // Kører i ring for evigt. Stoppes først når man afslutter programmet '0'
 //    public static void showMainMenu(Scanner scanner) {
 //          System.out.println("           -*-*- THORNET -*-*-");
