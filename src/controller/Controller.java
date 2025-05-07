@@ -41,6 +41,15 @@ public class Controller {
     }
 
     public static void userChoice(Scanner scanner) {
+        int input = scanner.nextInt();
+        switch (input) {
+            case 1:
+                System.out.println("Nu køber du aktier");
 
+                break;
+
+            case 2:
+                System.out.println("Nu sælger du aktier");
+        }
     }
 }

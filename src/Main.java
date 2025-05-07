@@ -1,3 +1,4 @@
+import controller.Controller;
 import objects.Stock;
 import repository.StockRepository;
 import service.StockService;
@@ -18,7 +19,7 @@ public class Main {
 
         //TODO:
 
-       // Controller.logIn(scanner);
+        Controller.logIn(scanner);
         List<Stock> stocks = StockRepository.readStockFile();
         StockService.showTop10Stocks(stocks);
 
