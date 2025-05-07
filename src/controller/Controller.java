@@ -55,6 +55,9 @@ public class Controller {
                     System.out.println("Ugyldigt input");
                 }
                 break;
+
+            default:
+                System.out.println("Ugyldigt input");
         }
     }
 }
