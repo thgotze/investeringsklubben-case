@@ -30,6 +30,7 @@ public class Controller {
             System.out.println("> 5. Se brugernes porteføljeværdi");
             System.out.println("> 6. Se rangliste");
             System.out.println("> 7. Se fordeling af aktier & sektorer");
+            System.out.println("> 8. Tilføj bruger");
         }
         System.out.println("> 0. Afslut program");
 
@@ -46,11 +47,11 @@ public class Controller {
                 return;
 
             case "2": // Se min portefølje
-                TransactionService.showPortfolio(user);
+                // TransactionService.showPortfolio(user);
                 break;
 
             case "3": // Køb/Sælg aktier
-                TransactionService.createTransaction();
+                // TransactionService.createTransaction();
                 break;
 
             case "4": // Se tidligere handler
@@ -70,6 +71,11 @@ public class Controller {
             case "7": // Se foredeling af aktier & sektorer
                 if (!user.isAdmin()) {
                     break;
+                }
+
+            case "8":
+                if (user.isAdmin()) {
+                    UserService.addUser(scanner);
                 }
 
             default:

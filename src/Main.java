@@ -23,19 +23,7 @@ public class Main {
         // TODO: Lave menuen der dukker op i konsollen, som viser brugeren valgmuligheder
         // TODO: Omregne valuta i bruger saldo
         
-        
-        User user = new User(50, "Peter", "Bastian", LocalDate.now(), 1.0, LocalDate.now(), LocalDate.now(), false, "1231312");
-        UserRepository.addUserToFile(user);
-        Currency currency = new Currency("EUR", "DKK", 1.21, LocalDate.now());
-        Transaction transaction = new Transaction(11, 50, LocalDate.now(), "NOVO-B", 678.65,  currency, "KØB", 4);
-        TransactionRepository.addTransactionToFile(transaction);
-
-        
-        
-        //Controller.startProgram();
-        User mariaJensenTest = UserService.findByFullName("Maria Jensen");
-        TransactionService.showPortfolio(mariaJensenTest);
-
+        Controller.startProgram();
 
 
 

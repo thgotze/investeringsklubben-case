@@ -3,10 +3,10 @@ package service;
 import objects.User;
 import repository.UserRepository;
 
-import java.time.YearMonth;
-import java.util.List;
-import java.util.Scanner;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class UserService {
     public static User logIn(Scanner scanner) {
@@ -37,32 +37,13 @@ public class UserService {
         return user;
     }
 
-    public static void updateUserBalance(int userId, double amount, String transactionType) {
-        List<User> users = UserRepository.getUsersFromFile();
-
-        for (User user : users) {
-            if (user.getUserId() == userId) {
-                if ("BUY".equalsIgnoreCase(transactionType)) {
-                    user.setInitialCashDKK(user.getInitialCashDKK() - amount);
-                } else if ("SELL".equalsIgnoreCase(transactionType)) {
-                    user.setInitialCashDKK(user.getInitialCashDKK() + amount);
-                }
-
-                UserRepository.addUserToFile(user);
-                return;
-            }
-        }
-        throw new RuntimeException("User not found with ID: " + userId);
-    }
-
 
     public static User findUserById(int userId) {
         for (User user : UserRepository.getUsersFromFile()) {
             if (user.getUserId() == userId) {
                 return user;
             }
-        }
-        return null;
+        } return null;
     }
 
     public static User findByFullName(String fullName) {
@@ -120,7 +101,7 @@ public class UserService {
         }
 
 
-        boolean admin;
+        boolean admin = false;
         while (true) {
             try {
                 System.out.println("Angiv om brugeren er admin, eller normal bruger:");
@@ -129,19 +110,35 @@ public class UserService {
                 int input = Integer.parseInt(scanner.nextLine());
 
                 switch (input) {
-                    case 1: admin = false;
+                    case 1:
+                        admin = false;
                         break;
 
                         case 2: admin = true;
                             break;
-
+                            
                             default:
-                            System.out.println("Ugyldigt input! prøv igen");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Ugyldigt input! prøv igen");
             }
             break;
         }
+
+        System.out.println("Angiv adgangskode hos brugren");
+        String password = scanner.nextLine();
+
+        int userId = UserRepository.getUsersFromFile().getLast().getUserId() + 1;
+        double initialSaldo = 100000.0;
+        LocalDate createdDate = LocalDate.now();
+        LocalDate lastUpdated = LocalDate.now();
+
+
+        User user = new User(userId, fullName, email, birthDay, initialSaldo, createdDate,lastUpdated, admin, password);
+        UserRepository.addUserToFile(user);
+        System.out.println(userId + " " + fullName + " " + email + " " + birthDay + " " + initialSaldo + " " + createdDate + " " + lastUpdated + " " + admin + " " + password);
+        System.out.println(user.getFullName() + " er blevet tilføjet til programmet");
     }
+
+
 }

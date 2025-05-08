@@ -53,7 +53,7 @@ public class UserRepository {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv", true))) {
             writer.newLine();
-            writer.write(user.toString());
+            writer.write(user.getUserId() + ";" + user.getFullName() + ";" + user.getEmail() + ";" + user.getBirthDate() + ";" + user.getInitialCashDKK() + ";" + user.getCreatedDate() + ";" + user.getLastUpdated() + ";" + user.isAdmin() + ";" + user.getPassword());
         } catch (IOException e) {
             System.out.println("Failed to add user: " + e.getMessage());
         }

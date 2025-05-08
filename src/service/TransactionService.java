@@ -17,20 +17,20 @@ public class TransactionService {
             System.out.println("Hvad");
         }
 
-        Transaction transaction = new Transaction()
-        List<Transaction> transactions = TransactionRepository.readTransactionFile();
+        // Transaction transaction = new Transaction()
+        // List<Transaction> transactions = TransactionRepository.readTransactionFile();
 
         // Genererer nyt ID
-        int newId = TransactionRepository.readTransactionFile().isEmpty() ? 1 :
-                transactions.getLast().getId() + 1;
-        transaction.setId(newId);
+       //  int newId = TransactionRepository.readTransactionFile().isEmpty() ? 1 :
+               //  transactions.getLast().getId() + 1;
+        // transaction.setId(newId);
 
-        transactions.add(transaction);
-        TransactionRepository.addTransactionToFile(transaction);
+        // transactions.add(transaction);
+        // TransactionRepository.addTransactionToFile(transaction);
 
         // Opdater brugerbalance
-        double amount = transaction.getPrice() * transaction.getQuantity();
-        UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
+        // double amount = transaction.getPrice() * transaction.getQuantity();
+        // UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
     }
 
     public static Transaction findById(int id) {
