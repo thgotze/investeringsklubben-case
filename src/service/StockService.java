@@ -9,7 +9,7 @@ import java.util.List;
 
 public class StockService {
 
-    public static Stock findByTicker (String ticker) {
+    public static Stock findByTicker(String ticker) {
         for (Stock stock : StockRepository.readStockFile()) {
             if (stock.getTickerName().equalsIgnoreCase(ticker)) {
                 return stock;
@@ -18,7 +18,7 @@ public class StockService {
         return null;
     }
 
-    public static Stock findByName (String name) {
+    public static Stock findByName(String name) {
         for (Stock stock : StockRepository.readStockFile()) {
             if (stock.getName().equalsIgnoreCase(name)) {
                 return stock;
@@ -27,7 +27,7 @@ public class StockService {
         return null;
     }
 
-    public static List<Stock> findAllBySector (String sector) {
+    public static List<Stock> findAllBySector(String sector) {
         List<Stock> sectors = new ArrayList<>();
         for (Stock stock : StockRepository.readStockFile()) {
             if (stock.getSector().equalsIgnoreCase(sector)) {
@@ -37,7 +37,7 @@ public class StockService {
         return sectors;
     }
 
-    public static void showTop10Stocks (List<Stock> stocks) {
+    public static void showTop10Stocks(List<Stock> stocks) {
         stocks.sort(Comparator.comparing(Stock::getPrice).reversed());
         int limit = Math.min(stocks.size(), 10);
         for (int i = 0; i < limit; i++) {

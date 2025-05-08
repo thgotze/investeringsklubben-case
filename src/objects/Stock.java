@@ -98,8 +98,8 @@ public class Stock {
         this.lastUpdated = lastUpdated;
     }
 
-    @Override
-    public String toString() {
-        return ("Ticker: " + ticker + " Navn: " + name + " Sektor: " + sector + " Pris: " + price + " Rate: " + rating + " Valuta: " + currency.getBaseCurrency() + " Udbytte: " + dividendYield + " Marked: " + market + " Sidst updateret: " + lastUpdated);
-    }
+//    @Override
+//    public String toString() {
+//        return ticker + ;
+//    }
 }

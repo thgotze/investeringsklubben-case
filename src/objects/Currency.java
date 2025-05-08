@@ -8,7 +8,7 @@ public class Currency {
     private double rate;
     private LocalDate lastUpdated;
 
-    //Constructor
+    // Constructor
     public Currency(String baseCurrency, String quoteCurrency, double rate, LocalDate lastUpdated) {
         this.baseCurrency = baseCurrency;
         this.quoteCurrency = quoteCurrency;

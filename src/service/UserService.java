@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class UserService {
-    public static User logIn(Scanner scanner) {
 
+    public static User logIn(Scanner scanner) {
         User user;
         while (true) {
             System.out.println("Indtast fulde navn:");

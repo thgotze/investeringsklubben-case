@@ -3,11 +3,10 @@ package service;
 import objects.Stock;
 import objects.Transaction;
 import objects.User;
+import repository.StockRepository;
 import repository.TransactionRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class TransactionService {
 
@@ -33,7 +32,7 @@ public class TransactionService {
         // UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
     }
 
-    public static Transaction findById(int id) {
+    public static Transaction findTransactionById(int id) {
         for (Transaction transaction : TransactionRepository.readTransactionFile()) {
             if (transaction.getId() == id) {
                 return transaction;
@@ -42,82 +41,73 @@ public class TransactionService {
         return null;
     }
 
-    public static List<Transaction> findAllByUserId(int userId) {
-        List<Transaction> transactionsByUserId = new ArrayList<>();
+    public static List<Transaction> findAllTransactionsForUser(User user) {
+        int userId = user.getUserId();
+
+        List<Transaction> transactionsForUser = new ArrayList<>();
         for (Transaction transaction : TransactionRepository.readTransactionFile()) {
             if (transaction.getUserId() == userId) {
-                transactionsByUserId.add(transaction);
+                transactionsForUser.add(transaction);
             }
         }
-        return transactionsByUserId;
+        return transactionsForUser;
+    }
+
+    public static List<Transaction> findTransactionsWithSameTicker(List<Transaction> transactions, String ticker) {
+        List<Transaction> sameTickerTransactions = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            if (transaction.getTicker().equals(ticker)) {
+                sameTickerTransactions.add(transaction);
+            }
+        }
+        return sameTickerTransactions;
+    }
+
+
+    public static void showPortfolio(User user) {
+        // Retrieve all transactions for the user
+        List<Transaction> userTransactions = findAllTransactionsForUser(user);
+
+        // If there are no transactions, return early
+        if (userTransactions.isEmpty()) {
+            System.out.println("No transactions found for the user.");
+            return;
+        }
+
+        // Map to hold aggregated portfolio data
+        // Key: Ticker, Value: Net Quantity
+        Map<String, Integer> portfolio = new HashMap<>();
+
+        // Iterate over user transactions
+        for (Transaction transaction : userTransactions) {
+            String ticker = transaction.getTicker(); // e.g., NOVO-B
+            int quantity = transaction.getQuantity(); // Quantity of the transaction
+
+            // Get the order type: buy or sell
+            String orderType = transaction.getOrderType();
+
+            // Update portfolio based on order type
+            if (orderType.equals("buy")) {
+                portfolio.put(ticker, portfolio.getOrDefault(ticker, 0) + quantity);
+            } else if (orderType.equals("sell")) {
+                portfolio.put(ticker, portfolio.getOrDefault(ticker, 0) - quantity);
+            }
+        }
+
+        // Display the portfolio
+        System.out.println("Portfolio for " + user.getFullName() + ":");
+        double totalValue = 0.0;
+        for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
+            String ticker = entry.getKey();
+            int netQuantity = entry.getValue();
+
+            // Only display stocks with a positive quantity
+            if (netQuantity > 0) {
+                double value = StockService.findByTicker(ticker).getPrice() * netQuantity;
+                totalValue += value;
+                System.out.println("Ticker: " + ticker + ", Quantity: " + netQuantity);
+            }
+        }
+        System.out.println("Total Værdi: " + totalValue);
     }
 }
-
-    //public static void showPortfolio(User user) {
-    //        List<Transaction> userTransactions = findAllByUserId(user.getUserId());
-    //        double totalvalue = 0.0;
-    //
-    //        System.out.println("\n--- DIN PORTEFØLJE ---");
-    //        System.out.printf("%-10s %-10s %-10s %-10s%n", "Aktie", "Antal", "Pris", "Værdi");
-    //
-    //        List<String> uniqueTickers = new ArrayList<>();
-    //        for (Transaction transaction : userTransactions) {
-    //            Stock stock = StockService.findByTicker(transaction.getTicker());
-    //            double currentvalue = stock.getPrice() * transaction.getQuantity();
-    //            totalvalue += currentvalue;
-    //
-    //
-    //        }
-    //
-    //    }
-
-
-
-
-
-    // // Valider input
-    //    if (stock == null || user == null || currency == null ||
-    //        !(orderType.equalsIgnoreCase("BUY") && !(orderType.equalsIgnoreCase("SELL"))) {
-    //        throw new IllegalArgumentException("Ugyldigt transaktionsinput");
-    //    }
-    //
-    //    // Beregn transaktionsværdi
-    //    double transactionAmount = stock.getPrice() * quantity;
-    //    double exchangeRate = currency.getRate(); // Antager at rate er fra currency til basisvaluta
-    //
-    //    // Konverter til brugerens valuta hvis nødvendigt
-    //    if (!stock.getCurrency().equals(currency.getBaseCurrency())) {
-    //        transactionAmount *= exchangeRate;
-    //    }
-    //
-    //    // Tjek brugerens saldo ved køb
-    //    if (orderType.equalsIgnoreCase("BUY") && user.getBalance() < transactionAmount) {
-    //        throw new IllegalStateException("Utilstrækkelig saldo");
-    //    }
-    //
-    //    // Opret transaktion
-    //    int transactionId = TransactionRepository.getNextId();
-    //    Transaction transaction = new Transaction(
-    //        transactionId,
-    //        user.getUserId(),
-    //        LocalDateTime.now(),
-    //        stock.getTickerName(),
-    //        stock.getPrice(),
-    //        currency.getBaseCurrency(), // Gem basisvalutaen
-    //        orderType.toUpperCase(),
-    //        quantity
-    //    );
-    //
-    //    // Opdater brugerens saldo
-    //    if (orderType.equalsIgnoreCase("BUY")) {
-    //        user.setBalance(user.getBalance() - transactionAmount);
-    //    } else { // SELL
-    //        user.setBalance(user.getBalance() + transactionAmount);
-    //    }
-    //
-    //    // Gem transaktion
-    //    TransactionRepository.saveTransaction(transaction);
-    //    UserRepository.updateUser(user); // Antager at du har en måde at gemme brugeren på
-    //
-    //    return transaction;
-    //

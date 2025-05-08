@@ -2,7 +2,7 @@ package objects;
 
 import java.time.LocalDate;
 
-public class User implements Comparable<User>{
+public class User implements Comparable<User> {
 
     private int userId;
     private String fullName;

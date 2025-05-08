@@ -47,11 +47,11 @@ public class Controller {
                 return;
 
             case "2": // Se min portefølje
-                // TransactionService.showPortfolio(user);
+                TransactionService.showPortfolio(user);
                 break;
 
             case "3": // Køb/Sælg aktier
-                // TransactionService.createTransaction();
+                TransactionService.createTransaction();
                 break;
 
             case "4": // Se tidligere handler

@@ -31,30 +31,30 @@ public class StockRepository {
                 }
                 String[] data1 = line.split(";");
 
-                    try {
-                        String ticker = data1[0];
-                        String name = data1[1];
-                        String sector = data1[2].trim();
-                        double price = Double.parseDouble(data1[3].trim().replace(",", "."));
+                try {
+                    String ticker = data1[0];
+                    String name = data1[1];
+                    String sector = data1[2].trim();
+                    double price = Double.parseDouble(data1[3].trim().replace(",", "."));
 
-                        String currencyCode = data1[4].trim();
-                        Currency currency = CurrencyService.findByBaseCurrency(currencyCode);
-                        String rating = data1[5].trim();
-                        double dividendYield = Double.parseDouble(data1[6].trim().replace(",", "."));
-                        String market = data1[7].trim();
-                        LocalDate lastUpdated = LocalDate.parse(data1[8].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                    String currencyCode = data1[4].trim();
+                    Currency currency = CurrencyService.findByBaseCurrency(currencyCode);
+                    String rating = data1[5].trim();
+                    double dividendYield = Double.parseDouble(data1[6].trim().replace(",", "."));
+                    String market = data1[7].trim();
+                    LocalDate lastUpdated = LocalDate.parse(data1[8].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-                        Stock stock = new Stock(ticker, name, sector, price, rating, currency, dividendYield, market, lastUpdated);
-                        stocks.add(stock);
+                    Stock stock = new Stock(ticker, name, sector, price, rating, currency, dividendYield, market, lastUpdated);
+                    stocks.add(stock);
 
 
-                    } catch (NumberFormatException e) {
-                        System.out.println("NumberFormatException for line: " + line);
-                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("NumberFormatException for line: " + line);
                 }
-            } catch (FileNotFoundException e){
-                System.out.println("File not found!");
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
         return stocks;
     }
 }
