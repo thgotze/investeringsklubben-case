@@ -73,4 +73,75 @@ public class UserService {
         }
         return null;
     }
+
+    public static void addUser(Scanner scanner) {
+        System.out.println("Hvad er brugerens fulde navn?");
+        String fullName = scanner.nextLine();
+
+        System.out.println("Hvad er brugerens e-mail adresse?");
+        String email = scanner.nextLine();
+
+        LocalDate birthDay;
+
+        while (true) {
+            try {
+                System.out.println("angiv fødselsår for brugeren:");
+                int birthyear = Integer.parseInt(scanner.nextLine());
+
+                if (birthyear > LocalDate.now().getYear() || birthyear < 1900) {
+                    System.out.println("Ugyldigt fødselsår! prøv igen");
+                    continue;
+                }
+
+                System.out.println("Angiv fødselsmåned for brugeren (1-12):");
+                int birthMonth = Integer.parseInt(scanner.nextLine());
+
+                if (birthMonth < 1 || birthMonth > 12) {
+                    System.out.println("Ugyldigt fødselsmåned! prøv igen");
+                    continue;
+                }
+
+                int maxDaysInMonth = YearMonth.of(birthyear, birthMonth).lengthOfMonth();
+
+                System.out.println("Angiv fødselsdato for brugeren:");
+                int birthDate = Integer.parseInt(scanner.nextLine());
+
+                if (birthDate < 1 || birthDate > maxDaysInMonth) {
+                    System.out.println("Ugyldig fødselsdato! prøv igen");
+                    continue;
+                }
+
+                birthDay = LocalDate.of(birthyear, birthMonth, birthDate);
+                break;
+
+            } catch (NumberFormatException e) {
+                System.out.println("Ugyldigt input! prøv igen");
+            }
+        }
+
+
+        boolean admin;
+        while (true) {
+            try {
+                System.out.println("Angiv om brugeren er admin, eller normal bruger:");
+                System.out.println("> 1. Bruger");
+                System.out.println("> 2. Admin");
+                int input = Integer.parseInt(scanner.nextLine());
+
+                switch (input) {
+                    case 1: admin = false;
+                        break;
+
+                        case 2: admin = true;
+                            break;
+
+                            default:
+                            System.out.println("Ugyldigt input! prøv igen");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ugyldigt input! prøv igen");
+            }
+            break;
+        }
+    }
 }

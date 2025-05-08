@@ -12,7 +12,11 @@ import java.util.Scanner;
 public class TransactionService {
 
     public static void createTransaction(Scanner scanner, User user, Stock stock) {
-        
+
+        while (true) {
+            System.out.println("Hvad");
+        }
+
         Transaction transaction = new Transaction()
         List<Transaction> transactions = TransactionRepository.readTransactionFile();
 

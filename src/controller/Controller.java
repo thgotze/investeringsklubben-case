@@ -78,4 +78,5 @@ public class Controller {
         System.out.println("Ugyldigt input! Prøv igen");
         showMainMenu(scanner, user);
     }
+
 }
