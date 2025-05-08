@@ -6,6 +6,8 @@ import objects.User;
 import repository.TransactionRepository;
 import repository.UserRepository;
 import service.StockService;
+import service.TransactionService;
+import service.UserService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,18 +18,27 @@ public class Main {
         // TODO: Admin opret bruger funktion (Nikolaj)
         // TODO: Køb Aktie - Skal rykkes videre til transaction history (Oliver)
         // TODO: Sælg Aktie - Skal rykkes videre til transaction history (Oliver)
-
-
-
-         User user = new User(50, "Peter", "Bastian", LocalDate.now(), 1.0, LocalDate.now(), LocalDate.now(), false, "1231312");
+        // TODO: Lav funktion der viser alle stocks (Sebastian)
+        // TODO: Vis min portefølje
+        // TODO: Linjer der bliver tilføjet til .csv filerne skal formatteres korrekt 
+        // TODO: Admin skal kunne oprette bruger funktion (Nikolaj)
+        // TODO: Admin skal kunne
+        // TODO: Lave menuen der dukker op i konsollen, som viser brugeren valgmuligheder
+        // TODO: Omregne valuta i bruger saldo
+        
+        
+        User user = new User(50, "Peter", "Bastian", LocalDate.now(), 1.0, LocalDate.now(), LocalDate.now(), false, "1231312");
         UserRepository.addUserToFile(user);
-
         Currency currency = new Currency("EUR", "DKK", 1.21, LocalDate.now());
-        Transaction transaction = new Transaction(11, 56, LocalDate.now(), "APPL", 678.65,  currency, "KØB", 4);
+        Transaction transaction = new Transaction(11, 50, LocalDate.now(), "NOVO-B", 678.65,  currency, "KØB", 4);
         TransactionRepository.addTransactionToFile(transaction);
-        List<Stock> stocks = sto
-        StockService.showWholeStockList();
-        Controller.logIn();
+
+        
+        
+        //Controller.startProgram();
+        User mariaJensenTest = UserService.findByFullName("Maria Jensen");
+        TransactionService.showPortfolio(mariaJensenTest);
+
 
 
 

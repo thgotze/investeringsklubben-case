@@ -1,45 +1,31 @@
 package service;
 
-import objects.Currency;
 import objects.Stock;
 import objects.Transaction;
 import objects.User;
 import repository.TransactionRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionService {
 
-    public static void createTransaction(Stock stock, User user, Currency currency, String orderType, int quantity) {
+    public static void createTransaction(Scanner scanner, User user, Stock stock) {
+        
+        Transaction transaction = new Transaction()
+        List<Transaction> transactions = TransactionRepository.readTransactionFile();
 
-        // vi snakker om når man har valgt om man vil købe eller sælge stock om det skal være en
-        // boolean eller int eller hvad det skal være
-        int transactionId = TransactionRepository.readTransactionFile().getLast().getId() + 1;
-        int userId = user.getUserId();
-        LocalDate date = LocalDate.now();
-        String ticker = stock.getTickerName();
-        double price = stock.getPrice();
+        // Genererer nyt ID
+        int newId = TransactionRepository.readTransactionFile().isEmpty() ? 1 :
+                transactions.getLast().getId() + 1;
+        transaction.setId(newId);
 
-        Transaction transaction = new Transaction(transactionId, userId, date, ticker, price, currency, orderType, quantity);
+        transactions.add(transaction);
+        TransactionRepository.addTransactionToFile(transaction);
 
-
-//        Transaction(int transactionId, int userId, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
-
-
-        // id = counter bullshit (Ikke user input)
-        // user_id = får user id'et på den der er logget ind (Ikke user input)
-        // date = genereres localdatetime now (Ikke user input)
-        // ticker = det er den stock brugeren vil handle (Ikke user input)
-        // price = bliver fundet ud fra stock repository (Ikke user input)
-        // currency = det er den valuta de vil betale med (USER INPUT)
-        // order_type = alt afhænging af om useren vil købe eller sælge den valgte stock (USER INPUT)
-        // quantity = antal af valgt stock useren vil købe eller sælge (USER INPUT)
-
-
-        // til sidst checkes brugerens saldo om de har nok til at købe stock
+        // Opdater brugerbalance
+        double amount = transaction.getPrice() * transaction.getQuantity();
+        UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
     }
 
     public static Transaction findById (int id) {
@@ -60,6 +46,29 @@ public class TransactionService {
         }
         return transactionsByUserId;
     }
+}
+
+    //public static void showPortfolio(User user) {
+    //        List<Transaction> userTransactions = findAllByUserId(user.getUserId());
+    //        double totalvalue = 0.0;
+    //
+    //        System.out.println("\n--- DIN PORTEFØLJE ---");
+    //        System.out.printf("%-10s %-10s %-10s %-10s%n", "Aktie", "Antal", "Pris", "Værdi");
+    //
+    //        List<String> uniqueTickers = new ArrayList<>();
+    //        for (Transaction transaction : userTransactions) {
+    //            Stock stock = StockService.findByTicker(transaction.getTicker());
+    //            double currentvalue = stock.getPrice() * transaction.getQuantity();
+    //            totalvalue += currentvalue;
+    //
+    //
+    //        }
+    //
+    //    }
+
+
+
+
 
     // // Valider input
     //    if (stock == null || user == null || currency == null ||

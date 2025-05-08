@@ -7,35 +7,11 @@ import java.util.Scanner;
 
 public class Controller {
 
-    public static void logIn() {
+    public static void startProgram() {
         Scanner scanner = new Scanner(System.in);
 
-        User user;
-        String name;
-        String password;
-
-        while (true) {
-            System.out.println("Indtast fulde navn:");
-            name = scanner.nextLine();
-            user = UserService.findByFullName(name);
-            if (user == null) {
-                System.out.println("Bruger ikke fundet, prøv igen! ");
-            } else {
-                break;
-            }
-        }
-
-        while (true) {
-            System.out.println("Indtast adgangskode: ");
-            password = scanner.nextLine();
-
-            if (password.equals(user.getPassword())) {
-                showMenu();
-                break;
-            } else {
-                System.out.println("Forkert adgangskode! Prøv igen.");
-            }
-        }
+        User user = UserService.logIn(scanner);
+        showMainMenu(scanner, user);
     }
 
     public static void showMenu() {
