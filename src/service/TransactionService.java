@@ -7,6 +7,7 @@ import repository.TransactionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class TransactionService {
 
@@ -28,7 +29,7 @@ public class TransactionService {
         UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
     }
 
-    public static Transaction findById (int id) {
+    public static Transaction findById(int id) {
         for (Transaction transaction : TransactionRepository.readTransactionFile()) {
             if (transaction.getId() == id) {
                 return transaction;
@@ -37,7 +38,7 @@ public class TransactionService {
         return null;
     }
 
-    public static List<Transaction> findAllByUserId (int userId) {
+    public static List<Transaction> findAllByUserId(int userId) {
         List<Transaction> transactionsByUserId = new ArrayList<>();
         for (Transaction transaction : TransactionRepository.readTransactionFile()) {
             if (transaction.getUserId() == userId) {
@@ -115,7 +116,4 @@ public class TransactionService {
     //    UserRepository.updateUser(user); // Antager at du har en måde at gemme brugeren på
     //
     //    return transaction;
-    //}
-
-
-}
+    //

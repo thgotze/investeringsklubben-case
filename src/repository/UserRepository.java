@@ -11,21 +11,16 @@ import java.util.Scanner;
 
 public class UserRepository {
 
-    public static List<User> readUsersFile() {
+    public static List<User> getUsersFromFile() {
         List<User> users = new ArrayList<>();
         try {
             File usersFile = new File("resources/users.csv");
             Scanner reader = new Scanner(usersFile);
 
-            boolean isFirstLine = true;
+            reader.nextLine(); // Skip first line
+
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-
-                if (isFirstLine) {
-                    isFirstLine = false;
-                    continue;
-                }
-
                 String[] data = line.split(";");
 
                 try {
@@ -46,7 +41,6 @@ public class UserRepository {
                     System.out.println("Could not read line " + line);
                 }
             }
-
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
         }
@@ -54,8 +48,9 @@ public class UserRepository {
     }
 
     public static void addUserToFile(User user) {
-        List<User> users = readUsersFile();
+        List<User> users = getUsersFromFile();
         users.add(user);
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv", true))) {
             writer.newLine();
             writer.write(user.toString());

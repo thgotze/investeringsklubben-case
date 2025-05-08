@@ -1,6 +1,5 @@
 import controller.Controller;
 import objects.Currency;
-import objects.Stock;
 import objects.Transaction;
 import objects.User;
 import repository.TransactionRepository;
@@ -10,12 +9,10 @@ import service.TransactionService;
 import service.UserService;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        // TODO: Admin opret bruger funktion (Nikolaj)
         // TODO: Køb Aktie - Skal rykkes videre til transaction history (Oliver)
         // TODO: Sælg Aktie - Skal rykkes videre til transaction history (Oliver)
         // TODO: Lav funktion der viser alle stocks (Sebastian)

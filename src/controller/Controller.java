@@ -1,8 +1,13 @@
 package controller;
 
+import objects.Stock;
+import objects.Transaction;
 import objects.User;
+import service.StockService;
+import service.TransactionService;
 import service.UserService;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Controller {
@@ -14,42 +19,63 @@ public class Controller {
         showMainMenu(scanner, user);
     }
 
-    public static void showMenu() {
-        System.out.println("           -*-*- THORNET -*-*-");
+    private static void showMainMenu(Scanner scanner, User user) {
+        System.out.println("    -*-*- THORNET -*-*-      ");
         System.out.println("> 1. Se aktiemarkedet & Kurs");
         System.out.println("> 2. Se min portefølje");
-        System.out.println("> 3. Køb/Sælg aktier ");
-        System.out.println("> 4. Se tidligere handler ");
+        System.out.println("> 3. Køb/Sælg aktier");
+        System.out.println("> 4. Se tidligere handler");
+
+        if (user.isAdmin()) {
+            System.out.println("> 5. Se brugernes porteføljeværdi");
+            System.out.println("> 6. Se rangliste");
+            System.out.println("> 7. Se fordeling af aktier & sektorer");
+        }
         System.out.println("> 0. Afslut program");
 
-
-//        For admin:
-//        System.out.println("> 5. Se brugernes porteføljeværdi");
-//        System.out.println("> 6. Se rangliste");
-//        System.out.println("> 7. Se fordeling af aktier & sektorer");
-//        System.out.println("> 0. Afslut program");
-
-
-
-        }
-
-    public static void handleUserChoice(Scanner scanner, User user) {
-
-        int input = scanner.nextInt();
+        String input = scanner.nextLine();
         switch (input) {
-            case 1:
-                System.out.println("Nu køber du aktier");
+            case "0": // Afslut program
+                System.out.println("Afslutter program...");
+                System.exit(0);
+                return;
 
+            case "1": // Se aktiemarkedet & Kurs
+                StockService.showWholeStockList();
+                showMainMenu(scanner, user);
+                return;
+
+            case "2": // Se min portefølje
+                TransactionService.showPortfolio(user);
                 break;
 
-            case 2:
-                if (user.isAdmin()) {
-                    System.out.println("Nu sælger du aktier");
+            case "3": // Køb/Sælg aktier
+                TransactionService.createTransaction();
+                break;
+
+            case "4": // Se tidligere handler
+                break;
+
+            case "5": // Se brugernes porteføljeværdi
+                if (!user.isAdmin()) {
+                    break;
                 }
-                break;
+
+
+            case "6": // Se rangliste
+                if (!user.isAdmin()) {
+                    break;
+                }
+
+            case "7": // Se foredeling af aktier & sektorer
+                if (!user.isAdmin()) {
+                    break;
+                }
 
             default:
-                System.out.println("Ugyldigt input");
+                break;
         }
+        System.out.println("Ugyldigt input! Prøv igen");
+        showMainMenu(scanner, user);
     }
 }
