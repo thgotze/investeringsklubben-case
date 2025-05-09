@@ -37,15 +37,14 @@ public class StockService {
         return sectors;
     }
 
-    public static void showTop10Stocks(List<Stock> stocks) {
+    public static void showStocksSortedByPrice(List<Stock> stocks) {
         stocks.sort(Comparator.comparing(Stock::getPrice).reversed());
-        int limit = Math.min(stocks.size(), 10);
-        for (int i = 0; i < limit; i++) {
-            System.out.println(stocks.get(i));
+        for (Stock stock : stocks) {
+            System.out.println(stock);
         }
     }
 
-    public static void showWholeStockList() {
+    public static void showAllStocks() {
         System.out.println(" -*- Aktier -*- ");
         System.out.printf("%-9s %-21s %-15s %10s %8s %8s %13s   %-15s   %18s\n",
                 "Ticker", "Navn", "Sektor", "Pris", "Valuta", "Rating", "Dividend %", "Marked", "Sidst opdateret");

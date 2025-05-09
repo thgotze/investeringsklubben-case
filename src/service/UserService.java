@@ -1,11 +1,14 @@
 package service;
 
+import objects.Transaction;
 import objects.User;
+import repository.TransactionRepository;
 import repository.UserRepository;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
 public class UserService {
@@ -133,12 +136,23 @@ public class UserService {
         LocalDate createdDate = LocalDate.now();
         LocalDate lastUpdated = LocalDate.now();
 
-
         User user = new User(userId, fullName, email, birthDay, initialSaldo, createdDate,lastUpdated, admin, password);
         UserRepository.addUserToFile(user);
         System.out.println(userId + " " + fullName + " " + email + " " + birthDay + " " + initialSaldo + " " + createdDate + " " + lastUpdated + " " + admin + " " + password);
         System.out.println(user.getFullName() + " er blevet tilføjet til programmet");
     }
 
+    public static double findUserBalance(User user) {
+        List<Transaction> userTransactions = TransactionService.findAllTransactionsForUser(user);
 
+        double userBalance = user.getInitialCashDKK();
+        for (Transaction transaction : userTransactions) {
+            if (transaction.getOrderType().equals("buy")) {
+                userBalance -= transaction.getPrice() * transaction.getQuantity();
+            } else {
+                userBalance += transaction.getPrice() * transaction.getQuantity();
+            }
+        }
+        return userBalance;
+    }
 }

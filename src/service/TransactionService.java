@@ -10,26 +10,86 @@ import java.util.*;
 
 public class TransactionService {
 
-    public static void createTransaction(Scanner scanner, User user, Stock stock) {
+    public static void createTransaction(Scanner scanner, User user) {
+        System.out.println("> 1. Køb Aktier ");
+        System.out.println("> 2. Sælg Aktier");
+        System.out.println("> 0. Returner til hovedmenu");
 
-        while (true) {
-            System.out.println("Hvad");
+        String input = scanner.nextLine();
+        switch (input) {
+            case "1": // Køb aktie
+                StockService.showAllStocks();
+                buyStock(scanner, user);
+                break;
+            case "2": // Sælg aktie
+                showPortfolio(user);
+                sellStock(scanner, user);
+                break;
+
+            case "0": // Gå tilbage til hovedmenu
+                return;
+
+            default:
+                System.out.println("Ugyldigt input! Prøv igen");
+                break;
+        }
+        createTransaction(scanner, user);
+    }
+
+    // Køb eller sælg?
+
+    // Hvilken aktie?
+
+    // Hvor mange
+
+
+    // Transaction transaction = new Transaction()
+    // List<Transaction> transactions = TransactionRepository.readTransactionFile();
+
+    // Genererer nyt ID
+    //  int newId = TransactionRepository.readTransactionFile().isEmpty() ? 1 :
+    //  transactions.getLast().getId() + 1;
+    // transaction.setId(newId);
+
+    // transactions.add(transaction);
+    // TransactionRepository.addTransactionToFile(transaction);
+
+    // Opdater brugerbalance
+    // double amount = transaction.getPrice() * transaction.getQuantity();
+    // UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
+
+    public static void buyStock(Scanner scanner, User user) {
+        System.out.println("Hvilken stock vil du købe");
+        System.out.println("Indtast ticker på stock");
+
+        String tickerInput = scanner.nextLine();
+        Stock stock = StockService.findByTicker(tickerInput);
+        if (stock == null) {
+            System.out.println("Denne aktie findes ikke");
+        }
+        System.out.println("Hvor mange af " + stock.getName() + " vil du købe?");
+        int amountInput = Integer.parseInt(scanner.nextLine());
+
+
+
+    }
+
+
+    public static void sellStock(Scanner scanner, User user) {
+        String sellInput = scanner.nextLine();
+
+        switch (sellInput) {
+            case "1":
+
+                break;
+            case "2":
+
+                break;
+
+            case "0":
+                break;
         }
 
-        // Transaction transaction = new Transaction()
-        // List<Transaction> transactions = TransactionRepository.readTransactionFile();
-
-        // Genererer nyt ID
-       //  int newId = TransactionRepository.readTransactionFile().isEmpty() ? 1 :
-               //  transactions.getLast().getId() + 1;
-        // transaction.setId(newId);
-
-        // transactions.add(transaction);
-        // TransactionRepository.addTransactionToFile(transaction);
-
-        // Opdater brugerbalance
-        // double amount = transaction.getPrice() * transaction.getQuantity();
-        // UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
     }
 
     public static Transaction findTransactionById(int id) {

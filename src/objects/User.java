@@ -31,7 +31,6 @@ public class User implements Comparable<User> {
         this.password = password;
     }
 
-
     // Setters & Getters
     public int getUserId() {
         return userId;

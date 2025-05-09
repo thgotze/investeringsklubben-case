@@ -25,6 +25,7 @@ public class Controller {
         System.out.println("> 2. Se min portefølje");
         System.out.println("> 3. Køb/Sælg aktier");
         System.out.println("> 4. Se tidligere handler");
+        System.out.println("> 99. Se min saldo");
 
         if (user.isAdmin()) {
             System.out.println("> 5. Se brugernes porteføljeværdi");
@@ -42,26 +43,33 @@ public class Controller {
                 return;
 
             case "1": // Se aktiemarkedet & Kurs
-                StockService.showWholeStockList();
-                showMainMenu(scanner, user);
-                return;
+                StockService.showAllStocks();
+                break;
 
             case "2": // Se min portefølje
                 TransactionService.showPortfolio(user);
                 break;
 
             case "3": // Køb/Sælg aktier
-                TransactionService.createTransaction();
+                TransactionService.createTransaction(scanner, user);
                 break;
 
             case "4": // Se tidligere handler
+                System.out.println("Ikke implementeret endnu!");
+
+                break;
+
+            case "99": // TODO: TESTING Se min saldo
+                double userBalance = UserService.findUserBalance(user);
+                System.out.println(userBalance);
                 break;
 
             case "5": // Se brugernes porteføljeværdi
                 if (!user.isAdmin()) {
                     break;
                 }
-
+                System.out.println("Ugyldigt input! Prøv igen");
+                break;
 
             case "6": // Se rangliste
                 if (!user.isAdmin()) {
@@ -72,17 +80,21 @@ public class Controller {
                 if (!user.isAdmin()) {
                     break;
                 }
+                System.out.println("Ugyldigt input! Prøv igen");
+                break;
 
             case "8":
                 if (user.isAdmin()) {
                     UserService.addUser(scanner);
+                    break;
                 }
+                System.out.println("Ugyldigt input! Prøv igen");
+                break;
 
             default:
+                System.out.println("Ugyldigt input! Prøv igen");
                 break;
         }
-        System.out.println("Ugyldigt input! Prøv igen");
         showMainMenu(scanner, user);
     }
-
 }
