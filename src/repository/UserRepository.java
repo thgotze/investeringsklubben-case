@@ -23,22 +23,26 @@ public class UserRepository {
                 String line = reader.nextLine();
                 String[] data = line.split(";");
 
-                try {
-                    int userId = Integer.parseInt(data[0].trim());
-                    String fullName = data[1].trim();
-                    String email = data[2].trim();
-                    LocalDate birthDate = LocalDate.parse(data[3].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                    double initialCashDKK = Double.parseDouble(data[4].trim());
-                    LocalDate createdDate = LocalDate.parse(data[5].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                    LocalDate lastUpdated = LocalDate.parse(data[6].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-                    boolean admin = Boolean.parseBoolean(data[7]);
-                    String password = data[8].trim();
+                if (data.length >= 9) {
+                    try {
+                        int userId = Integer.parseInt(data[0].trim());
+                        String fullName = data[1].trim();
+                        String email = data[2].trim();
+                        LocalDate birthDate = LocalDate.parse(data[3].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                        double initialCashDKK = Double.parseDouble(data[4].trim());
+                        LocalDate createdDate = LocalDate.parse(data[5].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                        LocalDate lastUpdated = LocalDate.parse(data[6].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                        boolean admin = Boolean.parseBoolean(data[7]);
+                        String password = data[8].trim();
 
-                    User user = new User(userId, fullName, email, birthDate, initialCashDKK, createdDate, lastUpdated, admin, password);
-                    users.add(user);
+                        User user = new User(userId, fullName, email, birthDate, initialCashDKK, createdDate, lastUpdated, admin, password);
+                        users.add(user);
 
-                } catch (NumberFormatException e) {
-                    System.out.println("Could not read line " + line);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Kunne ikke parse linje: " + line);
+                    }
+                } else {
+                    System.out.println("Ugyldig linje (for få felter): " + line);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -51,11 +55,13 @@ public class UserRepository {
         List<User> users = getUsersFromFile();
         users.add(user);
 
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv", true))) {
             writer.newLine();
             writer.write(user.getUserId() + ";" + user.getFullName() + ";" + user.getEmail()
-                    + ";" + user.getBirthDate() + ";" + user.getInitialCashDKK() + ";" + user.getCreatedDate()
-                    + ";" + user.getLastUpdated() + ";" + user.isAdmin() + ";" + user.getPassword());
+                    + ";" + user.getBirthDate().format(dateFormatter) + ";" + user.getInitialCashDKK() + ";" + user.getCreatedDate().format(dateFormatter)
+                    + ";" + user.getLastUpdated().format(dateFormatter) + ";" + user.isAdmin() + ";" + user.getPassword());
         } catch (IOException e) {
             System.out.println("Failed to add user: " + e.getMessage());
         }
