@@ -18,7 +18,7 @@ public class TransactionService {
         System.out.println("Indtast ticker på stock");
 
         String tickerInput = scanner.nextLine();
-        Stock stock = StockRepository.findByTicker(tickerInput);
+        Stock stock = StockRepository.findStockByTicker(tickerInput);
         if (stock == null) {
             System.out.println("Denne aktie findes ikke");
             return;
@@ -74,40 +74,43 @@ public class TransactionService {
         List<Transaction> userTransactions = TransactionRepository.findTransactionsForUser(user);
 
         if (userTransactions.isEmpty()) {
-            System.out.println("Ingen transaktioner fundet for bruger: " + user.getFullName());
-            return null;
+            return userPortfolio;
         }
 
         for (Transaction transaction : userTransactions) {
             String ticker = transaction.getTicker();
             int quantity = transaction.getQuantity();
-            String orderType = transaction.getOrderType();
 
+            String orderType = transaction.getOrderType();
             if (orderType.equals("buy")) {
                 userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) + quantity);
             } else if (orderType.equals("sell")) {
                 userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) - quantity);
             }
+
+            if (userPortfolio.get(ticker) == 0) {
+                userPortfolio.remove(ticker);
+            }
         }
-        return null;
+        return userPortfolio;
     }
 
-    public static void displayPortfolio(User user, Map<String, Integer> portfolio) {
-        System.out.println(user.getFullName() + "'s Portfolio");
+    public static void displayPortfolioOfUser(Map<String, Integer> portfolio, User user) {
+        System.out.println(" -*- " + user.getFullName() + "'s  Portefølje -*-");
+        System.out.printf("%-9s %-21s %10s %10s \n", "Ticker", "Navn", "Antal", "Værdi");
+        System.out.println("--------------------------------------------------------");
+
         double totalValue = 0.0;
         for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
             String ticker = entry.getKey();
-            int netQuantity = entry.getValue();
+            int quantity = entry.getValue();
+            Stock stock = StockRepository.findStockByTicker(ticker); // TODO FIX
 
-            if (netQuantity > 0) {
-                double value = StockRepository.findByTicker(ticker).getPrice() * netQuantity;
-                totalValue += value;
-                System.out.println("Ticker: " + ticker + ", Quantity: " + netQuantity);
-                System.out.printf("%-9s %-21s %10s\n", "Ticker", "Navn", "Værdi");
-                System.out.println("--------------------------------------------------------");
-                System.out.printf("%-9s %-21s %10.2f\n", ticker, StockRepository.findByTicker(ticker).getName(), netQuantity, value);
-            }
+            double subtotal = stock.getPrice() * quantity;
+            totalValue += subtotal;
+            System.out.printf("%-9s %-21s %10d %10.2f\n", ticker, stock.getName(), quantity, subtotal);
         }
         System.out.println("Total Værdi: " + totalValue);
+        System.out.println(" -*- " + user.getFullName() + "'s  Portefølje -*-");
     }
 }

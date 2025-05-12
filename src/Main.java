@@ -1,9 +1,7 @@
-import controller.Controller;
+import controller.MainController;
 
 public class Main {
     public static void main(String[] args) {
-
-
         // TODO: 1. Køb Aktie - Skal rykkes videre til transaction history (Thor, Sebas)
         // TODO: 2. Sælg Aktie - Skal rykkes videre til transaction history (Thor, Sebas)
         // TODO: 3. Confirm beskeder når man har solgt en aktie (Isak)
@@ -21,11 +19,17 @@ public class Main {
         // TODO: 10. (1) Seperer showPortfolio op i to dele: 1. getPortfolioForUser og 2. displayPortfolio. Vi skal nemlig bruge -
         // TODO: (2) porteføljet både til at displaye det, men også når man skal vælge hvilke aktie man vil sælge
 
+        // TODO: 11. Gennemgå alle klasser og led efter System.out.println. Kun controllers bør have dem, service og repository må ikke
 
         // TODO: TIL SIDST:
         // TODO: Vi skal huske at have mindst et par testmetoder
         // TODO: Vi skal fjerne metoder der ikke bruges
-        // TODO: Vi skal være sikker på at alt kode er
-        Controller.startProgram();
+        // TODO: Tjekke at vi bruger camelCase overalt
+        // TODO: Være sikker på at systemet ikke har mulighed for at crashe - tjekke om der mangler throw exception
+        // TODO: Tjekke at vi altid går fra controller -> service -> repository og ikke controller -> repository
+        // TODO: Fjerne evt. overflødelige getters/setters i objekt klasserne (f.x. User)
+        // TODO: Gennemkigge om der er grammatiske stavefejl
+        // TODO: Er der nogen 'magic numbers'?
+        MainController.startProgram();
     }
 }

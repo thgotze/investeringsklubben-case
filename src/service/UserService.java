@@ -12,6 +12,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserService {
+    public static User findUserById(int userId) {
+        return UserRepository.findUserById(userId);
+    }
+
+    public static User findUserByFullName(String fullName) {
+        return UserRepository.findUserByFullName(fullName);
+    }
+
+    public static boolean validatePassword(User user, String password) {
+        return user.getPassword().equals(password);
+    }
+
     public static void addUser(Scanner scanner) {
         System.out.println("Hvad er brugerens fulde navn?");
         System.out.println("> 0. Returner til hovedmenu");
@@ -143,7 +155,7 @@ public class UserService {
         String input = scanner.nextLine();
 
         if (input.equals("0")) return;
-        User userToDelete = UserRepository.findByFullName(input);
+        User userToDelete = UserRepository.findUserByFullName(input);
 
         if (userToDelete == null) return;
 
@@ -152,7 +164,7 @@ public class UserService {
         if (idOfUserToDelete == user.getUserId()) {
             System.out.println("Kan ikke slette den bruger du er logget ind med!");
         } else {
-            UserRepository.deleteUserFromFile(idOfUserToDelete);
+            UserRepository.removeUserFromFile(idOfUserToDelete);
         }
     }
 

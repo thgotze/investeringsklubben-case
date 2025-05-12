@@ -1,6 +1,7 @@
 package objects;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
 
@@ -42,6 +43,10 @@ public class Transaction {
 
     public LocalDate getDate() {
         return date;
+    }
+    public String getFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return date.format(formatter);
     }
 
     public void setDate(LocalDate date) {

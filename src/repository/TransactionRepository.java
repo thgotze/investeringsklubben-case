@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TransactionRepository {
+    //Definere dato formatet i CSV filen
+    private static final DateTimeFormatter CSV_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public static List<Transaction> readTransactionFile() {
         List<Transaction> transactions = new ArrayList<>();
@@ -32,7 +34,7 @@ public class TransactionRepository {
                 try {
                     int transactionId = Integer.parseInt(data2[0].trim());
                     int userId = Integer.parseInt(data2[1].trim());
-                    LocalDate transactionDate = LocalDate.parse(data2[2].trim(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                    LocalDate transactionDate = LocalDate.parse(data2[2].trim(), CSV_DATE_FORMAT);
                     String ticker = data2[3].trim();
                     double pricePerStock = Double.parseDouble(data2[4].trim().replace(",", "."));
                     Currency currency = new Currency(data2[5].trim(), "DKK", 10515.20, LocalDate.now()); // TODO: Fix denne linje senere
@@ -56,8 +58,20 @@ public class TransactionRepository {
     public static void addTransactionToFile(Transaction transaction) {
         List<Transaction> transactions = readTransactionFile();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/transactions.csv", true))) {
+            String formattedDate = transaction.getDate().format(CSV_DATE_FORMAT);
             writer.newLine();
-            writer.write(transaction.toString());
+            writer.write(
+                    transaction.getId() + ";" +
+                        transaction.getUserId() + ";" +
+                        formattedDate + ";" +
+                        transaction.getTicker() + ";" +
+                        transaction.getPrice() + ";" +
+                        transaction.getCurrency().getBaseCurrency() + ";" +
+                        transaction.getOrderType() + ";" +
+                        transaction.getQuantity());
+
+            transactions.add(transaction);
+
         } catch (IOException e) {
             System.out.println("Failed to add transaction: " + e.getMessage());
         }

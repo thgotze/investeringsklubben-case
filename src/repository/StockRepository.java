@@ -2,7 +2,6 @@ package repository;
 
 import objects.Currency;
 import objects.Stock;
-import service.CurrencyService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,7 +66,7 @@ public class StockRepository {
         return null;
     }
 
-    public static Stock findByName(String name) {
+    public static Stock findStockByName(String name) {
         for (Stock stock : StockRepository.readStockFile()) {
             if (stock.getName().equalsIgnoreCase(name)) {
                 return stock;
@@ -76,7 +75,7 @@ public class StockRepository {
         return null;
     }
 
-    public static List<Stock> findAllBySector(String sector) {
+    public static List<Stock> findAllStocksBySector(String sector) {
         List<Stock> sectors = new ArrayList<>();
         for (Stock stock : StockRepository.readStockFile()) {
             if (stock.getSector().equalsIgnoreCase(sector)) {

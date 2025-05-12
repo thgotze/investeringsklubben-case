@@ -1,18 +1,21 @@
 package controller;
 
 import objects.User;
-import repository.UserRepository;
+import service.UserService;
 
 import java.util.Scanner;
 
 public class UserController {
 
     public static User logIn(Scanner scanner) {
+        System.out.println("-*-*- Login på ThorNet -*-*-");
+        System.out.println("Indtast brugernavn: ");
+
         User user;
         while (true) {
-            System.out.println("Indtast fulde navn:");
             String name = scanner.nextLine();
-            user = UserRepository.findByFullName(name);
+            user = UserService.findUserByFullName(name);
+
             if (user == null) {
                 System.out.println("Bruger ikke fundet. Prøv igen");
             } else {
@@ -20,17 +23,17 @@ public class UserController {
             }
         }
 
-        String password;
+        System.out.println("Indtast adgangskode: ");
         while (true) {
-            System.out.println("Indtast adgangskode: ");
-            password = scanner.nextLine();
+            String password = scanner.nextLine();
+            boolean correctPassword = UserService.validatePassword(user, password);
 
-            if (password.equals(user.getPassword())) {
-                break;
+            if (correctPassword) {
+                System.out.println("Velkommen tilbage " + user.getFullName() + "!");
+                return user;
             } else {
                 System.out.println("Forkert adgangskode. Prøv igen");
             }
         }
-        return user;
     }
 }

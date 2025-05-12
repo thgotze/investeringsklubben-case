@@ -68,7 +68,7 @@ public class UserRepository {
     }
 
     // TODO: Tilføj en funktion der redigerer en users oplysninger
-    public static void deleteUserFromFile(int userId) {
+    public static void removeUserFromFile(int userId) {
         List<User> users = getUsersFromFile();
         for (User user : users) {
             if (userId == user.getUserId()){
@@ -110,17 +110,15 @@ public class UserRepository {
                 return user;
             }
         }
-        System.out.println("Kunne ikke finde en bruger med ID: " + userId);
         return null;
     }
 
-    public static User findByFullName(String fullName) {
+    public static User findUserByFullName(String fullName) {
         for (User user : UserRepository.getUsersFromFile()) {
             if (user.getFullName().equalsIgnoreCase(fullName)) {
                 return user;
             }
         }
-        System.out.println("Kunne ikke finde en bruger med navnet: " + fullName);
         return null;
     }
 }

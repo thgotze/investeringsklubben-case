@@ -47,4 +47,20 @@ public class CurrencyRepository {
         }
         return currencies;
     }
+    public static Currency findByBaseCurrency(String baseCurrency) {
+        for (Currency currency : CurrencyRepository.readCurrencyFile()) {
+            if (currency.getBaseCurrency().equalsIgnoreCase(baseCurrency)) {
+                return currency;
+            }
+        }
+        return null;
+    }
+    public static Currency findByQuoteCurrency(String quoteCurrency) {
+        for (Currency currency : CurrencyRepository.readCurrencyFile()) {
+            if (currency.getQuoteCurrency().equalsIgnoreCase(quoteCurrency)) {
+                return currency;
+            }
+        }
+        return null;
+    }
 }

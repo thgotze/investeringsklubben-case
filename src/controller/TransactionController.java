@@ -17,8 +17,14 @@ public class TransactionController {
                 break;
 
             case "2": // Sælg aktie
-                TransactionService.showPortfolio(user);
-                TransactionService.sellStock(scanner, user);
+                Map<String, Integer> portfolio = TransactionService.getPortfolioForUser(user);
+                if (portfolio.isEmpty()) {
+                    System.out.println(user.getFullName() + "'s portefølje er tom");
+                } else {
+                    TransactionService.displayPortfolioOfUser(portfolio, user);
+                    TransactionService.sellStock(scanner, user);
+                    return;
+                }
                 break;
 
             case "0": // Gå tilbage til hovedmenu

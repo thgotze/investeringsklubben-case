@@ -22,17 +22,14 @@ public class StockService {
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
 
         for (Stock stock : StockRepository.readStockFile()) {
-            String currencyString;
+            String currencyString = "N/A";
             if (stock.getCurrency() != null) {
                 currencyString = stock.getCurrency().getBaseCurrency();
-            } else {
-                currencyString = "N/A";
             }
-            String lastUpdatedString;
+
+            String lastUpdatedString = "N/A";
             if (stock.getLastUpdated() != null) {
                 lastUpdatedString = stock.getLastUpdated().toString();
-            } else {
-                lastUpdatedString = "N/A";
             }
 
             System.out.printf("%-9s %-21s %-15s %10.2f %8s %8s %11.2f%%    %-15s %18s\n",
