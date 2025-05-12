@@ -62,4 +62,24 @@ public class UserRepository {
     }
 
     // TODO: Tilføj en funktion der redigerer en users oplysninger
+
+
+
+
+    public static User findUserById(int userId) {
+        for (User user : UserRepository.getUsersFromFile()) {
+            if (user.getUserId() == userId) {
+                return user;
+            }
+        } return null;
+    }
+
+    public static User findByFullName(String fullName) {
+        for (User user : UserRepository.getUsersFromFile()) {
+            if (user.getFullName().equalsIgnoreCase(fullName)) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

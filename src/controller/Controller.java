@@ -1,13 +1,11 @@
 package controller;
 
-import objects.Stock;
-import objects.Transaction;
 import objects.User;
+import repository.UserRepository;
 import service.StockService;
 import service.TransactionService;
 import service.UserService;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Controller {
@@ -15,8 +13,35 @@ public class Controller {
     public static void startProgram() {
         Scanner scanner = new Scanner(System.in);
 
-        User user = UserService.logIn(scanner);
+        User user = logIn(scanner);
         showMainMenu(scanner, user);
+    }
+
+    private static User logIn(Scanner scanner) {
+        User user;
+        while (true) {
+            System.out.println("Indtast fulde navn:");
+            String name = scanner.nextLine();
+            user = UserRepository.findByFullName(name);
+            if (user == null) {
+                System.out.println("Bruger ikke fundet. Prøv igen");
+            } else {
+                break;
+            }
+        }
+
+        String password;
+        while (true) {
+            System.out.println("Indtast adgangskode: ");
+            password = scanner.nextLine();
+
+            if (password.equals(user.getPassword())) {
+                break;
+            } else {
+                System.out.println("Forkert adgangskode. Prøv igen");
+            }
+        }
+        return user;
     }
 
     private static void showMainMenu(Scanner scanner, User user) {

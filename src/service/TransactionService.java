@@ -63,13 +63,13 @@ public class TransactionService {
         System.out.println("Indtast ticker på stock");
 
         String tickerInput = scanner.nextLine();
-        Stock stock = StockService.findByTicker(tickerInput);
+        Stock stock = StockRepository.findByTicker(tickerInput);
         if (stock == null) {
             System.out.println("Denne aktie findes ikke");
         }
         System.out.println("Hvor mange af " + stock.getName() + " vil du købe?");
-        int amountInput = Integer.parseInt(scanner.nextLine());
 
+        int amountInput = Integer.parseInt(scanner.nextLine());
 
 
     }
@@ -155,7 +155,7 @@ public class TransactionService {
         }
 
         // Display the portfolio
-        System.out.println("Portfolio for " + user.getFullName() + ":");
+        System.out.println(user.getFullName() + "'s Portfolio");
         double totalValue = 0.0;
         for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
             String ticker = entry.getKey();
@@ -163,9 +163,13 @@ public class TransactionService {
 
             // Only display stocks with a positive quantity
             if (netQuantity > 0) {
-                double value = StockService.findByTicker(ticker).getPrice() * netQuantity;
+                double value = StockRepository.findByTicker(ticker).getPrice() * netQuantity;
                 totalValue += value;
                 System.out.println("Ticker: " + ticker + ", Quantity: " + netQuantity);
+                System.out.printf("%-9s %-21s %10s\n", "Ticker", "Navn", "Værdi");
+                System.out.println("--------------------------------------------------------");
+                System.out.printf("%-9s %-21s %10.2f\n", ticker, StockRepository.findByTicker(ticker).getName(), netQuantity, value);
+
             }
         }
         System.out.println("Total Værdi: " + totalValue);
