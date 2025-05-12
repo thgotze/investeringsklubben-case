@@ -58,6 +58,7 @@ public class Controller {
                 System.out.println("> 6. Se rangliste");
                 System.out.println("> 7. Se fordeling af aktier & sektorer");
                 System.out.println("> 8. Tilføj bruger");
+                System.out.println("> 9. Fjern bruger");
             }
             System.out.println("> 0. Afslut program");
 
@@ -114,9 +115,13 @@ public class Controller {
                         UserService.addUser(scanner);
                         break;
                     }
-                    System.out.println("Ugyldigt input! Prøv igen");
                     break;
 
+                case "9":
+                    if (user.isAdmin()) {
+                        UserService.deleteUser(scanner, user);
+                    }
+                    break;
                 default:
                     System.out.println("Ugyldigt input! Prøv igen");
                     break;

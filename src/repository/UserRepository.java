@@ -68,6 +68,43 @@ public class UserRepository {
     }
 
     // TODO: Tilføj en funktion der redigerer en users oplysninger
+    public static void deleteUserFromFile(int userId) {
+        List<User> users = getUsersFromFile();
+        for (User user : users) {
+            if (userId == user.getUserId()){
+                users.remove(user);
+                break;
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv"))) {
+            writer.write("userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;password");
+            writer.newLine();
+
+            // Skriv alle brugere til filen
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            for (User user : users) {
+                writer.write(
+                        user.getUserId() + ";" +
+                                user.getFullName() + ";" +
+                                user.getEmail() + ";" +
+                                user.getBirthDate().format(dateFormatter) + ";" +
+                                user.getInitialCashDKK() + ";" +
+                                user.getCreatedDate().format(dateFormatter) + ";" +
+                                user.getLastUpdated().format(dateFormatter) + ";" +
+                                user.isAdmin() + ";" +
+                                user.getPassword()
+                );
+                writer.newLine();
+            }
+
+            System.out.println("Bruger med ID " + userId + " er slettet.");
+        } catch (IOException e) {
+            System.out.println("Fejl under sletning: " + e.getMessage());
+        }
+
+
+    }
 
 
 
@@ -86,6 +123,7 @@ public class UserRepository {
                 return user;
             }
         }
+        System.out.println("Kunne ikke finde en bruger med navnet: " + fullName);
         return null;
     }
 }

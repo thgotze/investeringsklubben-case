@@ -136,6 +136,28 @@ public class UserService {
         System.out.println(user.getFullName() + " er blevet tilføjet til programmet");
     }
 
+    public static void deleteUser(Scanner scanner, User user) {
+        System.out.println("Indtast navnet på den bruger du vil fjerne fra systemet:");
+        System.out.println("> 0. Returner til hovedmenu");
+
+        String input = scanner.nextLine();
+
+        if (input.equals("0")) return;
+        User userToDelete = UserRepository.findByFullName(input);
+
+        if (userToDelete == null) return;
+
+        int idOfUserToDelete = userToDelete.getUserId();
+
+
+        if (idOfUserToDelete == user.getUserId()) {
+            System.out.println("Kan ikke slette den bruger du er logget ind med!");
+        } else {
+            UserRepository.deleteUserFromFile(idOfUserToDelete);
+        }
+    }
+
+
     public static double findUserBalance(User user) {
         List<Transaction> userTransactions = TransactionService.findAllTransactionsForUser(user);
 
