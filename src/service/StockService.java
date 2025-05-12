@@ -23,7 +23,7 @@ public class StockService {
 
         for (Stock stock : StockRepository.readStockFile()) {
             String currencyString;
-            if (stock.getCurrency() !=null) {
+            if (stock.getCurrency() != null) {
                 currencyString = stock.getCurrency().getBaseCurrency();
             } else {
                 currencyString = "N/A";

@@ -1,116 +1,61 @@
 package service;
 
+import objects.Currency;
 import objects.Stock;
 import objects.Transaction;
 import objects.User;
+import repository.CurrencyRepository;
 import repository.StockRepository;
 import repository.TransactionRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class TransactionService {
 
-    public static void createTransaction(Scanner scanner, User user) {
-        System.out.println("> 1. Køb Aktier ");
-        System.out.println("> 2. Sælg Aktier");
-        System.out.println("> 0. Returner til hovedmenu");
-
-        String input = scanner.nextLine();
-        switch (input) {
-            case "1": // Køb aktie
-                StockService.showAllStocks();
-                buyStock(scanner, user);
-                break;
-            case "2": // Sælg aktie
-                showPortfolio(user);
-                sellStock(scanner, user);
-                break;
-
-            case "0": // Gå tilbage til hovedmenu
-                return;
-
-            default:
-                System.out.println("Ugyldigt input! Prøv igen");
-                break;
-        }
-        createTransaction(scanner, user);
-    }
-
-    // Køb eller sælg?
-
-    // Hvilken aktie?
-
-    // Hvor mange
-
-
-    // Transaction transaction = new Transaction()
-    // List<Transaction> transactions = TransactionRepository.readTransactionFile();
-
-    // Genererer nyt ID
-    //  int newId = TransactionRepository.readTransactionFile().isEmpty() ? 1 :
-    //  transactions.getLast().getId() + 1;
-    // transaction.setId(newId);
-
-    // transactions.add(transaction);
-    // TransactionRepository.addTransactionToFile(transaction);
-
-    // Opdater brugerbalance
-    // double amount = transaction.getPrice() * transaction.getQuantity();
-    // UserService.updateUserBalance(transaction.getUserId(), amount, transaction.getOrderType());
-
     public static void buyStock(Scanner scanner, User user) {
-        System.out.println("Hvilken stock vil du købe");
+        System.out.println("Hvilken stock vil du købe?");
         System.out.println("Indtast ticker på stock");
 
         String tickerInput = scanner.nextLine();
         Stock stock = StockRepository.findByTicker(tickerInput);
         if (stock == null) {
             System.out.println("Denne aktie findes ikke");
+            return;
         }
-        System.out.println("Hvor mange af " + stock.getName() + " vil du købe?");
+        List<Transaction> transactions = TransactionRepository.readTransactionFile();
 
+        int transactionId = transactions.getLast().getId() + 1;
+        int userId = user.getUserId();
+        String tickerName = stock.getTickerName();
+        double price = stock.getPrice();
+        String orderType = "buy";
+        Currency currency = CurrencyRepository.findByBaseCurrency("DKK"); // TODO: THOR ER I GANG MED DET HER SHIT
+
+        System.out.println("Hvor mange af " + stock.getName() + " vil du købe?");
         int amountInput = Integer.parseInt(scanner.nextLine());
 
+        if (stock.getPrice() * amountInput > user.getInitialCashDKK()) {
+            System.out.println("Du har ikke råd til at købe " + amountInput + " x " + stock.getName() + " fordi din balance er " + user.getInitialCashDKK() + " og det  ville koste " + amountInput * stock.getPrice());
+        }
 
+        Transaction transaction = new Transaction(transactionId, userId, LocalDate.now(), tickerName, price, currency, orderType, amountInput);
+        TransactionRepository.addTransactionToFile(transaction);
+
+        System.out.println("Du har nu købt: " + amountInput + " x " + stock.getName());
+
+        // UserRepository.updateUser TODO: THOR Opdater brugerbalance
     }
-
 
     public static void sellStock(Scanner scanner, User user) {
-        String sellInput = scanner.nextLine();
+        System.out.println("Hvilken stock vil du sælge?");
+        System.out.println("Indtast ticker på stock");
 
-        switch (sellInput) {
-            case "1":
+        List<Transaction> transactionsForUser = TransactionRepository.findTransactionsForUser(user);
 
-                break;
-            case "2":
+        String tickerInput = scanner.nextLine();
 
-                break;
-
-            case "0":
-                break;
-        }
-
-    }
-
-    public static Transaction findTransactionById(int id) {
-        for (Transaction transaction : TransactionRepository.readTransactionFile()) {
-            if (transaction.getId() == id) {
-                return transaction;
-            }
-        }
-        return null;
-    }
-
-    public static List<Transaction> findAllTransactionsForUser(User user) {
-        int userId = user.getUserId();
-
-        List<Transaction> transactionsForUser = new ArrayList<>();
-        for (Transaction transaction : TransactionRepository.readTransactionFile()) {
-            if (transaction.getUserId() == userId) {
-                transactionsForUser.add(transaction);
-            }
-        }
-        return transactionsForUser;
+        // TODO: THOR OG SEBASTIAN LAVER DET HER
     }
 
     public static List<Transaction> findTransactionsWithSameTicker(List<Transaction> transactions, String ticker) {
@@ -123,45 +68,37 @@ public class TransactionService {
         return sameTickerTransactions;
     }
 
+    public static Map<String, Integer> getPortfolioForUser(User user) {
+        Map<String, Integer> userPortfolio = new HashMap<>();
 
-    public static void showPortfolio(User user) {
-        // Retrieve all transactions for the user
-        List<Transaction> userTransactions = findAllTransactionsForUser(user);
+        List<Transaction> userTransactions = TransactionRepository.findTransactionsForUser(user);
 
-        // If there are no transactions, return early
         if (userTransactions.isEmpty()) {
-            System.out.println("No transactions found for the user.");
-            return;
+            System.out.println("Ingen transaktioner fundet for bruger: " + user.getFullName());
+            return null;
         }
 
-        // Map to hold aggregated portfolio data
-        // Key: Ticker, Value: Net Quantity
-        Map<String, Integer> portfolio = new HashMap<>();
-
-        // Iterate over user transactions
         for (Transaction transaction : userTransactions) {
-            String ticker = transaction.getTicker(); // e.g., NOVO-B
-            int quantity = transaction.getQuantity(); // Quantity of the transaction
-
-            // Get the order type: buy or sell
+            String ticker = transaction.getTicker();
+            int quantity = transaction.getQuantity();
             String orderType = transaction.getOrderType();
 
-            // Update portfolio based on order type
             if (orderType.equals("buy")) {
-                portfolio.put(ticker, portfolio.getOrDefault(ticker, 0) + quantity);
+                userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) + quantity);
             } else if (orderType.equals("sell")) {
-                portfolio.put(ticker, portfolio.getOrDefault(ticker, 0) - quantity);
+                userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) - quantity);
             }
         }
+        return null;
+    }
 
-        // Display the portfolio
+    public static void displayPortfolio(User user, Map<String, Integer> portfolio) {
         System.out.println(user.getFullName() + "'s Portfolio");
         double totalValue = 0.0;
         for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
             String ticker = entry.getKey();
             int netQuantity = entry.getValue();
 
-            // Only display stocks with a positive quantity
             if (netQuantity > 0) {
                 double value = StockRepository.findByTicker(ticker).getPrice() * netQuantity;
                 totalValue += value;
@@ -169,7 +106,6 @@ public class TransactionService {
                 System.out.printf("%-9s %-21s %10s\n", "Ticker", "Navn", "Værdi");
                 System.out.println("--------------------------------------------------------");
                 System.out.printf("%-9s %-21s %10.2f\n", ticker, StockRepository.findByTicker(ticker).getName(), netQuantity, value);
-
             }
         }
         System.out.println("Total Værdi: " + totalValue);

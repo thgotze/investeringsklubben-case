@@ -38,7 +38,7 @@ public class StockRepository {
                     double price = Double.parseDouble(data1[3].trim().replace(",", "."));
 
                     String currencyCode = data1[4].trim();
-                    Currency currency = CurrencyService.findByBaseCurrency(currencyCode);
+                    Currency currency = CurrencyRepository.findByBaseCurrency(currencyCode);
                     String rating = data1[5].trim();
                     double dividendYield = Double.parseDouble(data1[6].trim().replace(",", "."));
                     String market = data1[7].trim();

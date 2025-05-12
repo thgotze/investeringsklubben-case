@@ -149,7 +149,6 @@ public class UserService {
 
         int idOfUserToDelete = userToDelete.getUserId();
 
-
         if (idOfUserToDelete == user.getUserId()) {
             System.out.println("Kan ikke slette den bruger du er logget ind med!");
         } else {
@@ -157,9 +156,8 @@ public class UserService {
         }
     }
 
-
     public static double findUserBalance(User user) {
-        List<Transaction> userTransactions = TransactionService.findAllTransactionsForUser(user);
+        List<Transaction> userTransactions = TransactionRepository.findTransactionsForUser(user);
 
         double userBalance = user.getInitialCashDKK();
         for (Transaction transaction : userTransactions) {

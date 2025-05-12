@@ -13,7 +13,6 @@ public class Transaction {
     private String orderType;
     private int quantity;
 
-
     public Transaction(int id, int userId, LocalDate date, String ticker, double price, Currency currency, String orderType, int quantity) {
         this.id = id;
         this.userId = userId;

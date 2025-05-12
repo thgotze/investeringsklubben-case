@@ -53,15 +53,34 @@ public class TransactionRepository {
         return transactions;
     }
 
-
     public static void addTransactionToFile(Transaction transaction) {
         List<Transaction> transactions = readTransactionFile();
-        transactions.add(transaction);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/transactions.csv", true))) {
             writer.newLine();
             writer.write(transaction.toString());
         } catch (IOException e) {
             System.out.println("Failed to add transaction: " + e.getMessage());
         }
+    }
+
+    public static Transaction findTransactionById(int id) {
+        for (Transaction transaction : TransactionRepository.readTransactionFile()) {
+            if (transaction.getId() == id) {
+                return transaction;
+            }
+        }
+        return null;
+    }
+
+    public static List<Transaction> findTransactionsForUser(User user) {
+        int userId = user.getUserId();
+
+        List<Transaction> transactionsForUser = new ArrayList<>();
+        for (Transaction transaction : TransactionRepository.readTransactionFile()) {
+            if (transaction.getUserId() == userId) {
+                transactionsForUser.add(transaction);
+            }
+        }
+        return transactionsForUser;
     }
 }

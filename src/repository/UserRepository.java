@@ -102,19 +102,16 @@ public class UserRepository {
         } catch (IOException e) {
             System.out.println("Fejl under sletning: " + e.getMessage());
         }
-
-
     }
-
-
-
 
     public static User findUserById(int userId) {
         for (User user : UserRepository.getUsersFromFile()) {
             if (user.getUserId() == userId) {
                 return user;
             }
-        } return null;
+        }
+        System.out.println("Kunne ikke finde en bruger med ID: " + userId);
+        return null;
     }
 
     public static User findByFullName(String fullName) {
