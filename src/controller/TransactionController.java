@@ -1,5 +1,12 @@
 package controller;
 
+import objects.User;
+import service.StockService;
+import service.TransactionService;
+
+import java.util.Map;
+import java.util.Scanner;
+
 public class TransactionController {
 
     public static void showTransactionMenu(Scanner scanner, User user) {

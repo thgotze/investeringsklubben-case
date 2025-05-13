@@ -25,12 +25,14 @@ public class MainController {
         System.out.println("> 4. Køb/Sælg aktier");
         System.out.println("> 5. Se tidligere handler");
         System.out.println("> 99. Se min saldo");
+        System.out.println("> 98. Rediger kontooplysninger");
+
 
         if (user.isAdmin()) {
             System.out.println("> 6. Se brugernes porteføljeværdi");
             System.out.println("> 7. Se rangliste");
             System.out.println("> 8. Se fordeling af aktier & sektorer");
-            System.out.println("> 9. Tilføj bruger");
+            System.out.println("> 9. Rediger brugere");
         }
         System.out.println("> 0. Afslut program");
 
@@ -71,6 +73,10 @@ public class MainController {
                 System.out.println(userBalance);
                 break;
 
+            case "98":
+                UserService.editUser(scanner, user);
+                break;
+
             case "6": // Se brugernes porteføljeværdi
                 System.out.println("Ikke implementeret endnu!");
                 if (!user.isAdmin()) {
@@ -96,10 +102,9 @@ public class MainController {
 
             case "9": // Tilføj bruger
                 if (user.isAdmin()) {
-                    UserService.addUser(scanner);
+                    UserController.adminEditUserMenu(scanner, user);
                     break;
                 }
-                System.out.println("Ugyldigt input! Prøv igen");
                 break;
 
             default:

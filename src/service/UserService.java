@@ -17,7 +17,7 @@ public class UserService {
     }
 
     public static User findUserByFullName(String fullName) {
-        return UserRepository.findUserByFullName(fullName);
+        return UserRepository.findByFullName(fullName);
     }
 
     public static boolean validatePassword(User user, String password) {
@@ -40,59 +40,8 @@ public class UserService {
         LocalDate birthDay;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        while (true) {
-            try {
-                // År
-                System.out.println("Angiv fødselsår for brugeren:");
-                System.out.println("> 0. Returner til hovedmenu");
-
-                String inputYear = scanner.nextLine();
-                if (inputYear.equals("0")) return;
-                int birthyear = Integer.parseInt(inputYear);
-
-                if (birthyear > LocalDate.now().getYear() || birthyear < 1900) {
-                    System.out.println("Ugyldigt fødselsår! Prøv igen");
-                    continue;
-                }
-
-                // Måned
-                System.out.println("Angiv fødselsmåned for brugeren (1-12):");
-                System.out.println("> 0. Returner til hovedmenu");
-
-                String inputMonth = scanner.nextLine();
-                if (inputMonth.equals("0")) return;
-                int birthMonth = Integer.parseInt(inputMonth);
-
-                if (birthMonth < 1 || birthMonth > 12) {
-                    System.out.println("Ugyldig måned! Prøv igen");
-                    continue;
-                }
-
-                // Dag
-                int maxDaysInMonth = YearMonth.of(birthyear, birthMonth).lengthOfMonth();
-
-                System.out.println("Angiv fødselsdato for brugeren:");
-                System.out.println("> 0. Returner til hovedmenu");
-
-                String inputDate = scanner.nextLine();
-                if (inputDate.equals("0")) return;
-                int birthDate = Integer.parseInt(inputDate);
-
-                if (birthDate < 1 || birthDate > maxDaysInMonth) {
-                    System.out.println("Ugyldig dato! Prøv igen");
-                    continue;
-                }
-
-                // Gem Dato
-                birthDay = LocalDate.of(birthyear, birthMonth, birthDate);
-                String formattedBirthDay = birthDay.format(dateTimeFormatter);
-                birthDay = LocalDate.parse(formattedBirthDay, dateTimeFormatter);
-                break;
-
-            } catch (NumberFormatException e) {
-                System.out.println("Ugyldigt input! prøv igen");
-            }
-        }
+        birthDay = chooseBirthDay(scanner);
+        if (birthDay == null) return;
 
 
         boolean admin = false;
@@ -155,7 +104,7 @@ public class UserService {
         String input = scanner.nextLine();
 
         if (input.equals("0")) return;
-        User userToDelete = UserRepository.findUserByFullName(input);
+        User userToDelete = UserRepository.findByFullName(input);
 
         if (userToDelete == null) return;
 
@@ -165,6 +114,65 @@ public class UserService {
             System.out.println("Kan ikke slette den bruger du er logget ind med!");
         } else {
             UserRepository.removeUserFromFile(idOfUserToDelete);
+        }
+    }
+
+    public static void editUser(Scanner scanner, User user) {
+        boolean editing = true;
+        while (editing) {
+            System.out.println("Hvad vil du redigere:");
+            System.out.println("> 1. Navn");
+            System.out.println("> 2. Email");
+            System.out.println("> 3. Fødselsdato");
+            System.out.println("> 4. Adgangskode");
+            System.out.println("> 0. Gem og afslut");
+
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Indtast nyt navn:");
+                    String newName = scanner.nextLine();
+                    if (newName.equals(user.getFullName())) {
+                        System.out.println("Du kan ikke bruge det samme navn");
+                    } else {
+                        user.setFullName(scanner.nextLine());
+                    }
+                    break;
+                case 2:
+                    System.out.println("Indtast ny email:");
+                    String newEmail = scanner.nextLine();
+                    if (newEmail.equals(user.getEmail())) {
+                        System.out.println("Du kan ikke bruge den samme email");
+                    } else {
+                        user.setEmail(newEmail);
+                    }
+                    break;
+                case 3:
+                    System.out.println("Indtast ny fødselsdag:");
+                    LocalDate newBirthDay = chooseBirthDay(scanner);
+                    if (newBirthDay == null) break;
+
+                    user.setBirthDate(newBirthDay);
+                    break;
+                case 4:
+                    System.out.println("Indtast ny adgangskode:");
+                    String newPassword = scanner.nextLine();
+                    if (newPassword.equals(user.getPassword())) {
+                        System.out.println("Du kan ikke bruge samme adgangskode");
+                    } else {
+                        user.setPassword(newPassword);
+                    }
+                    break;
+                case 5:
+                    editing = false;
+                    user.setLastUpdated(LocalDate.now());
+                    UserRepository.updateUserInFile(user);
+                    System.out.println("Bruger opdateret");
+                    break;
+                default:
+                    System.out.println("Ugyldigt input! Prøv igen");
+            }
         }
     }
 
@@ -180,5 +188,66 @@ public class UserService {
             }
         }
         return userBalance;
+    }
+
+
+    public static LocalDate chooseBirthDay (Scanner scanner) {
+        LocalDate birthDay;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        while (true) {
+            try {
+                // År
+                System.out.println("Angiv fødselsår for brugeren:");
+                System.out.println("> 0. Returner til hovedmenu");
+
+                String inputYear = scanner.nextLine();
+                if (inputYear.equals("0")) return null;
+                int birthyear = Integer.parseInt(inputYear);
+
+                if (birthyear > LocalDate.now().getYear() || birthyear < 1900) {
+                    System.out.println("Ugyldigt fødselsår! Prøv igen");
+                    continue;
+                }
+
+                // Måned
+                System.out.println("Angiv fødselsmåned for brugeren (1-12):");
+                System.out.println("> 0. Returner til hovedmenu");
+
+                String inputMonth = scanner.nextLine();
+                if (inputMonth.equals("0")) return null;
+                int birthMonth = Integer.parseInt(inputMonth);
+
+                if (birthMonth < 1 || birthMonth > 12) {
+                    System.out.println("Ugyldig måned! Prøv igen");
+                    continue;
+                }
+
+                // Dag
+                int maxDaysInMonth = YearMonth.of(birthyear, birthMonth).lengthOfMonth();
+
+                System.out.println("Angiv fødselsdato for brugeren:");
+                System.out.println("> 0. Returner til hovedmenu");
+
+                String inputDate = scanner.nextLine();
+                if (inputDate.equals("0")) return null;
+                int birthDate = Integer.parseInt(inputDate);
+
+                if (birthDate < 1 || birthDate > maxDaysInMonth) {
+                    System.out.println("Ugyldig dato! Prøv igen");
+                    continue;
+                }
+
+                // Gem Dato
+                birthDay = LocalDate.of(birthyear, birthMonth, birthDate);
+                String formattedBirthDay = birthDay.format(dateTimeFormatter);
+                birthDay = LocalDate.parse(formattedBirthDay, dateTimeFormatter);
+                break;
+
+            } catch (NumberFormatException e) {
+                System.out.println("Ugyldigt input! prøv igen");
+            }
+        }
+        return birthDay;
     }
 }

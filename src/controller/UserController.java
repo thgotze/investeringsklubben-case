@@ -36,4 +36,30 @@ public class UserController {
             }
         }
     }
+
+
+    public static void adminEditUserMenu (Scanner scanner, User user) {
+        System.out.println("> 1. Tilføj bruger");
+        System.out.println("> 2. Fjern bruger");
+        System.out.println("> 3. Ændrer brugers admin status");
+        System.out.println("> 0. Returnern til menu");
+
+        String input = scanner.nextLine();
+
+        switch (input) {
+            case "0":
+                return;
+            case "1":
+                UserService.addUser(scanner);
+                break;
+            case "2":
+                UserService.deleteUser(scanner, user);
+                break;
+            case "3":
+
+            default:
+                System.out.println("Ugyldigt input! prøv igen");
+
+        }
+    }
 }

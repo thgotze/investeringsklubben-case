@@ -18,7 +18,7 @@ public class TransactionService {
         System.out.println("Indtast ticker på stock");
 
         String tickerInput = scanner.nextLine();
-        Stock stock = StockRepository.findStockByTicker(tickerInput);
+        Stock stock = StockRepository.findByTicker(tickerInput);
         if (stock == null) {
             System.out.println("Denne aktie findes ikke");
             return;
@@ -104,7 +104,7 @@ public class TransactionService {
         for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
             String ticker = entry.getKey();
             int quantity = entry.getValue();
-            Stock stock = StockRepository.findStockByTicker(ticker); // TODO FIX
+            Stock stock = StockRepository.findByTicker(ticker); // TODO FIX
 
             double subtotal = stock.getPrice() * quantity;
             totalValue += subtotal;
