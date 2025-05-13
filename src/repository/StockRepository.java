@@ -2,6 +2,7 @@ package repository;
 
 import objects.Currency;
 import objects.Stock;
+import service.CurrencyService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,7 +38,7 @@ public class StockRepository {
                     double price = Double.parseDouble(data1[3].trim().replace(",", "."));
 
                     String currencyCode = data1[4].trim();
-                    Currency currency = CurrencyRepository.findByBaseCurrency(currencyCode);
+                    Currency currency = CurrencyService.findByBaseCurrency(currencyCode);
                     String rating = data1[5].trim();
                     double dividendYield = Double.parseDouble(data1[6].trim().replace(",", "."));
                     String market = data1[7].trim();
@@ -56,32 +57,5 @@ public class StockRepository {
         }
         return stocks;
     }
-    
-    public static Stock findByTicker(String ticker) {
-        for (Stock stock : StockRepository.readStockFile()) {
-            if (stock.getTickerName().equalsIgnoreCase(ticker)) {
-                return stock;
-            }
-        }
-        return null;
-    }
 
-    public static Stock findStockByName(String name) {
-        for (Stock stock : StockRepository.readStockFile()) {
-            if (stock.getName().equalsIgnoreCase(name)) {
-                return stock;
-            }
-        }
-        return null;
-    }
-
-    public static List<Stock> findAllStocksBySector(String sector) {
-        List<Stock> sectors = new ArrayList<>();
-        for (Stock stock : StockRepository.readStockFile()) {
-            if (stock.getSector().equalsIgnoreCase(sector)) {
-                sectors.add(stock);
-            }
-        }
-        return sectors;
-    }
 }

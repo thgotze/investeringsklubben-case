@@ -31,73 +31,73 @@ public class User implements Comparable<User> {
         this.password = password;
     }
 
-    // Setters & Getters
+    // Getters & Setters
     public int getUserId() {
         return userId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public double getInitialCashDKK() {
-        return initialCashDKK;
-    }
-
-    public LocalDate getCreatedDate() {
-        return createdDate;
-    }
-
-    public LocalDate getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public double getInitialCashDKK() {
+        return initialCashDKK;
     }
 
     public void setInitialCashDKK(double initialCashDKK) {
         this.initialCashDKK = initialCashDKK;
     }
 
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
     }
 
     public void setLastUpdated(LocalDate lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {

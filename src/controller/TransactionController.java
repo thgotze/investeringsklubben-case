@@ -24,11 +24,10 @@ public class TransactionController {
                 break;
 
             case "2": // Sælg aktie
-                Map<String, Integer> portfolio = TransactionService.getPortfolioForUser(user);
-                if (portfolio.isEmpty()) {
-                    System.out.println(user.getFullName() + "'s portefølje er tom");
+                if (TransactionService.getPortfolioForUser(user).isEmpty()) {
+                    System.out.println("Kan ikke sælge aktier da dit portefølje er tomt!");
                 } else {
-                    TransactionService.displayPortfolioOfUser(portfolio, user);
+                    TransactionService.displayPortfolioOfUser(user);
                     TransactionService.sellStock(scanner, user);
                     return;
                 }

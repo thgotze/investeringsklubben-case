@@ -2,7 +2,6 @@ package repository;
 
 import objects.Currency;
 import objects.Transaction;
-import objects.User;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -59,13 +58,14 @@ public class TransactionRepository {
         List<Transaction> transactions = readTransactionFile();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/transactions.csv", true))) {
             String formattedDate = transaction.getDate().format(CSV_DATE_FORMAT);
+            String formattedPrice = String.valueOf(transaction.getPrice()).replace(".", ",");
             writer.newLine();
             writer.write(
                     transaction.getId() + ";" +
                         transaction.getUserId() + ";" +
                         formattedDate + ";" +
                         transaction.getTicker() + ";" +
-                        transaction.getPrice() + ";" +
+                        formattedPrice + ";" +
                         transaction.getCurrency().getBaseCurrency() + ";" +
                         transaction.getOrderType() + ";" +
                         transaction.getQuantity());
@@ -75,26 +75,5 @@ public class TransactionRepository {
         } catch (IOException e) {
             System.out.println("Failed to add transaction: " + e.getMessage());
         }
-    }
-
-    public static Transaction findTransactionById(int id) {
-        for (Transaction transaction : TransactionRepository.readTransactionFile()) {
-            if (transaction.getId() == id) {
-                return transaction;
-            }
-        }
-        return null;
-    }
-
-    public static List<Transaction> findTransactionsForUser(User user) {
-        int userId = user.getUserId();
-
-        List<Transaction> transactionsForUser = new ArrayList<>();
-        for (Transaction transaction : TransactionRepository.readTransactionFile()) {
-            if (transaction.getUserId() == userId) {
-                transactionsForUser.add(transaction);
-            }
-        }
-        return transactionsForUser;
     }
 }

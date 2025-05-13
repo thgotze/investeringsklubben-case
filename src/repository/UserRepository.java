@@ -67,6 +67,43 @@ public class UserRepository {
         }
     }
 
+    public static void updateUserInFile(User updatedUser) {
+        List<User> users = getUsersFromFile();
+
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId() == updatedUser.getUserId()) {
+                users.set(i, updatedUser);
+                break;
+            }
+        }
+        saveUsersToFile(users);
+    }
+
+    private static void saveUsersToFile(List<User> users) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv"))) {
+            writer.write("userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;password");
+            writer.newLine();
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            for (User user : users) {
+                writer.write(
+                        user.getUserId() + ";" +
+                                user.getFullName() + ";" +
+                                user.getEmail() + ";" +
+                                user.getBirthDate().format(dateFormatter) + ";" +
+                                user.getInitialCashDKK() + ";" +
+                                user.getCreatedDate().format(dateFormatter) + ";" +
+                                user.getLastUpdated().format(dateFormatter) + ";" +
+                                user.isAdmin() + ";" +
+                                user.getPassword());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Fejl under gemning: " + e.getMessage());
+        }
+    }
+
     public static void removeUserFromFile(int userId) {
         List<User> users = getUsersFromFile();
         for (User user : users) {
@@ -103,61 +140,4 @@ public class UserRepository {
         }
     }
 
-    public static void updateUserInFile(User updatedUser) {
-        List<User> users = getUsersFromFile();
-
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId() == updatedUser.getUserId()) {
-                users.set(i, updatedUser);
-                break;
-            }
-        }
-        saveUsersToFile(users);
-    }
-
-    private static void saveUsersToFile(List<User> users) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv"))) {
-            writer.write("userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;password");
-            writer.newLine();
-
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-            for (User user : users) {
-                writer.write(
-                        user.getUserId() + ";" +
-                                user.getFullName() + ";" +
-                                user.getEmail() + ";" +
-                                user.getBirthDate().format(dateFormatter) + ";" +
-                                user.getInitialCashDKK() + ";" +
-                                user.getCreatedDate().format(dateFormatter) + ";" +
-                                user.getLastUpdated().format(dateFormatter) + ";" +
-                                user.isAdmin() + ";" +
-                                user.getPassword());
-                        writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Fejl under gemning: " + e.getMessage());
-        }
-    }
-
-
-    public static User findUserById(int userId) {
-        for (User user : UserRepository.getUsersFromFile()) {
-            if (user.getUserId() == userId) {
-                return user;
-            }
-        }
-        System.out.println("Kunne ikke finde en bruger med ID: " + userId);
-        return null;
-    }
-
-    public static User findByFullName(String fullName) {
-        for (User user : UserRepository.getUsersFromFile()) {
-            if (user.getFullName().equalsIgnoreCase(fullName)) {
-                return user;
-            }
-        }
-        System.out.println("Kunne ikke finde en bruger med navnet: " + fullName);
-        return null;
-    }
 }

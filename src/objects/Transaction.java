@@ -14,6 +14,7 @@ public class Transaction {
     private String orderType;
     private int quantity;
 
+    // Constructor
     public Transaction(int id, int userId, LocalDate date, String ticker, double price, Currency currency, String orderType, int quantity) {
         this.id = id;
         this.userId = userId;
@@ -43,10 +44,6 @@ public class Transaction {
 
     public LocalDate getDate() {
         return date;
-    }
-    public String getFormattedDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return date.format(formatter);
     }
 
     public void setDate(LocalDate date) {

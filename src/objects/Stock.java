@@ -13,7 +13,7 @@ public class Stock {
     private String market;
     private LocalDate lastUpdated;
 
-    //Constructor
+    // Constructor
     public Stock(String ticker, String name, String sector, double price, String rating, Currency currency, double dividendYield, String market, LocalDate lastUpdated) {
         this.ticker = ticker;
         this.name = name;

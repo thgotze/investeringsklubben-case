@@ -37,7 +37,6 @@ public class UserController {
         }
     }
 
-
     public static void adminEditUserMenu (Scanner scanner, User user) {
         System.out.println("> 1. Tilføj bruger");
         System.out.println("> 2. Fjern bruger");

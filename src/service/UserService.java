@@ -2,23 +2,17 @@ package service;
 
 import objects.Transaction;
 import objects.User;
-import repository.TransactionRepository;
 import repository.UserRepository;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UserService {
-    public static User findUserById(int userId) {
-        return UserRepository.findUserById(userId);
-    }
-
-    public static User findUserByFullName(String fullName) {
-        return UserRepository.findByFullName(fullName);
-    }
 
     public static boolean validatePassword(User user, String password) {
         return user.getPassword().equals(password);
@@ -43,7 +37,6 @@ public class UserService {
         birthDay = chooseBirthDay(scanner);
         if (birthDay == null) return;
 
-
         boolean admin = false;
         while (true) {
             try {
@@ -61,15 +54,14 @@ public class UserService {
 
                 switch (input) {
                     case 1:
-                        admin = false;
                         break;
 
-                        case 2:
-                            admin = true;
-                            break;
+                    case 2:
+                        admin = true;
+                        break;
 
-                            default:
-                                System.out.println("Ugyldigt. input! prøv igen");
+                    default:
+                        System.out.println("Ugyldigt. input! prøv igen");
                 }
                 break;
             } catch (NumberFormatException e) {
@@ -77,7 +69,7 @@ public class UserService {
             }
         }
 
-        System.out.println("Angiv adgangskode hos brugren");
+        System.out.println("Angiv adgangskode hos brugeren");
         System.out.println("> 0. Returner til hovedmenu");
 
         String password = scanner.nextLine();
@@ -92,7 +84,7 @@ public class UserService {
 
         LocalDate lastUpdated = LocalDate.now();
 
-        User user = new User(userId, fullName, email, birthDay , initialSaldo, createdDate, lastUpdated, admin, password);
+        User user = new User(userId, fullName, email, birthDay, initialSaldo, createdDate, lastUpdated, admin, password);
         UserRepository.addUserToFile(user);
         System.out.println(user.getFullName() + " er blevet tilføjet til programmet");
     }
@@ -104,7 +96,7 @@ public class UserService {
         String input = scanner.nextLine();
 
         if (input.equals("0")) return;
-        User userToDelete = UserRepository.findByFullName(input);
+        User userToDelete = UserService.findUserByFullName(input);
 
         if (userToDelete == null) return;
 
@@ -176,22 +168,7 @@ public class UserService {
         }
     }
 
-    public static double findUserBalance(User user) {
-        List<Transaction> userTransactions = TransactionRepository.findTransactionsForUser(user);
-
-        double userBalance = user.getInitialCashDKK();
-        for (Transaction transaction : userTransactions) {
-            if (transaction.getOrderType().equals("buy")) {
-                userBalance -= transaction.getPrice() * transaction.getQuantity();
-            } else {
-                userBalance += transaction.getPrice() * transaction.getQuantity();
-            }
-        }
-        return userBalance;
-    }
-
-
-    public static LocalDate chooseBirthDay (Scanner scanner) {
+    public static LocalDate chooseBirthDay(Scanner scanner) {
         LocalDate birthDay;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -249,5 +226,52 @@ public class UserService {
             }
         }
         return birthDay;
+    }
+
+    public static double findUserBalance(User user) {
+        List<Transaction> userTransactions = TransactionService.findTransactionsForUser(user);
+
+        double userBalance = user.getInitialCashDKK();
+        for (Transaction transaction : userTransactions) {
+            if (transaction.getOrderType().equals("buy")) {
+                userBalance -= transaction.getPrice() * transaction.getQuantity();
+            } else {
+                userBalance += transaction.getPrice() * transaction.getQuantity();
+            }
+        }
+        return userBalance;
+    }
+
+    public static void userRanking(User user) {
+        System.out.println("Top 5 brugere i programmet");
+        List<Transaction> userTransactions = TransactionService.findTransactionsForUser(user);
+        Map<String, Double> latestPrices = new HashMap<>();
+        Map<String, LocalDate> latestDates = new HashMap<>();
+
+        for (Transaction transaction : userTransactions) {
+            if (!latestPrices.containsKey(transaction.getTicker()) || transaction.getDate().isAfter(latestDates.get(transaction.getTicker()))) {
+                latestPrices.put(transaction.getTicker(), transaction.getPrice());
+                latestDates.put(transaction.getTicker(), transaction.getDate());
+            }
+        }
+
+    }
+
+    public static User findUserById(int userId) {
+        for (User user : UserRepository.getUsersFromFile()) {
+            if (user.getUserId() == userId) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public static User findUserByFullName(String fullName) {
+        for (User user : UserRepository.getUsersFromFile()) {
+            if (user.getFullName().equalsIgnoreCase(fullName)) {
+                return user;
+            }
+        }
+        return null;
     }
 }
