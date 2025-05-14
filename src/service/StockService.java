@@ -6,16 +6,21 @@ import repository.StockRepository;
 import java.util.*;
 
 public class StockService {
+    private final StockRepository stockRepository;
 
-    public static void showStocksSortedByPrice(List<Stock> stocks) {
+    public StockService(StockRepository stockRepository) {
+        this.stockRepository = stockRepository;
+    }
+
+    public void showStocksSortedByPrice(List<Stock> stocks) {
         stocks.sort(Comparator.comparing(Stock::getPrice).reversed());
         for (Stock stock : stocks) {
             System.out.println(stock);
         }
     }
 
-    public static Stock findStockByTicker(String ticker) {
-        for (Stock stock : StockRepository.readStockFile()) {
+    public Stock findStockByTicker(String ticker) {
+        for (Stock stock : stockRepository.readStockFile()) {
             if (stock.getTickerName().equalsIgnoreCase(ticker)) {
                 return stock;
             }
@@ -23,8 +28,8 @@ public class StockService {
         return null;
     }
 
-    public static Stock findStockByName(String name) {
-        for (Stock stock : StockRepository.readStockFile()) {
+    public Stock findStockByName(String name) {
+        for (Stock stock : stockRepository.readStockFile()) {
             if (stock.getName().equalsIgnoreCase(name)) {
                 return stock;
             }
@@ -32,9 +37,9 @@ public class StockService {
         return null;
     }
 
-    public static List<Stock> findAllStocksBySector(String sector) {
+    public List<Stock> findAllStocksBySector(String sector) {
         List<Stock> sectors = new ArrayList<>();
-        for (Stock stock : StockRepository.readStockFile()) {
+        for (Stock stock : stockRepository.readStockFile()) {
             if (stock.getSector().equalsIgnoreCase(sector)) {
                 sectors.add(stock);
             }
@@ -42,13 +47,13 @@ public class StockService {
         return sectors;
     }
 
-    public static void showAllStocks() {
+    public void showAllStocks() {
         System.out.println(" -*- Aktier -*- ");
         System.out.printf("%-9s %-21s %-15s %10s %8s %8s %13s   %-15s   %18s\n",
                 "Ticker", "Navn", "Sektor", "Pris", "Valuta", "Rating", "Dividend %", "Marked", "Sidst opdateret");
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
 
-        for (Stock stock : StockRepository.readStockFile()) {
+        for (Stock stock : stockRepository.readStockFile()) {
             String currencyString = "N/A";
             if (stock.getCurrency() != null) {
                 currencyString = stock.getCurrency().getBaseCurrency();
@@ -73,15 +78,16 @@ public class StockService {
         System.out.println(" -*- Aktier -*-");
     }
 
-    public static void showSectorDistribution() {
+    public void showSectorDistribution() {
         // Henter alle aktier fra repository
-        List<Stock> allStocks = StockRepository.readStockFile();
+        List<Stock> allStocks = stockRepository.readStockFile();
         // Bruger MAP til at parre (Sektors navn med den samlede pris for aktierne i den sektor)
         Map<String, Double> sectorTotals = new HashMap<>();
 
         // Hele klubbens investeringer
         double totalInvestement = 0.0;
 
+        System.out.println("=== Klubinvestering fordelt på sektorer (% af samlet værdi) ===");
         for (Stock stock : allStocks) {
             String sector = stock.getSector();
             Double price = stock.getPrice();

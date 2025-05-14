@@ -9,16 +9,7 @@ public class Utilities {
         System.out.println("Ugyldigt input! Prøv igen.");
     }
 
-    public static boolean hasAdminAccess(User user) {
-        if (!user.isAdmin()) {
-            System.out.println("Adgang nægtet: Denne funktion kræver administratorrettigheder.");
-            return false;
-        }
-        return true;
-    }
-½
-    public static void showUserBalance(User user) {
-        double balance = UserService.findUserBalance(user);
-        System.out.printf("Saldo for %s: %.2f\n", user.getFullName(), balance);
+    public static void notAdminMessage() {
+        System.out.println("Adgang nægtet: Denne funktion kræver administratorrettigheder.");
     }
 }

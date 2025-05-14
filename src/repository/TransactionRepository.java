@@ -14,7 +14,7 @@ public class TransactionRepository {
     //Definere dato formatet i CSV filen
     private static final DateTimeFormatter CSV_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public static List<Transaction> readTransactionFile() {
+    public List<Transaction> readTransactionFile() {
         List<Transaction> transactions = new ArrayList<>();
         try {
             File transactionsFile = new File("resources/transactions.csv");
@@ -36,7 +36,7 @@ public class TransactionRepository {
                     LocalDate transactionDate = LocalDate.parse(data2[2].trim(), CSV_DATE_FORMAT);
                     String ticker = data2[3].trim();
                     double pricePerStock = Double.parseDouble(data2[4].trim().replace(",", "."));
-                    Currency currency = new Currency(data2[5].trim(), "DKK", 10515.20, LocalDate.now()); // TODO: Fix denne linje senere
+                    Currency currency = new Currency(data2[5].trim());
                     String orderType = data2[6].trim();
                     int quantity = Integer.parseInt(data2[7].trim());
 
@@ -54,7 +54,7 @@ public class TransactionRepository {
         return transactions;
     }
 
-    public static void addTransactionToFile(Transaction transaction) {
+    public void addTransactionToFile(Transaction transaction) {
         List<Transaction> transactions = readTransactionFile();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/transactions.csv", true))) {
             String formattedDate = transaction.getDate().format(CSV_DATE_FORMAT);
@@ -62,8 +62,8 @@ public class TransactionRepository {
             writer.newLine();
             writer.write(
                     transaction.getId() + ";" +
-                        transaction.getUserId() + ";" +
-                        formattedDate + ";" +
+                            transaction.getUserId() + ";" +
+                            formattedDate + ";" +
                         transaction.getTicker() + ";" +
                         formattedPrice + ";" +
                         transaction.getCurrency().getBaseCurrency() + ";" +

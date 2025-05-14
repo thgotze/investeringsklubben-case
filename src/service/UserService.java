@@ -1,24 +1,25 @@
 package service;
 
-import objects.Transaction;
 import objects.User;
 import repository.UserRepository;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class UserService {
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public static boolean validatePassword(User user, String password) {
         return user.getPassword().equals(password);
     }
 
-    public static void addUser(Scanner scanner) {
+    public void addUser(Scanner scanner) {
         System.out.println("Hvad er brugerens fulde navn?");
         System.out.println("> 0. Returner til hovedmenu");
 
@@ -77,7 +78,7 @@ public class UserService {
             return;
         }
 
-        int userId = UserRepository.getUsersFromFile().getLast().getUserId() + 1;
+        int userId = userRepository.getUsersFromFile().getLast().getUserId() + 1;
         double initialSaldo = 100000.0;
 
         LocalDate createdDate = LocalDate.now();
@@ -85,18 +86,18 @@ public class UserService {
         LocalDate lastUpdated = LocalDate.now();
 
         User user = new User(userId, fullName, email, birthDay, initialSaldo, createdDate, lastUpdated, admin, password);
-        UserRepository.addUserToFile(user);
+        userRepository.addUserToFile(user);
         System.out.println(user.getFullName() + " er blevet tilføjet til programmet");
     }
 
-    public static void deleteUser(Scanner scanner, User user) {
+    public void deleteUser(Scanner scanner, User user) {
         System.out.println("Indtast navnet på den bruger du vil fjerne fra systemet:");
         System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
 
         if (input.equals("0")) return;
-        User userToDelete = UserService.findUserByFullName(input);
+        User userToDelete = findUserByFullName(input);
 
         if (userToDelete == null) return;
 
@@ -105,11 +106,11 @@ public class UserService {
         if (idOfUserToDelete == user.getUserId()) {
             System.out.println("Kan ikke slette den bruger du er logget ind med!");
         } else {
-            UserRepository.removeUserFromFile(idOfUserToDelete);
+            userRepository.removeUserFromFile(idOfUserToDelete);
         }
     }
 
-    public static void editUser(Scanner scanner, User user) {
+    public void editUser(Scanner scanner, User user) {
         boolean editing = true;
         while (editing) {
             System.out.println("Hvad vil du redigere:");
@@ -159,7 +160,7 @@ public class UserService {
                 case 5:
                     editing = false;
                     user.setLastUpdated(LocalDate.now());
-                    UserRepository.updateUserInFile(user);
+                    userRepository.updateUserInFile(user);
                     System.out.println("Bruger opdateret");
                     break;
                 default:
@@ -168,7 +169,7 @@ public class UserService {
         }
     }
 
-    public static LocalDate chooseBirthDay(Scanner scanner) {
+    public LocalDate chooseBirthDay(Scanner scanner) {
         LocalDate birthDay;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
@@ -228,37 +229,8 @@ public class UserService {
         return birthDay;
     }
 
-    public static double findUserBalance(User user) {
-        List<Transaction> userTransactions = TransactionService.findTransactionsForUser(user);
-
-        double userBalance = user.getInitialCashDKK();
-        for (Transaction transaction : userTransactions) {
-            if (transaction.getOrderType().equals("buy")) {
-                userBalance -= transaction.getPrice() * transaction.getQuantity();
-            } else {
-                userBalance += transaction.getPrice() * transaction.getQuantity();
-            }
-        }
-        return userBalance;
-    }
-
-    public static void userRanking(User user) {
-        System.out.println("Top 5 brugere i programmet");
-        List<Transaction> userTransactions = TransactionService.findTransactionsForUser(user);
-        Map<String, Double> latestPrices = new HashMap<>();
-        Map<String, LocalDate> latestDates = new HashMap<>();
-
-        for (Transaction transaction : userTransactions) {
-            if (!latestPrices.containsKey(transaction.getTicker()) || transaction.getDate().isAfter(latestDates.get(transaction.getTicker()))) {
-                latestPrices.put(transaction.getTicker(), transaction.getPrice());
-                latestDates.put(transaction.getTicker(), transaction.getDate());
-            }
-        }
-
-    }
-
-    public static User findUserById(int userId) {
-        for (User user : UserRepository.getUsersFromFile()) {
+    public User findUserById(int userId) {
+        for (User user : userRepository.getUsersFromFile()) {
             if (user.getUserId() == userId) {
                 return user;
             }
@@ -266,12 +238,18 @@ public class UserService {
         return null;
     }
 
-    public static User findUserByFullName(String fullName) {
-        for (User user : UserRepository.getUsersFromFile()) {
+    public User findUserByFullName(String fullName) {
+        for (User user : userRepository.getUsersFromFile()) {
             if (user.getFullName().equalsIgnoreCase(fullName)) {
                 return user;
             }
         }
         return null;
+    }
+
+    public void logOutOfUser(User user) {
+        if (user != null ) {
+            System.out.println("Bruger " + user.getFullName() + "er nu logget ud");
+        }
     }
 }

@@ -1,31 +1,129 @@
-import controller.MainController;
+import controller.TransactionController;
+import controller.UserController;
+import objects.User;
+import repository.CurrencyRepository;
+import repository.StockRepository;
+import repository.TransactionRepository;
+import repository.UserRepository;
+import service.CurrencyService;
+import service.StockService;
+import service.TransactionService;
+import service.UserService;
+import util.Utilities;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // TODO: (1) Når man vi købe/sælge en stock så spørger den hvilken stock vil du købe?
-        // TODO: (2) indtast ticker på stock. Vi vil have den siger noget i retning af:
-        // TODO: (3) "Indtast navn på ønsket aktie du vil købe"
 
-        // TODO: (1) Vi vil gerne have bekræftelses besked efter man har købt/solgt en aktie
-        // TODO: (2) så der står, du har købt X antal Y aktier til Z pris, nu er din saldo XXX
+        // TODO: Tilføj log ud af bruger funktion
 
-        // TODO: (1) Når man printer en brugers portefølje viser den ticker, navn, antal og værdi.
-        // TODO: (2) Vi vil gerne have at den også viser aktiekurs, altså prisen for 1 af den enkelte aktie
-
-        // TODO: (1) Tilføj DKK til Saldo for bruger. + den bør formateres bedre
-
+        // TODO: Rykke MainController op i main. main skal starte rep, service og controller og uddelegere arbejde til controllere
         // TODO: (1) Main menuen er alt for overcrowded, vi skal bestemme konkret hvilke valgmuligheder der skal være i den -
         // TODO: (2) fjerne dem der ikke er nødvendige, og merge dem der skal være sammen
-
-        // TODO: 8 Gennemgå alle klasser og led efter System.out.println. Kun controllers bør have dem, service og repository må ikke
-
-        // TODO: TIL SIDST:
         // TODO: Vi skal huske at have mindst et par testmetoder
         // TODO: Vi skal fjerne metoder der ikke bruges
-        // TODO: Tjekke at vi bruger camelCase overalt
         // TODO: Være sikker på at systemet ikke har mulighed for at crashe - tjekke om der mangler throw exception
         // TODO: Tjekke at vi altid går fra controller -> service -> repository og ikke controller -> repository
         // TODO: Er der nogen 'magic numbers'?
-        MainController.startProgram();
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Repositories
+        StockRepository stockRepository = new StockRepository();
+        CurrencyRepository currencyRepository = new CurrencyRepository();
+        UserRepository userRepository = new UserRepository();
+        TransactionRepository transactionRepository = new TransactionRepository();
+
+        // Services
+        StockService stockService = new StockService(stockRepository);
+        CurrencyService currencyService = new CurrencyService(currencyRepository);
+        UserService userService = new UserService(userRepository);
+        TransactionService transactionService = new TransactionService(transactionRepository, currencyService, stockService, userService);
+
+        // Controllers
+        UserController userController = new UserController(userService, scanner);
+        TransactionController transactionController = new TransactionController(transactionService, stockService, currencyService, scanner);
+
+        User user = userController.logIn();
+
+        while (true) {
+            userController.printMainMenu(user);
+            String input = scanner.nextLine();
+
+            switch (input) {
+                case "0":
+                    System.out.println("Afslutter program...");
+                    System.exit(0);
+
+                case "1":
+                    stockService.showAllStocks();
+                    break;
+
+                case "2":
+                    currencyService.showAllCurrencies();
+                    break;
+
+                case "3":
+                    transactionService.displayPortfolioOfUser(user);
+                    break;
+
+                case "4":
+                    transactionController.showTransactionMenu(scanner, user);
+                    break;
+
+                case "5":
+                    System.out.println("Ikke implementeret endnu!");
+                    break;
+
+                case "6":
+                    transactionService.displayUserBalance(user);
+                    break;
+
+                case "7":
+                    userService.editUser(scanner, user);
+                    break;
+
+                case "8": // Adminfunktion: se brugernes porteføljeværdi
+                    if (!user.isAdmin()) {
+                        Utilities.notAdminMessage();
+                        break;
+                    }
+                    System.out.println("Ikke implementeret endnu!");
+                    break;
+
+                case "9": // Adminfunktion: se rangliste
+                    if (!user.isAdmin()) {
+                        Utilities.notAdminMessage();
+                        break;
+                    }
+                    System.out.println("Ikke implementeret endnu!");
+                    break;
+
+                case "10": // vis sektor fordeling
+                    if (!user.isAdmin()) {
+                        Utilities.notAdminMessage();
+                        break;
+                    }
+                    System.out.println("Ikke implementeret endnu!");
+                    break;
+
+                case "11":
+                    if (!user.isAdmin()) {
+                        Utilities.notAdminMessage();
+                        break;
+                    }
+                    System.out.println("Ikke implementeret endnu!");
+                    break;
+
+                case "12":
+                    if (!user.isAdmin()) {
+                        Utilities.notAdminMessage();
+                        break;
+                    }
+                    System.out.println("Ikke implementeret endnu!");
+                    break;
+            }
+        }
     }
 }

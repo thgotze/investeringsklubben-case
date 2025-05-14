@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class CurrencyRepository {
 
-    public static List<Currency> readCurrencyFile() {
+    public List<Currency> readCurrencyFile() {
         List<Currency> currencies = new ArrayList<>();
         try {
             File currencyFile = new File("resources/currency.csv");

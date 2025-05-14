@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class UserRepository {
 
-    public static List<User> getUsersFromFile() {
+    public List<User> getUsersFromFile() {
         List<User> users = new ArrayList<>();
         try {
             File usersFile = new File("resources/users.csv");
@@ -51,7 +51,7 @@ public class UserRepository {
         return users;
     }
 
-    public static void addUserToFile(User user) {
+    public void addUserToFile(User user) {
         List<User> users = getUsersFromFile();
         users.add(user);
 
@@ -67,7 +67,7 @@ public class UserRepository {
         }
     }
 
-    public static void updateUserInFile(User updatedUser) {
+    public void updateUserInFile(User updatedUser) {
         List<User> users = getUsersFromFile();
 
         for (int i = 0; i < users.size(); i++) {
@@ -79,7 +79,7 @@ public class UserRepository {
         saveUsersToFile(users);
     }
 
-    private static void saveUsersToFile(List<User> users) {
+    private void saveUsersToFile(List<User> users) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("resources/users.csv"))) {
             writer.write("userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;password");
             writer.newLine();
@@ -104,7 +104,7 @@ public class UserRepository {
         }
     }
 
-    public static void removeUserFromFile(int userId) {
+    public void removeUserFromFile(int userId) {
         List<User> users = getUsersFromFile();
         for (User user : users) {
             if (userId == user.getUserId()){
@@ -139,5 +139,4 @@ public class UserRepository {
             System.out.println("Fejl under sletning: " + e.getMessage());
         }
     }
-
 }

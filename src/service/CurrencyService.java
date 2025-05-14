@@ -7,22 +7,28 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class CurrencyService {
-    public static void showAllCurrencies() {
+    private final CurrencyRepository currencyRepository;
+
+    public CurrencyService(CurrencyRepository currencyRepository) {
+        this.currencyRepository = currencyRepository;
+    }
+
+    public void showAllCurrencies() {
         System.out.println("-*- Valutakurser -*-");
         System.out.printf("%-8s %-8s %-16s \n", "Valuta", "Kurs", "Sidst opdateret");
         System.out.println("----------------------------------");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        for (Currency currency : CurrencyRepository.readCurrencyFile()) {
+        for (Currency currency : currencyRepository.readCurrencyFile()) {
             String formattedDate = currency.getLastUpdated().format(formatter);
             System.out.printf("%-8s %-6s %-16s \n", currency.getBaseCurrency(), currency.getRate(), formattedDate);
         }
         System.out.println("-*- Valutakurser -*-");
     }
 
-    public static Currency findByBaseCurrency(String baseCurrency) {
-        for (Currency currency : CurrencyRepository.readCurrencyFile()) {
+    public Currency findByBaseCurrency(String baseCurrency) {
+        for (Currency currency : currencyRepository.readCurrencyFile()) {
             if (currency.getBaseCurrency().equalsIgnoreCase(baseCurrency)) {
                 return currency;
             }
@@ -30,8 +36,8 @@ public class CurrencyService {
         return null;
     }
 
-    public static Currency findByQuoteCurrency(String quoteCurrency) {
-        for (Currency currency : CurrencyRepository.readCurrencyFile()) {
+    public Currency findByQuoteCurrency(String quoteCurrency) {
+        for (Currency currency : currencyRepository.readCurrencyFile()) {
             if (currency.getQuoteCurrency().equalsIgnoreCase(quoteCurrency)) {
                 return currency;
             }
@@ -39,8 +45,8 @@ public class CurrencyService {
         return null;
     }
 
-    public static double currencyConverter(Double amount, Currency preferredCurrency) {
-        List<Currency> currencies = CurrencyRepository.readCurrencyFile();
+    public double currencyConverter(Double amount, Currency preferredCurrency) {
+        List<Currency> currencies = currencyRepository.readCurrencyFile();
 
 
         for (Currency currency : currencies) {
