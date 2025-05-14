@@ -6,9 +6,9 @@ import java.time.LocalDate;
 
 public class Currency {
     private String baseCurrency;
-    private String quoteCurrency = "DKK";
+    private String quoteCurrency;
     private double rate;
-    private LocalDate lastUpdated = LocalDate.now();
+    private LocalDate lastUpdated;
 
     // Constructor
     public Currency(String baseCurrency, String quoteCurrency, double rate, LocalDate lastUpdated) {
@@ -18,19 +18,18 @@ public class Currency {
         this.lastUpdated = lastUpdated;
     }
 
+    // Constructor that gets other instance variables from base currency
     public Currency(String baseCurrency) {
         this.baseCurrency = baseCurrency;
-        this.rate = getRateFromBaseCurrency(baseCurrency);
-    }
 
-    public double getRateFromBaseCurrency(String baseCurrency) {
         CurrencyRepository currencyRepository = new CurrencyRepository();
         for (Currency currency : currencyRepository.readCurrencyFile()) {
             if (currency.getBaseCurrency().equals(baseCurrency)) {
-                return currency.getRate();
+                this.quoteCurrency = currency.getQuoteCurrency();
+                this.rate = currency.getRate();
+                this.lastUpdated = currency.getLastUpdated();
             }
         }
-        return 0.0;
     }
 
     public String getBaseCurrency() {

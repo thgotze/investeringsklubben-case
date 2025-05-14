@@ -117,11 +117,7 @@ public class Main {
                     break;
 
                 case "12":
-                    if (!user.isAdmin()) {
-                        Utilities.notAdminMessage();
-                        break;
-                    }
-                    System.out.println("Ikke implementeret endnu!");
+                    userService.logOutOfUser(user);
                     break;
             }
         }
