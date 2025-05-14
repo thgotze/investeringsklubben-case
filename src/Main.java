@@ -81,7 +81,7 @@ public class Main {
                     break;
 
                 case "7":
-                    userService.editUser(scanner, user);
+                    userController.editUser(scanner, user);
                     break;
 
                 case "8": // Adminfunktion: se brugernes porteføljeværdi
@@ -115,7 +115,7 @@ public class Main {
                         Utilities.notAdminMessage();
                         break;
                     }
-                    System.out.println("Ikke implementeret endnu!");
+                    userController.adminEditUserMenu(user);
                     break;
 
                 case "12":
