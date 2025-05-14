@@ -93,11 +93,13 @@ public class Main {
                     break;
 
                 case "9": // Adminfunktion: se rangliste
-                    if (!user.isAdmin()) {
-                        Utilities.notAdminMessage();
+                    if (user.isAdmin()) {
+                        TransactionService service = new TransactionService(transactionRepository, currencyService, stockService, userService);
+                        service.userRanking(user);
+
                         break;
                     }
-                    System.out.println("Ikke implementeret endnu!");
+                    Utilities.notAdminMessage();
                     break;
 
                 case "10": // vis sektor fordeling

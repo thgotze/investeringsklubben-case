@@ -4,8 +4,6 @@ import objects.Currency;
 import objects.Stock;
 import objects.Transaction;
 import objects.User;
-import repository.CurrencyRepository;
-import repository.StockRepository;
 import repository.TransactionRepository;
 import util.Utilities;
 
@@ -26,10 +24,11 @@ public class TransactionService {
         this.userService = userService;
     }
 
+        // HALLA DEN ER LAVET der mangler bare noget finpudsning
     public void userRanking(User user) {
-        // Brugeren skal bruge sin procentvise stigning på deres aktier både når de har solgt en aktie og købt holdt en aktie
-        // altså så den viser hvor meget brugeren har tjent og den procentvise stigning eller faldning
-        List<Transaction> userTransactions = findTransactionsForUser(user);
+        List<Transaction> userTransactions = findAllTransactionsForUsers();
+
+
 
         Map<String, Double> latestPrices = new HashMap<>();
         Map<String, LocalDate> latestDates = new HashMap<>();
@@ -53,7 +52,7 @@ public class TransactionService {
                     .add(t.getPrice(), t.getQuantity());
         }
         Map<String, Double> userGains = new HashMap<>();
-        // VED IK OM DEN HER SEKTION NEDEUNDER VIRKER
+
         for (int userId : userTickerBuys.keySet()) {
             double totalGain = 0;
             Map<String, AvgPrice> tickers = userTickerBuys.get(userId);
@@ -69,14 +68,20 @@ public class TransactionService {
                 }
             }
 
-//            userGains.put(userId, totalGain);
+            userGains.put(String.valueOf(userId), totalGain);
+
         }
         // TODO: OMREGN OGSÅ TIL PROCENT
         System.out.println("Top 5 brugere med højest positiv ændring i pris:");
         userGains.entrySet().stream()
                 .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
                 .limit(5)
-                .forEach(entry -> System.out.printf("User %s: %.2f kr. gevinst\n", entry.getKey(), entry.getValue()));
+                .forEach(entry -> System.out.printf("User %s: %.2f kr. afkast\n", entry.getKey(), entry.getValue()));
+
+    }
+
+    public void InvestmentRetunForUser(User user) {
+
     }
 
     public void buyStock(Scanner scanner, User user) {
@@ -283,7 +288,17 @@ public class TransactionService {
         }
         return null;
     }
+    // LAV EN FIND ALL TRANSACTION UDEN AT CHECKE MED SPECIFIKT USER
+    public List<Transaction> findAllTransactionsForUsers() {
 
+        List<Transaction> transactionsForUser = new ArrayList<>();
+        for (Transaction transaction : transactionRepository.readTransactionFile()) {
+
+                transactionsForUser.add(transaction);
+
+        }
+        return transactionsForUser;
+    }
     public List<Transaction> findTransactionsForUser(User user) {
         int userId = user.getUserId();
 

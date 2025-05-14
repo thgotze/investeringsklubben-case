@@ -17,4 +17,8 @@ public class AvgPrice {
 
     public void add(double price, int quantity) {
     }
+
+    public int getQuantity() {
+        return totalQuantity;
+    }
 }
