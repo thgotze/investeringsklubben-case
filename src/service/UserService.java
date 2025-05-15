@@ -1,5 +1,6 @@
 package service;
 
+import controller.UserController;
 import objects.User;
 import repository.UserRepository;
 
@@ -97,7 +98,8 @@ public class UserService {
 
     public void logOutOfUser(User user) {
         if (user != null ) {
-            System.out.println("Bruger " + user.getFullName() + "er nu logget ud");
+            System.out.println("Bruger " + user.getFullName() + " er nu logget ud");
         }
+
     }
 }

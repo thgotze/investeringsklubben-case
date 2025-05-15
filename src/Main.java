@@ -1,5 +1,6 @@
 import controller.TransactionController;
 import controller.UserController;
+import objects.Transaction;
 import objects.User;
 import repository.CurrencyRepository;
 import repository.StockRepository;
@@ -16,7 +17,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        // TODO: Tilføj log ud af bruger funktion
 
         // TODO: Rykke MainController op i main. main skal starte rep, service og controller og uddelegere arbejde til controllere
         // TODO: (1) Main menuen er alt for overcrowded, vi skal bestemme konkret hvilke valgmuligheder der skal være i den -
@@ -73,7 +73,9 @@ public class Main {
                     break;
 
                 case "5":
-                    System.out.println("Ikke implementeret endnu!");
+                    for (Transaction transaction : transactionService.findTransactionsForUser(user)) {
+                        System.out.println(transaction);
+                    }
                     break;
 
                 case "6":
@@ -89,7 +91,7 @@ public class Main {
                         Utilities.notAdminMessage();
                         break;
                     }
-                    System.out.println("Ikke implementeret endnu!");
+                  transactionService.displayPortfolioOfUser(user);
                     break;
 
                 case "9": // Adminfunktion: se rangliste
@@ -107,7 +109,7 @@ public class Main {
                         Utilities.notAdminMessage();
                         break;
                     }
-                    System.out.println("Ikke implementeret endnu!");
+                    stockService.showSectorDistribution();
                     break;
 
                 case "11":
@@ -120,6 +122,7 @@ public class Main {
 
                 case "12":
                     userService.logOutOfUser(user);
+                    user = userController.logIn();
                     break;
             }
         }

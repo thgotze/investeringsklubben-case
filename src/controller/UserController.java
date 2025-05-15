@@ -71,7 +71,7 @@ public class UserController {
         System.out.println("> 1. Tilføj bruger");
         System.out.println("> 2. Fjern bruger");
         System.out.println("> 3. Ændrer brugers admin status");
-        System.out.println("> 0. Returnern til menu");
+        System.out.println("> 0. Returner til menu");
 
         String input = scanner.nextLine();
 

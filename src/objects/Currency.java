@@ -64,6 +64,7 @@ public class Currency {
         this.lastUpdated = lastUpdated;
     }
 
+
     @Override
     public String toString() {
         return "1 " + baseCurrency + " svarer til " + rate + " " + quoteCurrency + ", Sidst updateret: " + lastUpdated;

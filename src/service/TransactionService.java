@@ -80,7 +80,7 @@ public class TransactionService {
 
     }
 
-    public void InvestmentRetunForUser(User user) {
+    public void InvestmentReturnForUser(User user) {
 
     }
 
@@ -294,7 +294,7 @@ public class TransactionService {
         List<Transaction> transactionsForUser = new ArrayList<>();
         for (Transaction transaction : transactionRepository.readTransactionFile()) {
 
-                transactionsForUser.add(transaction);
+            transactionsForUser.add(transaction);
 
         }
         return transactionsForUser;
