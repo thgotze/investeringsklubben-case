@@ -1,6 +1,6 @@
 package service;
 
-import objects.Transaction;
+import models.Transaction;
 
 public class AvgPrice {
     double totalPrice = 0;

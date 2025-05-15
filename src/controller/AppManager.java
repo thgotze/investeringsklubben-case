@@ -1,12 +1,10 @@
 package controller;
 
-import objects.Transaction;
-import objects.User;
+import models.User;
 import service.CurrencyService;
 import service.StockService;
 import service.TransactionService;
-import service.UserService;
-import util.Utilities;
+import util.MessagePrinter;
 
 import java.util.Scanner;
 
@@ -31,66 +29,61 @@ public class AppManager {
     }
 
     public void startProgram() {
-        User user = userController.logIn();
-
         while (true) {
-            printMainMenu(user);
-            String input = scanner.nextLine();
+            User user = userController.logIn();
+            if (user == null) return;
 
-            switch (input) {
-                case "1": // Aktiemarked
-                    stockService.showAllStocks();
+            System.out.println("\n-*-*- ThorNet -*-*-");
+            System.out.println("> 1. Aktiemarked");
+            System.out.println("> 2. Aktiehandel");
+            System.out.println("> 3. Valutakurser");
+            System.out.println("> 4. Min konto");
+
+            if (user.isAdmin()) {
+                System.out.println("> 5. Statistik");
+                System.out.println("> 6. Rediger medlemmer");
+            }
+            System.out.println("> 0. Log ud");
+
+            while (true) {
+                String input = scanner.nextLine();
+                switch (input) {
+                    case "1": // Aktiemarked
+                        stockService.showAllStocks();
+                        break;
+
+                    case "2": // Aktiehandel
+                        transactionController.showTransactionMenu(user);
+                        break;
+
+                    case "3": // Valutakurser
+                        currencyService.showAllCurrencies();
+                        break;
+
+                    case "4": // Min konto
+                        printMyAccountMenu(user);
+                        break;
+
+                    case "5": // Statistik
+                        printStatisticsMenu();
+                        break;
+
+                    case "6": // Rediger medlemmer
+                        userController.adminEditUserMenu(user);
+                        break;
+
+                    case "0": // Log ud
+                        System.out.println("Bruger " + user.getFullName() + " er nu logget ud\n");
+                        break;
+
+                    default:
+                        MessagePrinter.printInvalidInputMessage();
+                }
+                if (input.equals("0")) {
                     break;
-
-                case "2": // Aktiehandel
-                    transactionController.showTransactionMenu(user);
-                    break;
-
-                case "3": // Valutakurser
-                    currencyService.showAllCurrencies();
-                    break;
-
-                case "4": // Min konto
-                    printMyAccountMenu(user);
-                    break;
-
-                case "5": // Statistik
-                    printStatisticsMenu(user);
-                    break;
-
-                case "6": // Rediger medlemmer
-                    break;
-
-                case "0": // Log ud
-                    userService.logOutOfUser(user);
-                    startProgram();
-                    return;
-
-                default:
-                    Utilities.displayInvalidInputMessage();
+                }
             }
         }
-    }
-
-    private void printStatisticsMenu(User user) {
-        System.out.println("\n-*-*- Statistik Menu -*-*-");
-        System.out.println("> 1. Se brugernes porteføljeværdi");
-        System.out.println("> 2. Se rangliste");
-        System.out.println("> 3. Se fordeling af aktier & sektorer");
-    }
-
-    private void printMainMenu(User user) {
-        System.out.println("\n-*-*- ThorNet -*-*-");
-        System.out.println("> 1. Aktiemarked");
-        System.out.println("> 2. Aktiehandel");
-        System.out.println("> 3. Valutakurser");
-        System.out.println("> 4. Min konto");
-
-        if (user.isAdmin()) {
-            System.out.println("> 5. Statistik");
-            System.out.println("> 6. Rediger medlemmer");
-        }
-        System.out.println("> 0. Log ud");
     }
 
     private void printMyAccountMenu(User user) {
@@ -105,5 +98,12 @@ public class AppManager {
         System.out.println("> 1. Mit portefølje");
         System.out.println("> 2. Rediger oplysninger");
         System.out.println("> 3. Transaktionshistorik");
+    }
+
+    private void printStatisticsMenu() {
+        System.out.println("\n-*-*- Statistik Menu -*-*-");
+        System.out.println("> 1. Se brugernes porteføljeværdi");
+        System.out.println("> 2. Se rangliste");
+        System.out.println("> 3. Se fordeling af aktier & sektorer");
     }
 }

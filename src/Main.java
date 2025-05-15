@@ -1,8 +1,6 @@
 import controller.AppManager;
 import controller.TransactionController;
 import controller.UserController;
-import objects.Transaction;
-import objects.User;
 import repository.CurrencyRepository;
 import repository.StockRepository;
 import repository.TransactionRepository;
@@ -29,7 +27,6 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-
         // Repositories
         StockRepository stockRepository = new StockRepository();
         CurrencyRepository currencyRepository = new CurrencyRepository();
@@ -39,16 +36,15 @@ public class Main {
         // Services
         StockService stockService = new StockService(stockRepository);
         CurrencyService currencyService = new CurrencyService(currencyRepository);
-        TransactionService transactionService = new TransactionService(transactionRepository, currencyService, stockService);
+        TransactionService transactionService = new TransactionService(transactionRepository, stockService);
         UserService userService = new UserService(userRepository);
 
         // Controllers
         UserController userController = new UserController(userService, scanner);
-        TransactionController transactionController = new TransactionController(transactionService, stockService, currencyService, scanner);
+        TransactionController transactionController = new TransactionController(transactionService, scanner);
 
         // Manager (MainController)
         AppManager appManager = new AppManager(userController, transactionController, currencyService, stockService, transactionService, userService, scanner);
         appManager.startProgram();
-
     }
 }

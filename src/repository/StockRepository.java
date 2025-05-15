@@ -1,8 +1,7 @@
 package repository;
 
-import objects.Currency;
-import objects.Stock;
-import service.CurrencyService;
+import models.Currency;
+import models.Stock;
 
 import java.io.File;
 import java.io.FileNotFoundException;

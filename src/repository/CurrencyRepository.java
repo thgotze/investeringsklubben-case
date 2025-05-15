@@ -1,6 +1,6 @@
 package repository;
 
-import objects.Currency;
+import models.Currency;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,7 +1,8 @@
 package controller;
 
-import objects.User;
+import models.User;
 import service.UserService;
+import util.MessagePrinter;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -20,11 +21,15 @@ public class UserController {
 
     public User logIn() {
         System.out.println("-*-*- Login på ThorNet -*-*-");
+        System.out.println("> 0. Afslut program");
         System.out.println("Indtast brugernavn: ");
 
         User user;
         while (true) {
             String name = scanner.nextLine();
+
+            if (name.equals("0")) return null;
+
             user = userService.findUserByFullName(name);
 
             if (user == null) {
@@ -40,7 +45,7 @@ public class UserController {
             boolean correctPassword = userService.validatePassword(user, password);
 
             if (correctPassword) {
-                System.out.println("Velkommen tilbage " + user.getFullName() + "!");
+                System.out.println("Velkommen " + user.getFullName() + "!");
                 return user;
             } else {
                 System.out.println("Forkert adgangskode. Prøv igen");
@@ -52,28 +57,31 @@ public class UserController {
         System.out.println("> 1. Tilføj bruger");
         System.out.println("> 2. Fjern bruger");
         System.out.println("> 3. Ændrer brugers admin status");
-        System.out.println("> 0. Returner til menu");
+        System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
 
         switch (input) {
             case "0":
                 return;
+
             case "1":
                 addUser(scanner);
                 break;
+
             case "2":
                 handleDeleteUser(scanner, user);
                 break;
+
             case "3":
                 changeAdminStatus(scanner, user);
                 break;
+
             default:
-                System.out.println("Ugyldigt input! prøv igen");
+                MessagePrinter.printInvalidInputMessage();
 
         }
     }
-
 
     public void handleDeleteUser(Scanner scanner, User currentUser) {
         System.out.println("Indtast navnet på den bruger du vil fjerne:");
@@ -91,7 +99,6 @@ public class UserController {
         }
 
     }
-
 
     public void addUser(Scanner scanner) {
         System.out.println("Hvad er brugerens fulde navn?");
@@ -131,11 +138,11 @@ public class UserController {
                         break;
 
                     default:
-                        System.out.println("Ugyldigt. input! prøv igen");
+                        MessagePrinter.printInvalidInputMessage();
                 }
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Ugyldigt input! prøv igen");
+                MessagePrinter.printInvalidInputMessage();
             }
         }
 
@@ -163,7 +170,7 @@ public class UserController {
             try {
                 choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("Ugyldigt input! Prøv igen.");
+                MessagePrinter.printInvalidInputMessage();
                 continue;
             }
 
@@ -177,6 +184,7 @@ public class UserController {
                         userService.updateUserName(user, newName);
                     }
                     break;
+
                 case 2:
                     System.out.println("Indtast ny email:");
                     String newEmail = scanner.nextLine();
@@ -210,7 +218,7 @@ public class UserController {
                     System.out.println("Bruger opdateret");
                     break;
                 default:
-                    System.out.println("Ugyldigt input! Prøv igen.");
+                    MessagePrinter.printInvalidInputMessage();
             }
         }
     }
@@ -239,7 +247,7 @@ public class UserController {
                 case 2:
                     return;
                 default:
-                    System.out.println("Ugyldigt input!");
+                    MessagePrinter.printInvalidInputMessage();
             }
 
         } else if (userToChange.isAdmin()) {
@@ -255,7 +263,7 @@ public class UserController {
                 case 2:
                     return;
                 default:
-                    System.out.println("Ugyldigt input!");
+                    MessagePrinter.printInvalidInputMessage();
             }
         }
 
@@ -318,7 +326,7 @@ public class UserController {
                 break;
 
             } catch (NumberFormatException e) {
-                System.out.println("Ugyldigt input! prøv igen");
+                MessagePrinter.printInvalidInputMessage();
             }
         }
         return birthDay;

@@ -1,6 +1,6 @@
 package service;
 
-import objects.Stock;
+import models.Stock;
 import repository.StockRepository;
 
 import java.util.*;

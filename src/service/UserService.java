@@ -1,13 +1,9 @@
 package service;
 
-import controller.UserController;
-import objects.User;
+import models.User;
 import repository.UserRepository;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -95,12 +91,5 @@ public class UserService {
             }
         }
         return null;
-    }
-
-    public void logOutOfUser(User user) {
-        if (user != null ) {
-            System.out.println("Bruger " + user.getFullName() + " er nu logget ud");
-        }
-
     }
 }

@@ -1,24 +1,20 @@
 package service;
 
-import objects.Currency;
-import objects.Stock;
-import objects.Transaction;
-import objects.User;
+import models.Stock;
+import models.Transaction;
+import models.User;
 import repository.TransactionRepository;
-import util.Utilities;
 
 import java.time.LocalDate;
 import java.util.*;
 
 public class TransactionService {
     private final TransactionRepository transactionRepository;
-    private final CurrencyService currencyService;
     private final StockService stockService;
 
-    public TransactionService(TransactionRepository transactionRepository, CurrencyService currencyService,
+    public TransactionService(TransactionRepository transactionRepository,
                               StockService stockService) {
         this.transactionRepository = transactionRepository;
-        this.currencyService = currencyService;
         this.stockService = stockService;
     }
 
@@ -84,111 +80,30 @@ public class TransactionService {
 
     }
 
-/*
-    public void buyStock(Scanner scanner, User user) {
 
+    public void buyStock(User user, Stock stock, int quantity) {
+        double totalPrice = stock.getPrice() * quantity;
 
-
-
-        addTransaction(user, stock, "buy", amountToBuy);
-        System.out.println("Du har købt " + amountToBuy + " x " + stock.getName() + ".");
-        double updatedUserBalance = findUserBalance(user);
-        System.out.println("Din saldo er nu: %.2f DKK\n" + updatedUserBalance);
-    }
-*/
-    public void sellStock(Scanner scanner, User user) {
-        Map<String, Integer> portfolio = getPortfolioForUser(user);
-
-        System.out.println("Hvilken aktie vil du sælge?");
-        System.out.println("Indtast navnet på den ønskede aktie");
-
-        String selectedTicker = null;
-        while (true) {
-            String tickerInput = scanner.nextLine();
-            boolean stockFound = false;
-
-            for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
-                if (entry.getKey().equalsIgnoreCase(tickerInput)) {
-                    selectedTicker = tickerInput.toUpperCase();
-                    System.out.println("Du har valgt at sælge " + selectedTicker);
-                    System.out.println("Er du sikker (ja/nej)? ");
-
-                    String confirmation = scanner.nextLine();
-                    if (confirmation.equalsIgnoreCase("ja")) {
-                        stockFound = true;
-                        break;
-                    } else if (confirmation.equalsIgnoreCase("nej")) {
-                        selectedTicker = null;
-                        System.out.println("Vælg en anden aktie...");
-                        break;
-                    } else {
-                        Utilities.displayInvalidInputMessage();
-                        selectedTicker = null;
-                        break;
-                    }
-                }
-            }
-
-            if (!stockFound && selectedTicker == null) {
-                System.out.println("Du ejer ikke denne aktie. Prøv igen eller tryk enter for at afbryde");
-            }
-            if (stockFound) {
-                break;
-            }
+        if (totalPrice > findUserBalance(user)) {
+            System.out.println("Du har ikke nok på din saldo");
+            return;
         }
 
-        Stock stock = stockService.findStockByTicker(selectedTicker);
-        System.out.println("Hvor mange " + stock.getName() + " vil du sælge?");
+        int transactionId = transactionRepository.readTransactionFile().size() + 1;
 
-        int ownedAmount = portfolio.get(selectedTicker);
-        int amountToSell = 0;
-        double totalPrice = 0.0;
-
-        while (true) {
-            String sellAmount = scanner.nextLine();
-
-            try {
-                amountToSell = Integer.parseInt(sellAmount);
-
-                if (amountToSell <= 0) {
-                    System.out.println("Du skal sælge mindst 1 aktie.");
-                } else if (amountToSell > ownedAmount) {
-                    System.out.println("Du ejer ikke så mange. Prøv igen.");
-                } else {
-                    totalPrice = stock.getPrice() * amountToSell;
-                    System.out.println("Bekræft salg af: " + amountToSell + " x " + stock.getName() + " til " + totalPrice + stock.getCurrency() + "? (ja/nej)");
-
-                    String confirmation = scanner.nextLine();
-                    if (confirmation.equalsIgnoreCase("ja")) {
-                        break;
-                    } else if (confirmation.equalsIgnoreCase("nej")) {
-                        System.out.println("Handlen blev afbrudt.");
-                    } else {
-                        Utilities.displayInvalidInputMessage();
-                    }
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Ugyldigt tal. Prøv igen.");
-            }
-        }
-        addTransaction(user, stock, "sell", amountToSell);
-        System.out.println("Du har solgt " + amountToSell + " x " + stock + " for " + totalPrice + stock.getCurrency());
-        double updatedUserBalance = findUserBalance(user);
-        System.out.println("Din saldo er nu: %.2f DKK\n" + updatedUserBalance);
-    }
-
-    private void addTransaction(User user, Stock stock, String orderType, int quantity) {
-        List<Transaction> transactions = transactionRepository.readTransactionFile();
-
-        int transactionId = transactions.getLast().getId() + 1;
-        int userId = user.getUserId();
-        LocalDate date = LocalDate.now();
-        String tickerName = stock.getTickerName();
-        double price = stock.getPrice();
-        Currency currency = currencyService.findByBaseCurrency("DKK");
-
-        Transaction transaction = new Transaction(transactionId, userId, date, tickerName, price, currency, orderType, quantity);
+        System.out.println("Du har købt " + quantity + " x " + stock.getName() + ".");
+        Transaction transaction = new Transaction(transactionId, user.getUserId(), LocalDate.now(), stock.getTickerName(), stock.getPrice(), stock.getCurrency(), "buy", quantity);
         transactionRepository.addTransactionToFile(transaction);
+        displayUserBalance(user);
+    }
+
+    public void sellStock(User user, Stock stock, int quantity) {
+        int transactionId = transactionRepository.readTransactionFile().size() + 1;
+
+        System.out.println("Du har solgt " + quantity + " x " + stock.getName() + ".");
+        Transaction transaction = new Transaction(transactionId, user.getUserId(), LocalDate.now(), stock.getTickerName(), stock.getPrice(), stock.getCurrency(), "sell", quantity);
+        transactionRepository.addTransactionToFile(transaction);
+        displayUserBalance(user);
     }
 
     public List<Transaction> findTransactionsWithSameTicker(List<Transaction> transactions, String ticker) {
@@ -275,6 +190,7 @@ public class TransactionService {
         }
         return transactionsForUser;
     }
+
     public List<Transaction> findTransactionsForUser(User user) {
         int userId = user.getUserId();
 

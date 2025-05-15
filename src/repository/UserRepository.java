@@ -1,6 +1,6 @@
 package repository;
 
-import objects.User;
+import models.User;
 
 import java.io.*;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package objects;
+package models;
 
 import repository.CurrencyRepository;
 

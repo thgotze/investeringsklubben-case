@@ -1,6 +1,6 @@
 package service;
 
-import objects.Currency;
+import models.Currency;
 import repository.CurrencyRepository;
 
 import java.time.format.DateTimeFormatter;
