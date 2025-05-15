@@ -14,17 +14,21 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final CurrencyService currencyService;
     private final StockService stockService;
-    private final UserService userService;
 
     public TransactionService(TransactionRepository transactionRepository, CurrencyService currencyService,
-                              StockService stockService, UserService userService) {
+                              StockService stockService) {
         this.transactionRepository = transactionRepository;
         this.currencyService = currencyService;
         this.stockService = stockService;
-        this.userService = userService;
+    }
+
+    public void showAllStock() {
+        stockService.showAllStocks();
     }
 
         // HALLA DEN ER LAVET der mangler bare noget finpudsning
+
+
     public void userRanking(User user) {
         List<Transaction> userTransactions = findAllTransactionsForUsers();
 
@@ -80,46 +84,18 @@ public class TransactionService {
 
     }
 
-    public void InvestmentReturnForUser(User user) {
-
-    }
-
+/*
     public void buyStock(Scanner scanner, User user) {
-        System.out.println("Hvilken aktie vil du købe?");
-        System.out.println("Indtast navnet på den ønskede aktie ");
-        String tickerInput = scanner.nextLine();
 
-        Stock stock = stockService.findStockByTicker(tickerInput);
-        if (stock == null) {
-            System.out.println("Denne aktie findes ikke");
-            return;
-        }
 
-        System.out.println("Hvor mange " + stock.getName() + " aktier vil du købe?");
-        int amountToBuy = Integer.parseInt(scanner.nextLine());
 
-        double totalPrice = stock.getPrice() * amountToBuy;
 
-        if (stock.getPrice() * amountToBuy > user.getInitialCashDKK()) {
-            System.out.println("Du har ikke råd til at købe " + amountToBuy + " x " + stock.getName() + "(" + (amountToBuy * stock.getPrice())
-                    + " " + stock.getCurrency() + " samlet)" + " - din saldo er kun " + user.getInitialCashDKK());
-            return;
-        }
-
-        System.out.println("Bekræft køb af: " + amountToBuy + "x " + stock.getName() + "for " + totalPrice + " " + stock.getCurrency() + ".");
-        System.out.println("Er du sikker? (Ja/nej): ");
-        String confirmation = scanner.nextLine();
-
-        if (!confirmation.equalsIgnoreCase("ja")) {
-            System.out.println("Handlen blev annulleret.");
-            return;
-        }
         addTransaction(user, stock, "buy", amountToBuy);
         System.out.println("Du har købt " + amountToBuy + " x " + stock.getName() + ".");
         double updatedUserBalance = findUserBalance(user);
         System.out.println("Din saldo er nu: %.2f DKK\n" + updatedUserBalance);
     }
-
+*/
     public void sellStock(Scanner scanner, User user) {
         Map<String, Integer> portfolio = getPortfolioForUser(user);
 
@@ -279,7 +255,6 @@ public class TransactionService {
         System.out.println(" -*- " + user.getFullName() + "'s  Portefølje -*-");
     }
 
-
     public Transaction findTransactionById(int id) {
         for (Transaction transaction : transactionRepository.readTransactionFile()) {
             if (transaction.getId() == id) {
@@ -288,6 +263,7 @@ public class TransactionService {
         }
         return null;
     }
+
     // LAV EN FIND ALL TRANSACTION UDEN AT CHECKE MED SPECIFIKT USER
     public List<Transaction> findAllTransactionsForUsers() {
 

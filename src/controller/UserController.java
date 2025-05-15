@@ -18,25 +18,6 @@ public class UserController {
         this.scanner = scanner;
     }
 
-    public void printMainMenu(User user) {
-        System.out.println("\n    -*-*- ThorNet -*-*-");
-        System.out.println("> 1. Se aktiemarkedet");
-        System.out.println("> 2. Se valutakurser");
-        System.out.println("> 3. Se min portefølje");
-        System.out.println("> 4. Køb/Sælg aktier");
-        System.out.println("> 5. Se tidligere handler");
-        System.out.println("> 6. Se min saldo");
-        System.out.println("> 7. Rediger kontooplysninger");
-        if (user.isAdmin()) {
-            System.out.println("> 8. Se brugernes porteføljeværdi");
-            System.out.println("> 9. Se rangliste");
-            System.out.println("> 10. Se fordeling af aktier & sektorer");
-            System.out.println("> 11. Rediger bruger");
-            System.out.println("> 12. Log ud");
-        }
-        System.out.println("> 0. Afslut program");
-    }
-
     public User logIn() {
         System.out.println("-*-*- Login på ThorNet -*-*-");
         System.out.println("Indtast brugernavn: ");
@@ -243,7 +224,7 @@ public class UserController {
 
         User userToChange = userService.findUserById(input);
         if (user == userToChange) {
-            System.out.println("Kan ike ændre status på den bruger du er logget ind på!");
+            System.out.println("Kan ikke ændre status på den bruger du er logget ind på!");
             return;
         } else if (userToChange.isAdmin() == false) {
             System.out.println("Denne bruger er ikke en admin! Kunne du tænke dig at gøre brugeren til admin?");

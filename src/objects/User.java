@@ -106,7 +106,7 @@ public class User implements Comparable<User> {
 
     @Override
     public String toString() {
-        return ("Fulde Navn: " + fullName + ", Email: " + email + ", Saldo: " + initialCashDKK);
+        return ("Fulde Navn: " + fullName + ", Email: " + email + ", Saldo: " + initialCashDKK + ", Admin: " + admin);
     }
 
     @Override

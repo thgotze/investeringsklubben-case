@@ -1,5 +1,5 @@
 userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;password
-1;Maria Jensen;maria.jensen@email.com;12-04-1990;100000.0;01-03-2025;01-03-2025;true;1234
+1;Maria Jensen;maria.jensen@email.com;12-04-1990;100000.0;01-03-2025;15-05-2025;true;1234
 2;Lars Petersen;lars.p@email.com;19-07-1985;100000.0;02-03-2025;15-05-2025;true;2
 3;Jakob Madsen;jakob.madsen@email.com;03-11-1992;100000.0;03-03-2025;03-03-2025;false;1
 4;Sofie Sørensen;sofie.sorensen@email.com;27-02-1994;100000.0;04-03-2025;04-03-2025;false;1
@@ -13,6 +13,5 @@ userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;pas
 12;Oscar Cola;cola.smager.godt@email.com;17-06-1912;100000.0;09-05-2025;09-05-2025;true;Brøndby1964
 15;Isak Alishiri;wolt.gigolo@email.com;01-01-2002;100000.0;09-05-2025;09-05-2025;true;ishøj4life
 16;Sebastian Vijeyaratnam;seb@outlook.dk;12-01-2003;100000.0;09-05-2025;09-05-2025;true;kawasaki2008
-17;Nikolaj Rødovre;unc@email.com;26-02-1912;100000.0;13-05-2025;13-05-2025;true;rødovreMansion1912
 17;Nikolaj Rødovre;unc@email.com;26-02-1912;100000.0;13-05-2025;13-05-2025;true;rødovreMansion1912
 18;Nikolaj Pedersen;nikolaj@email.com;26-02-2002;100000.0;14-05-2025;14-05-2025;true;1234

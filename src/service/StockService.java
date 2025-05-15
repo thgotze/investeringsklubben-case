@@ -48,7 +48,7 @@ public class StockService {
     }
 
     public void showAllStocks() {
-        System.out.println(" -*- Aktier -*- ");
+        System.out.println("-*- Aktier -*-");
         System.out.printf("%-9s %-21s %-15s %10s %8s %8s %13s   %-15s   %18s\n",
                 "Ticker", "Navn", "Sektor", "Pris", "Valuta", "Rating", "Dividend %", "Marked", "Sidst opdateret");
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
@@ -75,7 +75,7 @@ public class StockService {
                     stock.getMarket(),
                     lastUpdatedString);
         }
-        System.out.println(" -*- Aktier -*-");
+        System.out.println("-*- Aktier -*-");
     }
 
     public void showSectorDistribution() {

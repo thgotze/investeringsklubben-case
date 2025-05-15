@@ -16,6 +16,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+
     public boolean validatePassword(User user, String password) {
         return user.getPassword().equals(password);
     }

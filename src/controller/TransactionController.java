@@ -1,5 +1,6 @@
 package controller;
 
+import objects.Stock;
 import objects.User;
 import service.CurrencyService;
 import service.StockService;
@@ -20,7 +21,7 @@ public class TransactionController {
         this.scanner = scanner;
     }
 
-    public void showTransactionMenu(Scanner scanner, User user) {
+    public void showTransactionMenu(User user) {
         System.out.println("> 1. Køb Aktier ");
         System.out.println("> 2. Sælg Aktier");
         System.out.println("> 3. Vis alle Aktier");
@@ -30,8 +31,8 @@ public class TransactionController {
         String input = scanner.nextLine();
         switch (input) {
             case "1": // Køb aktie
-                stockService.showAllStocks();
-                transactionService.buyStock(scanner, user);
+                // stockService.showAllStocks();
+                // transactionService.buyStock(scanner, user);
                 break;
 
             case "2": // Sælg aktie
@@ -39,7 +40,7 @@ public class TransactionController {
                     System.out.println("Kan ikke sælge aktier da dit portefølje er tomt!");
                 } else {
                     transactionService.displayPortfolioOfUser(user);
-                    transactionService.sellStock(scanner, user);
+                    // transactionService.sellStock(scanner, user);
                     return;
                 }
                 break;
@@ -50,6 +51,40 @@ public class TransactionController {
             default:
                 System.out.println("Ugyldigt input! Prøv igen");
                 break;
+        }
+    }
+
+
+    public void buyStock(Scanner scanner, User user) {
+        System.out.println("Hvilken aktie vil du købe?");
+        System.out.println("Indtast navnet på den ønskede aktie ");
+        String tickerInput = scanner.nextLine();
+
+        Stock stock = stockService.findStockByTicker(tickerInput);
+        if (stock == null) {
+            System.out.println("Denne aktie findes ikke");
+            return;
+        }
+
+        System.out.println("Hvor mange " + stock.getName() + " aktier vil du købe?");
+        int amountToBuy = Integer.parseInt(scanner.nextLine());
+
+        double totalPrice = stock.getPrice() * amountToBuy;
+
+        if (stock.getPrice() * amountToBuy > user.getInitialCashDKK()) {
+            System.out.println("Du har ikke råd til at købe " + amountToBuy + " x " + stock.getName() + "(" + (amountToBuy * stock.getPrice())
+                    + " " + stock.getCurrency() + " samlet)" + " - din saldo er kun " + user.getInitialCashDKK());
+            return;
+        }
+
+        System.out.println("Er du sikker på at du vil købe: " + amountToBuy + "x " + stock.getName() + "for " + totalPrice + " " + stock.getCurrency());
+        System.out.println("> 1. Ja");
+        System.out.println("> 2. Nej");
+        String confirmation = scanner.nextLine();
+
+        if (!confirmation.equalsIgnoreCase("ja")) {
+            System.out.println("Handlen blev annulleret.");
+            return;
         }
     }
 }
