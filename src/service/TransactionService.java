@@ -1,20 +1,24 @@
 package service;
 
-import models.Stock;
-import models.Transaction;
-import models.User;
+import objects.Currency;
+import objects.Stock;
+import objects.Transaction;
+import objects.User;
 import repository.TransactionRepository;
+import util.Utilities;
 
 import java.time.LocalDate;
 import java.util.*;
 
 public class TransactionService {
     private final TransactionRepository transactionRepository;
+    private final CurrencyService currencyService;
     private final StockService stockService;
 
-    public TransactionService(TransactionRepository transactionRepository,
+    public TransactionService(TransactionRepository transactionRepository, CurrencyService currencyService,
                               StockService stockService) {
         this.transactionRepository = transactionRepository;
+        this.currencyService = currencyService;
         this.stockService = stockService;
     }
 
