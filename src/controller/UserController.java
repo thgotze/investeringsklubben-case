@@ -76,7 +76,7 @@ public final class UserController {
                 break;
 
             case "2": // Rediger oplysninger
-                editUser(scanner, user);
+                editUser(user);
                 break;
 
             case "3": // Transaktionshistorik
@@ -126,15 +126,15 @@ public final class UserController {
         String input = scanner.nextLine();
         switch (input) {
             case "1": // Tilføj bruger
-                addUser(scanner);
+                addUser();
                 break;
 
             case "2": // Rediger bruger
-                editUser(scanner, user);
+                editUser(user);
                 break;
 
             case "3": // Slet bruger
-                handleDeleteUser(scanner, user);
+                handleDeleteUser(user);
                 break;
 
             case "0": // Returner til hovedmenuen
@@ -146,7 +146,7 @@ public final class UserController {
         }
     }
 
-    public void handleDeleteUser(Scanner scanner, User currentUser) {
+    public void handleDeleteUser(User currentUser) {
         System.out.println("Indtast navnet på den bruger du vil fjerne:");
         System.out.println("> 0. Returner til hovedmenu");
 
@@ -162,7 +162,7 @@ public final class UserController {
 
     }
 
-    public void addUser(Scanner scanner) {
+    public void addUser() {
         System.out.println("Hvad er brugerens fulde navn?");
         System.out.println("> 0. Returner til hovedmenu");
         String fullName = scanner.nextLine();
@@ -222,9 +222,8 @@ public final class UserController {
         System.out.println(fullName + " er blevet tilføjet til programmet");
     }
 
-    public void editUser(Scanner scanner, User user) {
-        boolean editing = true;
-        while (editing) {
+    public void editUser(User user) {
+        while (true) {
             System.out.println("Hvad vil du redigere:");
             System.out.println("> 1. Navn");
             System.out.println("> 2. Email");
@@ -245,6 +244,7 @@ public final class UserController {
                 case 1:
                     System.out.println("Indtast nyt navn:");
                     String newName = scanner.nextLine();
+
                     if (newName.equals(user.getFullName())) {
                         System.out.println("Du kan ikke bruge det samme navn");
                     } else {
@@ -252,9 +252,12 @@ public final class UserController {
                     }
                     break;
 
+
                 case 2:
                     System.out.println("Indtast ny email:");
                     String newEmail = scanner.nextLine();
+                    System.out.println("Bekræft valg: Ja/Nej");
+
                     if (newEmail.equals(user.getEmail())) {
                         System.out.println("Du kan ikke bruge den samme email");
                     } else {
@@ -280,7 +283,6 @@ public final class UserController {
                     }
                     break;
                 case 0:
-                    editing = false;
                     userService.saveUser(user);
                     System.out.println("Bruger opdateret");
                     break;
@@ -290,7 +292,7 @@ public final class UserController {
         }
     }
 
-    public void changeAdminStatus(Scanner scanner, User user) {
+    public void changeAdminStatus(User user) {
         System.out.println("Angiv ID på den bruger du vil ændre admin status på:");
         System.out.println("> 0. Returner til hovedmenu");
 
@@ -397,6 +399,15 @@ public final class UserController {
             }
         }
         return birthDay;
+    }
+
+    public void confirmChoice(Scanner scanner) {
+        String input = scanner.nextLine();
+        switch (input) {
+            case "1":
+
+                break;
+        }
     }
 
 }
