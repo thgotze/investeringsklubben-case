@@ -5,7 +5,7 @@ import repository.StockRepository;
 
 import java.util.*;
 
-public class StockService {
+public final class StockService {
     private final StockRepository stockRepository;
 
     public StockService(StockRepository stockRepository) {
@@ -47,34 +47,25 @@ public class StockService {
         return sectors;
     }
 
-    public void showAllStocks() {
+    public void displayAllStocks() {
         System.out.println("-*- Aktier -*-");
         System.out.printf("%-9s %-21s %-15s %10s %8s %8s %13s   %-15s   %18s\n",
                 "Ticker", "Navn", "Sektor", "Pris", "Valuta", "Rating", "Dividend %", "Marked", "Sidst opdateret");
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
 
         for (Stock stock : stockRepository.readStockFile()) {
-            String currencyString = "N/A";
-            if (stock.getCurrency() != null) {
-                currencyString = stock.getCurrency().getBaseCurrency();
-            }
-
-            String lastUpdatedString = "N/A";
-            if (stock.getLastUpdated() != null) {
-                lastUpdatedString = stock.getLastUpdated().toString();
-            }
-
             System.out.printf("%-9s %-21s %-15s %10.2f %8s %8s %11.2f%%    %-15s %18s\n",
                     stock.getTickerName(),
                     stock.getName(),
                     stock.getSector(),
                     stock.getPrice(),
-                    currencyString,
+                    stock.getCurrency(),
                     stock.getRating(),
                     stock.getDividendYield(),
                     stock.getMarket(),
-                    lastUpdatedString);
+                    stock.getLastUpdated());
         }
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("-*- Aktier -*-");
     }
 

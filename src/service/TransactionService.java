@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TransactionService {
+public final class TransactionService {
     private final TransactionRepository transactionRepository;
     private final StockService stockService;
 
@@ -20,7 +20,7 @@ public class TransactionService {
         this.stockService = stockService;
     }
 
-    public void buyStock(User user, Stock stock, int quantity) {
+    public void processStockPurchase(User user, Stock stock, int quantity) {
         double totalPrice = stock.getPrice() * quantity;
 
         if (totalPrice > findUserBalance(user)) {
@@ -45,7 +45,7 @@ public class TransactionService {
         displayUserBalance(user);
     }
 
-    public Map<String, Integer> getPortfolioForUser(User user) {
+    public Map<String, Integer> findPortfolioForUser(User user) {
         Map<String, Integer> userPortfolio = new HashMap<>();
 
         List<Transaction> userTransactions = findTransactionsForUser(user);
@@ -73,7 +73,7 @@ public class TransactionService {
     }
 
     public void displayPortfolioOfUser(User user) {
-        Map<String, Integer> portfolio = getPortfolioForUser(user);
+        Map<String, Integer> portfolio = findPortfolioForUser(user);
         if (portfolio.isEmpty()) {
             System.out.println("Du har ingen aktier!");
             return;
@@ -99,17 +99,12 @@ public class TransactionService {
         System.out.println(" -*- " + user.getFullName() + "'s  Portefølje -*-");
     }
 
-    public void getAllStocks() {
-        stockService.showAllStocks();
+    public void findAllStocks() {
+        stockService.displayAllStocks();
     }
 
-    public Stock getStockByTicker(String tickerInput) {
-        Stock stock = stockService.findStockByTicker(tickerInput);
-        if (stock == null) {
-            System.out.println("Denne aktie findes ikke");
-            return null;
-        }
-        return stock;
+    public Stock findStockByTicker(String tickerInput) {
+        return stockService.findStockByTicker(tickerInput);
     }
 
     public List<Transaction> findTransactionsForUser(User user) {
@@ -143,13 +138,13 @@ public class TransactionService {
         return userBalance;
     }
 
-    public List<Stock> getStocksBySectors(String sector) {
+    public List<Stock> findStocksBySectors(String sector) {
         List<Stock> stockBySector = stockService.findAllStocksBySector(sector);
 
         return stockBySector;
     }
 
-    public double getReturnOfUser(User user) {
+    public double findReturnOfUser(User user) {
         return (findUserBalance(user) / user.getInitialCashDKK() - 1) * 100;
     }
 }

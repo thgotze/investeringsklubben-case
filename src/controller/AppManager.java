@@ -7,7 +7,7 @@ import util.MessagePrinter;
 
 import java.util.Scanner;
 
-public class AppManager {
+public final class AppManager {
     private final UserController userController;
     private final TransactionController transactionController;
     private final CurrencyService currencyService;
@@ -43,27 +43,35 @@ public class AppManager {
                 String input = scanner.nextLine();
                 switch (input) {
                     case "1": // Aktiemarked
-                        stockService.showAllStocks();
+                        stockService.displayAllStocks();
                         break;
 
                     case "2": // Aktiehandel
-                        transactionController.showTransactionMenu(user);
+                        transactionController.openTransactionMenu(user);
                         break;
 
                     case "3": // Valutakurser
-                        currencyService.showAllCurrencies();
+                        currencyService.displayAllCurrencies();
                         break;
 
                     case "4": // Min konto
-                        userController.printMyAccountMenu(user);
+                        userController.openMyAccountMenu(user);
                         break;
 
-                    case "5": // Statistik
-                        userController.statisticsMenu();
+                    case "5": // Statistik (Admin)
+                        if (user.isAdmin()) {
+                            userController.openStatisticsMenu();
+                        } else {
+                            MessagePrinter.printInvalidInputMessage();
+                        }
                         break;
 
-                    case "6": // Rediger medlemmer
-                        userController.adminEditUserMenu(user);
+                    case "6": // Rediger medlemmer (Admin)
+                        if (user.isAdmin()) {
+                            userController.openAdminEditUserMenu(user);
+                        } else {
+                            MessagePrinter.printInvalidInputMessage();
+                        }
                         break;
 
                     case "0": // Log ud

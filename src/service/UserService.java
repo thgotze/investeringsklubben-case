@@ -1,16 +1,12 @@
 package service;
 
-import models.Stock;
-import models.Transaction;
 import models.User;
 import repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-public class UserService {
+public final class UserService {
     private final UserRepository userRepository;
     private final TransactionService transactionService;
 
@@ -20,7 +16,42 @@ public class UserService {
     }
 
     public void displayTop5UserReturns() {
+        System.out.println("-*- Top 5 afkast -*-");
+        System.out.printf("%15s %15s %15s %15s %15s\n", "Plads", "Navn", "Email", "Gevinst", "Afkastprocent");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+
+        // 1. Maria Jensen          mariajensen@gmail.com        10000 DKK          75%
+
+        Map<User, Double> userReturns = new HashMap<>();
+
         List<Double> userReturns = new ArrayList<>();
+
+
+        // Map<String, Integer> userPortfolio = new HashMap<>();
+        //
+        //        List<Transaction> userTransactions = findTransactionsForUser(user);
+        //
+        //        if (userTransactions.isEmpty()) {
+        //            return userPortfolio;
+        //        }
+        //
+        //        for (Transaction transaction : userTransactions) {
+        //            String ticker = transaction.getTicker();
+        //            int quantity = transaction.getQuantity();
+        //
+        //            String orderType = transaction.getOrderType();
+        //            if (orderType.equals("buy")) {
+        //                userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) + quantity);
+        //            } else if (orderType.equals("sell")) {
+        //                userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) - quantity);
+        //            }
+        //
+        //            if (userPortfolio.get(ticker) == 0) {
+        //                userPortfolio.remove(ticker);
+        //            }
+        //        }
+        //        return userPortfolio;
+        //    }
 
         for (User user : userRepository.getUsersFromFile()) {
             userReturns.add(getReturnOfUser(user));
@@ -29,8 +60,13 @@ public class UserService {
         userReturns.sort(Comparator.reverseOrder());
 
         for (int i = 0; i < Math.min(5, userReturns.size()); i++) {
-            System.out.println((i + 1) + ":" + userReturns.get(i));
+            System.out.println((i + 1) + ":" + userReturns.get(i) + userReturns);
         }
+
+
+
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-*- Top 5 afkast -*-");
     }
 
     public void displayPortfolioOfUser(User user) {
@@ -38,7 +74,7 @@ public class UserService {
     }
 
     public double getReturnOfUser(User user) {
-        return transactionService.getReturnOfUser(user);
+        return transactionService.findReturnOfUser(user);
     }
 
     public boolean validatePassword(User user, String password) {
@@ -47,32 +83,26 @@ public class UserService {
 
     public void updateUserName(User user, String newName) {
         user.setFullName(newName);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void updateUserEmail(User user, String newEmail) {
         user.setEmail(newEmail);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void updateUserBirthDate(User user, LocalDate newBirthDate) {
         user.setBirthDate(newBirthDate);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void updateUserPassword(User user, String newPassword) {
         user.setPassword(newPassword);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void makeAdmin(User user) {
         user.setAdmin(true);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void removeAdmin(User user) {
         user.setAdmin(false);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void saveUser(User user) {

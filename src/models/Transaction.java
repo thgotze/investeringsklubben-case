@@ -2,19 +2,19 @@ package models;
 
 import java.time.LocalDate;
 
-public class Transaction {
+public final class Transaction {
 
     private final int id;
     private final int userId;
     private final LocalDate date;
     private final String ticker;
     private final double price;
-    private final Currency currency;
+    private final String currency;
     private final String orderType;
     private final int quantity;
 
     // Constructor
-    public Transaction(int id, int userId, LocalDate date, String ticker, double price, Currency currency, String orderType, int quantity) {
+    public Transaction(int id, int userId, LocalDate date, String ticker, double price, String currency, String orderType, int quantity) {
         this.id = id;
         this.userId = userId;
         this.date = date;
@@ -45,7 +45,7 @@ public class Transaction {
         return price;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 

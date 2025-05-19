@@ -2,19 +2,19 @@ package models;
 
 import java.time.LocalDate;
 
-public class Stock {
-    private String ticker;
-    private String name;
-    private String sector;
-    private double price;
-    private String rating;
-    private Currency currency;
-    private double dividendYield;
-    private String market;
-    private LocalDate lastUpdated;
+public final class Stock {
+    private final String ticker;
+    private final String name;
+    private final String sector;
+    private final double price;
+    private final String rating;
+    private final String currency;
+    private final double dividendYield;
+    private final String market;
+    private final LocalDate lastUpdated;
 
     // Constructor
-    public Stock(String ticker, String name, String sector, double price, String rating, Currency currency, double dividendYield, String market, LocalDate lastUpdated) {
+    public Stock(String ticker, String name, String sector, double price, String rating, String currency, double dividendYield, String market, LocalDate lastUpdated) {
         this.ticker = ticker;
         this.name = name;
         this.sector = sector;
@@ -46,7 +46,7 @@ public class Stock {
         return rating;
     }
 
-    public Currency getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
@@ -61,9 +61,4 @@ public class Stock {
     public LocalDate getLastUpdated() {
         return lastUpdated;
     }
-
-//    @Override
-//    public String toString() {
-//        return ticker + ;
-//    }
 }

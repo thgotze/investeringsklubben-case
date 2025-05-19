@@ -2,14 +2,14 @@ package models;
 
 import java.time.LocalDate;
 
-public class User implements Comparable<User> {
+public final class User implements Comparable<User> {
 
-    private int userId;
+    private final int userId;
     private String fullName;
     private String email;
     private LocalDate birthDate;
     private double initialCashDKK;
-    private LocalDate createdDate;
+    private final LocalDate createdDate;
     private LocalDate lastUpdated;
 
     // Egne tilføjelser
@@ -36,16 +36,13 @@ public class User implements Comparable<User> {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public String getFullName() {
         return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+        updateLastUpdated();
     }
 
     public String getEmail() {
@@ -54,6 +51,7 @@ public class User implements Comparable<User> {
 
     public void setEmail(String email) {
         this.email = email;
+        updateLastUpdated();
     }
 
     public LocalDate getBirthDate() {
@@ -62,6 +60,7 @@ public class User implements Comparable<User> {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+        updateLastUpdated();
     }
 
     public double getInitialCashDKK() {
@@ -70,22 +69,19 @@ public class User implements Comparable<User> {
 
     public void setInitialCashDKK(double initialCashDKK) {
         this.initialCashDKK = initialCashDKK;
+        updateLastUpdated();
     }
 
     public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public LocalDate getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDate lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    private void updateLastUpdated() {
+        this.lastUpdated = LocalDate.now();
     }
 
     public boolean isAdmin() {
@@ -94,6 +90,7 @@ public class User implements Comparable<User> {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+        updateLastUpdated();
     }
 
     public String getPassword() {
@@ -102,11 +99,12 @@ public class User implements Comparable<User> {
 
     public void setPassword(String password) {
         this.password = password;
+        updateLastUpdated();
     }
 
     @Override
     public String toString() {
-        return ("Fulde Navn: " + fullName + ", Email: " + email + ", Saldo: " + initialCashDKK + ", Admin: " + admin);
+        return ("Fulde Navn: " + fullName + ", Email: " + email + ", Admin: " + admin + ", Bruger ID: " + userId);
     }
 
     @Override

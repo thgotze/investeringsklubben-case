@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-public class UserController {
+public final class UserController {
     private final UserService userService;
     private final Scanner scanner;
 
@@ -22,7 +22,7 @@ public class UserController {
     public User logIn() {
         System.out.println("-*-*- Login på ThorNet -*-*-");
         System.out.println("> 0. Afslut program");
-        System.out.println("Indtast email: ");
+        System.out.println("Indtast email:");
 
         User user;
         while (true) {
@@ -53,26 +53,24 @@ public class UserController {
         }
     }
 
-    public void printMyAccountMenu(User user) {
+    public void openMyAccountMenu(User user) {
         System.out.println("\n-*-*- " + user.getFullName() + " -*-*-");
         if (user.isAdmin()) {
-            System.out.println("Admin");
+            System.out.println("Admin: true");
         }
         System.out.println("BrugerID: " + user.getUserId());
         System.out.println("Email: " + user.getEmail());
         System.out.printf("Saldo: %.2f DKK\n", userService.userBalance(user));
-        System.out.printf("dit afkast er : %.2f%%\n", userService.getReturnOfUser(user));
+        System.out.printf("Afkast: %.2f%%\n", userService.getReturnOfUser(user));
 
         System.out.println("> 1. Mit portefølje");
         System.out.println("> 2. Rediger oplysninger");
         System.out.println("> 3. Transaktionshistorik");
+        System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
 
-        switch(input) {
-            case "0": // Returner til hovedmenuen
-                return;
-
+        switch (input) {
             case "1": // Mit portefølje
                 userService.displayPortfolioOfUser(user);
                 break;
@@ -82,12 +80,17 @@ public class UserController {
                 break;
 
             case "3": // Transaktionshistorik
-
                 break;
+
+            case "0": // Returner til hovedmenuen
+                return;
+
+            default:
+                MessagePrinter.printInvalidInputMessage();
         }
     }
 
-    public void statisticsMenu() {
+    public void openStatisticsMenu() {
         System.out.println("\n-*-*- Statistik Menu -*-*-");
         System.out.println("> 1. Se brugernes porteføljeværdi");
         System.out.println("> 2. Top 5 afkast");
@@ -95,40 +98,47 @@ public class UserController {
         System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
-
         switch (input) {
-            case "0":
-                return;
+            case "1": // Se brugernes porteføljeværdi
+                break;
 
-            case "2":
+            case "2": // Se top 5 afkast
                 userService.displayTop5UserReturns();
                 break;
+
+            case "3": // Se fordeling af aktier & sektorer
+                break;
+
+            case "0": // Returner til hovedmenuen
+                return;
+
+            default:
+                MessagePrinter.printInvalidInputMessage();
         }
     }
 
-    public void adminEditUserMenu(User user) {
+    public void openAdminEditUserMenu(User user) {
         System.out.println("> 1. Tilføj bruger");
-        System.out.println("> 2. Fjern bruger");
-        System.out.println("> 3. Ændrer brugers admin status");
+        System.out.println("> 2. Rediger bruger");
+        System.out.println("> 3. Slet bruger");
         System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
-
         switch (input) {
-            case "0":
-                return;
-
-            case "1":
+            case "1": // Tilføj bruger
                 addUser(scanner);
                 break;
 
-            case "2":
+            case "2": // Rediger bruger
+                editUser(scanner, user);
+                break;
+
+            case "3": // Slet bruger
                 handleDeleteUser(scanner, user);
                 break;
 
-            case "3":
-                changeAdminStatus(scanner, user);
-                break;
+            case "0": // Returner til hovedmenuen
+                return;
 
             default:
                 MessagePrinter.printInvalidInputMessage();
@@ -143,12 +153,11 @@ public class UserController {
         String input = scanner.nextLine();
         if (input.equals("0")) return;
 
-
         User userToDelete = userService.findUserByFullName(input);
         if (userToDelete != null) {
             userService.deleteUser(userToDelete.getUserId(), currentUser.getUserId());
         } else {
-            System.out.println("Bruger ikke fudndet");
+            System.out.println("Bruger ikke fundet");
         }
 
     }
@@ -281,7 +290,7 @@ public class UserController {
         }
     }
 
-    public void changeAdminStatus (Scanner scanner, User user) {
+    public void changeAdminStatus(Scanner scanner, User user) {
         System.out.println("Angiv ID på den bruger du vil ændre admin status på:");
         System.out.println("> 0. Returner til hovedmenu");
 
