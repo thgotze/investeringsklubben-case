@@ -37,14 +37,14 @@ public class Main {
         StockService stockService = new StockService(stockRepository);
         CurrencyService currencyService = new CurrencyService(currencyRepository);
         TransactionService transactionService = new TransactionService(transactionRepository, stockService);
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository, transactionService);
 
         // Controllers
         UserController userController = new UserController(userService, scanner);
         TransactionController transactionController = new TransactionController(transactionService, scanner);
 
         // Manager (MainController)
-        AppManager appManager = new AppManager(userController, transactionController, currencyService, stockService, transactionService, userService, scanner);
+        AppManager appManager = new AppManager(userController, transactionController, currencyService, stockService, scanner);
         appManager.startProgram();
     }
 }

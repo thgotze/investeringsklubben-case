@@ -22,15 +22,15 @@ public class UserController {
     public User logIn() {
         System.out.println("-*-*- Login på ThorNet -*-*-");
         System.out.println("> 0. Afslut program");
-        System.out.println("Indtast brugernavn: ");
+        System.out.println("Indtast email: ");
 
         User user;
         while (true) {
-            String name = scanner.nextLine();
+            String email = scanner.nextLine();
 
-            if (name.equals("0")) return null;
+            if (email.equals("0")) return null;
 
-            user = userService.findUserByFullName(name);
+            user = userService.findUserByEmail(email);
 
             if (user == null) {
                 System.out.println("Bruger ikke fundet. Prøv igen");
@@ -50,6 +50,59 @@ public class UserController {
             } else {
                 System.out.println("Forkert adgangskode. Prøv igen");
             }
+        }
+    }
+
+    public void printMyAccountMenu(User user) {
+        System.out.println("\n-*-*- " + user.getFullName() + " -*-*-");
+        if (user.isAdmin()) {
+            System.out.println("Admin");
+        }
+        System.out.println("BrugerID: " + user.getUserId());
+        System.out.println("Email: " + user.getEmail());
+        System.out.printf("Saldo: %.2f DKK\n", userService.userBalance(user));
+        System.out.printf("dit afkast er : %.2f%%\n", userService.getReturnOfUser(user));
+
+        System.out.println("> 1. Mit portefølje");
+        System.out.println("> 2. Rediger oplysninger");
+        System.out.println("> 3. Transaktionshistorik");
+
+        String input = scanner.nextLine();
+
+        switch(input) {
+            case "0": // Returner til hovedmenuen
+                return;
+
+            case "1": // Mit portefølje
+                userService.displayPortfolioOfUser(user);
+                break;
+
+            case "2": // Rediger oplysninger
+
+                break;
+
+            case "3": // Transaktionshistorik
+
+                break;
+        }
+    }
+
+    public void statisticsMenu() {
+        System.out.println("\n-*-*- Statistik Menu -*-*-");
+        System.out.println("> 1. Se brugernes porteføljeværdi");
+        System.out.println("> 2. Top 5 afkast");
+        System.out.println("> 3. Se fordeling af aktier & sektorer");
+        System.out.println("> 0. Returner til hovedmenu");
+
+        String input = scanner.nextLine();
+
+        switch (input) {
+            case "0":
+                return;
+
+            case "2":
+                userService.displayTop5UserReturns();
+                break;
         }
     }
 
@@ -110,6 +163,11 @@ public class UserController {
         System.out.println("> 0. Returner til hovedmenu");
         String email = scanner.nextLine();
         if (email.equals("0")) return;
+
+        boolean newMail = userService.emailChecker(email);
+        if (!newMail) {
+            return;
+        }
 
         LocalDate birthDay = chooseBirthDay(scanner);
         if (birthDay == null) return;

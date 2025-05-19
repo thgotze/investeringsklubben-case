@@ -174,13 +174,17 @@ public class TransactionService {
         System.out.println(" -*- " + user.getFullName() + "'s  Portefølje -*-");
     }
 
-    public Transaction findTransactionById(int id) {
-        for (Transaction transaction : transactionRepository.readTransactionFile()) {
-            if (transaction.getId() == id) {
-                return transaction;
-            }
+    public void getAllStocks() {
+        stockService.showAllStocks();
+    }
+
+    public Stock getStockByTicker(String tickerInput) {
+        Stock stock = stockService.findStockByTicker(tickerInput);
+        if (stock == null) {
+            System.out.println("Denne aktie findes ikke");
+            return null;
         }
-        return null;
+        return stock;
     }
 
     // LAV EN FIND ALL TRANSACTION UDEN AT CHECKE MED SPECIFIKT USER

@@ -7,9 +7,11 @@ import java.time.LocalDate;
 
 public class UserService {
     private final UserRepository userRepository;
+    private final TransactionService transactionService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TransactionService transactionService) {
         this.userRepository = userRepository;
+        this.transactionService = transactionService;
     }
 
 
@@ -74,6 +76,19 @@ public class UserService {
         userRepository.removeUserFromFile(userIdToDelete);
     }
 
+    public double userBalance(User user) {
+        return transactionService.findUserBalance(user);
+    }
+
+    public boolean emailChecker(String email) {
+        for (User user : userRepository.getUsersFromFile()) {
+            if (email.equals(user.getEmail())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public User findUserById(int userId) {
         for (User user : userRepository.getUsersFromFile()) {
@@ -87,6 +102,15 @@ public class UserService {
     public User findUserByFullName(String fullName) {
         for (User user : userRepository.getUsersFromFile()) {
             if (user.getFullName().equalsIgnoreCase(fullName)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public User findUserByEmail(String email) {
+        for (User user : userRepository.getUsersFromFile()) {
+            if (user.getEmail().equalsIgnoreCase(email)) {
                 return user;
             }
         }

@@ -13,18 +13,14 @@ public class AppManager {
     private final TransactionController transactionController;
     private final CurrencyService currencyService;
     private final StockService stockService;
-    private final TransactionService transactionService;
-    private final UserService userService;
+
     private final Scanner scanner;
 
-
-    public AppManager(UserController userController, TransactionController transactionController, CurrencyService currencyService, StockService stockService, TransactionService transactionService, UserService userService, Scanner scanner) {
+    public AppManager(UserController userController, TransactionController transactionController, CurrencyService currencyService, StockService stockService, Scanner scanner) {
         this.userController = userController;
         this.transactionController = transactionController;
         this.currencyService = currencyService;
         this.stockService = stockService;
-        this.transactionService = transactionService;
-        this.userService = userService;
         this.scanner = scanner;
     }
 
@@ -33,19 +29,18 @@ public class AppManager {
             User user = userController.logIn();
             if (user == null) return;
 
-            System.out.println("\n-*-*- ThorNet -*-*-");
-            System.out.println("> 1. Aktiemarked");
-            System.out.println("> 2. Aktiehandel");
-            System.out.println("> 3. Valutakurser");
-            System.out.println("> 4. Min konto");
-
-            if (user.isAdmin()) {
-                System.out.println("> 5. Statistik");
-                System.out.println("> 6. Rediger medlemmer");
-            }
-            System.out.println("> 0. Log ud");
-
             while (true) {
+                System.out.println("\n-*-*- ThorNet -*-*-");
+                System.out.println("> 1. Aktiemarked");
+                System.out.println("> 2. Aktiehandel");
+                System.out.println("> 3. Valutakurser");
+                System.out.println("> 4. Min konto");
+                if (user.isAdmin()) {
+                    System.out.println("> 5. Statistik");
+                    System.out.println("> 6. Rediger medlemmer");
+                }
+                System.out.println("> 0. Log ud");
+
                 String input = scanner.nextLine();
                 switch (input) {
                     case "1": // Aktiemarked
@@ -61,7 +56,7 @@ public class AppManager {
                         break;
 
                     case "4": // Min konto
-                        printMyAccountMenu(user);
+                        userController.printMyAccountMenu(user);
                         break;
 
                     case "5": // Statistik
@@ -84,26 +79,5 @@ public class AppManager {
                 }
             }
         }
-    }
-
-    private void printMyAccountMenu(User user) {
-        System.out.println("\n-*-*- " + user.getFullName() + " -*-*-");
-        if (user.isAdmin()) {
-            System.out.println("Admin");
-        }
-        System.out.println("BrugerID: " + user.getUserId());
-        System.out.println("Email: " + user.getEmail());
-        System.out.printf("Saldo: %.2f DKK\n", transactionService.findUserBalance(user));
-
-        System.out.println("> 1. Mit portefølje");
-        System.out.println("> 2. Rediger oplysninger");
-        System.out.println("> 3. Transaktionshistorik");
-    }
-
-    private void printStatisticsMenu() {
-        System.out.println("\n-*-*- Statistik Menu -*-*-");
-        System.out.println("> 1. Se brugernes porteføljeværdi");
-        System.out.println("> 2. Se rangliste");
-        System.out.println("> 3. Se fordeling af aktier & sektorer");
     }
 }
