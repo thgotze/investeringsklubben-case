@@ -15,15 +15,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        // TODO: (1) Main menuen er alt for overcrowded, vi skal bestemme konkret hvilke valgmuligheder der skal være i den -
-        // TODO: (2) fjerne dem der ikke er nødvendige, og merge dem der skal være sammen
-        // TODO: Vi skal huske at have mindst et par testmetoder
-        // TODO: Vi skal fjerne metoder der ikke bruges
-        // TODO: Være sikker på at systemet ikke har mulighed for at crashe - tjekke om der mangler throw exception
-        // TODO: Tjekke at vi altid går fra controller -> service -> repository og ikke controller -> repository
-        // TODO: Er der nogen 'magic numbers'?
-        // TODO: Nyt class diagram 2.0
-        // TODO: UnitTesting
+        // TODO: Troubleshoot programmet
+        // TODO: Klassediagram (OLIVER)
+        // TODO: UnitTesting (SEBASTIAN)
+        // TODO: Afkast (OLIVER)
+        // TODO: Slet AvgPrice class
 
         Scanner scanner = new Scanner(System.in);
 

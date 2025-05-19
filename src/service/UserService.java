@@ -1,9 +1,14 @@
 package service;
 
+import models.Stock;
+import models.Transaction;
 import models.User;
 import repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -14,6 +19,27 @@ public class UserService {
         this.transactionService = transactionService;
     }
 
+    public void displayTop5UserReturns() {
+        List<Double> userReturns = new ArrayList<>();
+
+        for (User user : userRepository.getUsersFromFile()) {
+            userReturns.add(getReturnOfUser(user));
+        }
+
+        userReturns.sort(Comparator.reverseOrder());
+
+        for (int i = 0; i < Math.min(5, userReturns.size()); i++) {
+            System.out.println((i + 1) + ":" + userReturns.get(i));
+        }
+    }
+
+    public void displayPortfolioOfUser(User user) {
+        transactionService.displayPortfolioOfUser(user);
+    }
+
+    public double getReturnOfUser(User user) {
+        return transactionService.getReturnOfUser(user);
+    }
 
     public boolean validatePassword(User user, String password) {
         return user.getPassword().equals(password);

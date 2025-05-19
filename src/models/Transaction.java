@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 public class Transaction {
 
-    private int id;
-    private int userId;
-    private LocalDate date;
-    private String ticker;
-    private double price;
-    private Currency currency;
-    private String orderType;
-    private int quantity;
+    private final int id;
+    private final int userId;
+    private final LocalDate date;
+    private final String ticker;
+    private final double price;
+    private final Currency currency;
+    private final String orderType;
+    private final int quantity;
 
     // Constructor
     public Transaction(int id, int userId, LocalDate date, String ticker, double price, Currency currency, String orderType, int quantity) {
@@ -29,64 +29,32 @@ public class Transaction {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public String getTicker() {
         return ticker;
-    }
-
-    public void setTicker(String ticker) {
-        this.ticker = ticker;
     }
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public Currency getCurrency() {
         return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public String getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
-
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     @Override

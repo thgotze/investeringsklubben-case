@@ -2,10 +2,11 @@ package controller;
 
 import models.Stock;
 import models.User;
-import service.StockService;
 import service.TransactionService;
 import util.MessagePrinter;
 
+import javax.swing.text.Utilities;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -41,10 +42,10 @@ public class TransactionController {
                     break;
 
                 case "4": // Søg efter aktier
-                    // TODO
+                    searchStockBySector();
                     break;
 
-                case "0": // Returner til hovedmenu
+                case "0": // Returner til hovedemenu
                     return;
 
                 default:

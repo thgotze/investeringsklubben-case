@@ -1,89 +1,24 @@
 package service;
 
-import objects.Currency;
-import objects.Stock;
-import objects.Transaction;
-import objects.User;
+import models.Stock;
+import models.Transaction;
+import models.User;
 import repository.TransactionRepository;
-import util.Utilities;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TransactionService {
     private final TransactionRepository transactionRepository;
-    private final CurrencyService currencyService;
     private final StockService stockService;
 
-    public TransactionService(TransactionRepository transactionRepository, CurrencyService currencyService,
-                              StockService stockService) {
+    public TransactionService(TransactionRepository transactionRepository, StockService stockService) {
         this.transactionRepository = transactionRepository;
-        this.currencyService = currencyService;
         this.stockService = stockService;
     }
-
-    public void showAllStock() {
-        stockService.showAllStocks();
-    }
-
-        // HALLA DEN ER LAVET der mangler bare noget finpudsning
-
-
-    public void userRanking(User user) {
-        List<Transaction> userTransactions = findAllTransactionsForUsers();
-
-
-
-        Map<String, Double> latestPrices = new HashMap<>();
-        Map<String, LocalDate> latestDates = new HashMap<>();
-
-        // nyeste pris for hver aktie med dato
-        for (Transaction transaction : userTransactions) {
-            if (!latestPrices.containsKey(transaction.getTicker()) || transaction.getDate().isAfter(latestDates.get(transaction.getTicker()))) {
-                latestPrices.put(transaction.getTicker(), transaction.getPrice());
-                latestDates.put(transaction.getTicker(), transaction.getDate());
-            }
-        }
-
-        Map<Integer, Map<String, AvgPrice>> userTickerBuys = new HashMap<>();
-
-        for (Transaction t : userTransactions) {
-            if (!t.getOrderType().equalsIgnoreCase("BUY")) continue;
-
-            userTickerBuys
-                    .computeIfAbsent(t.getUserId(), k -> new HashMap<>())
-                    .computeIfAbsent(t.getTicker(), k -> new AvgPrice())
-                    .add(t.getPrice(), t.getQuantity());
-        }
-        Map<String, Double> userGains = new HashMap<>();
-
-        for (int userId : userTickerBuys.keySet()) {
-            double totalGain = 0;
-            Map<String, AvgPrice> tickers = userTickerBuys.get(userId);
-
-            for (String ticker : tickers.keySet()) {
-                AvgPrice avg = tickers.get(ticker);
-                double avgBuyPrice = avg.getAvg();
-                Double latestPrice = latestPrices.get(ticker);
-
-                if (latestPrice != null) {
-                    double diff = latestPrice - avgBuyPrice;
-                    totalGain += diff;
-                }
-            }
-
-            userGains.put(String.valueOf(userId), totalGain);
-
-        }
-        // TODO: OMREGN OGSÅ TIL PROCENT
-        System.out.println("Top 5 brugere med højest positiv ændring i pris:");
-        userGains.entrySet().stream()
-                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
-                .limit(5)
-                .forEach(entry -> System.out.printf("User %s: %.2f kr. afkast\n", entry.getKey(), entry.getValue()));
-
-    }
-
 
     public void buyStock(User user, Stock stock, int quantity) {
         double totalPrice = stock.getPrice() * quantity;
@@ -108,16 +43,6 @@ public class TransactionService {
         Transaction transaction = new Transaction(transactionId, user.getUserId(), LocalDate.now(), stock.getTickerName(), stock.getPrice(), stock.getCurrency(), "sell", quantity);
         transactionRepository.addTransactionToFile(transaction);
         displayUserBalance(user);
-    }
-
-    public List<Transaction> findTransactionsWithSameTicker(List<Transaction> transactions, String ticker) {
-        List<Transaction> sameTickerTransactions = new ArrayList<>();
-        for (Transaction transaction : transactions) {
-            if (transaction.getTicker().equals(ticker)) {
-                sameTickerTransactions.add(transaction);
-            }
-        }
-        return sameTickerTransactions;
     }
 
     public Map<String, Integer> getPortfolioForUser(User user) {
@@ -187,18 +112,6 @@ public class TransactionService {
         return stock;
     }
 
-    // LAV EN FIND ALL TRANSACTION UDEN AT CHECKE MED SPECIFIKT USER
-    public List<Transaction> findAllTransactionsForUsers() {
-
-        List<Transaction> transactionsForUser = new ArrayList<>();
-        for (Transaction transaction : transactionRepository.readTransactionFile()) {
-
-            transactionsForUser.add(transaction);
-
-        }
-        return transactionsForUser;
-    }
-
     public List<Transaction> findTransactionsForUser(User user) {
         int userId = user.getUserId();
 
@@ -228,5 +141,15 @@ public class TransactionService {
             }
         }
         return userBalance;
+    }
+
+    public List<Stock> getStocksBySectors(String sector) {
+        List<Stock> stockBySector = stockService.findAllStocksBySector(sector);
+
+        return stockBySector;
+    }
+
+    public double getReturnOfUser(User user) {
+        return (findUserBalance(user) / user.getInitialCashDKK() - 1) * 100;
     }
 }

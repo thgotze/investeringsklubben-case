@@ -1,0 +1,27 @@
+### Main ###
+* Main
+
+### Controller Layer ###
+* App Manager
+
+* User Controller
+
+* Transaction Controller
+
+### Service Layer ###
+* User Service
+
+* Transaction Service
+
+* Currency Service
+
+* Stock Service
+
+### Repository Layer ###
+* User Repository
+
+* Transaction Repository
+
+* Currency Repository
+
+* Stock Repository

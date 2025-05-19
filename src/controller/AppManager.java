@@ -3,7 +3,6 @@ package controller;
 import models.User;
 import service.CurrencyService;
 import service.StockService;
-import service.TransactionService;
 import util.MessagePrinter;
 
 import java.util.Scanner;
@@ -60,7 +59,7 @@ public class AppManager {
                         break;
 
                     case "5": // Statistik
-                        printStatisticsMenu();
+                        userController.statisticsMenu();
                         break;
 
                     case "6": // Rediger medlemmer
