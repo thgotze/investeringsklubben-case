@@ -16,57 +16,40 @@ public final class UserService {
     }
 
     public void displayTop5UserReturns() {
-        System.out.println("-*- Top 5 afkast -*-");
-        System.out.printf("%15s %15s %15s %15s %15s\n", "Plads", "Navn", "Email", "Gevinst", "Afkastprocent");
+        System.out.println("-*- Rangliste for Afkast -*-");
+        System.out.printf("%-6s %-30s %-30s %19s %14s\n",
+                "Plads", "Navn", "Email", "Gevinst", "Afkast");
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
 
-        // 1. Maria Jensen          mariajensen@gmail.com        10000 DKK          75%
+        // Create a map to store User objects and their returns
+        Map<User, Double> userReturnsMap = new HashMap<>();
 
-        Map<User, Double> userReturns = new HashMap<>();
-
-        List<Double> userReturns = new ArrayList<>();
-
-
-        // Map<String, Integer> userPortfolio = new HashMap<>();
-        //
-        //        List<Transaction> userTransactions = findTransactionsForUser(user);
-        //
-        //        if (userTransactions.isEmpty()) {
-        //            return userPortfolio;
-        //        }
-        //
-        //        for (Transaction transaction : userTransactions) {
-        //            String ticker = transaction.getTicker();
-        //            int quantity = transaction.getQuantity();
-        //
-        //            String orderType = transaction.getOrderType();
-        //            if (orderType.equals("buy")) {
-        //                userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) + quantity);
-        //            } else if (orderType.equals("sell")) {
-        //                userPortfolio.put(ticker, userPortfolio.getOrDefault(ticker, 0) - quantity);
-        //            }
-        //
-        //            if (userPortfolio.get(ticker) == 0) {
-        //                userPortfolio.remove(ticker);
-        //            }
-        //        }
-        //        return userPortfolio;
-        //    }
-
+        // Populate the map with all users and their returns
         for (User user : userRepository.getUsersFromFile()) {
-            userReturns.add(getReturnOfUser(user));
+            double userReturn = getReturnOfUser(user);
+            userReturnsMap.put(user, userReturn);
         }
 
-        userReturns.sort(Comparator.reverseOrder());
+        // Sort users by return value (descending order)
+        List<Map.Entry<User, Double>> sortedReturns = new ArrayList<>(userReturnsMap.entrySet());
+        sortedReturns.sort(Map.Entry.<User, Double>comparingByValue().reversed());
 
-        for (int i = 0; i < Math.min(5, userReturns.size()); i++) {
-            System.out.println((i + 1) + ":" + userReturns.get(i) + userReturns);
+        // Display top 10 users
+        for (int i = 0; i < sortedReturns.size(); i++) {
+            Map.Entry<User, Double> entry = sortedReturns.get(i);
+            User user = entry.getKey();
+            Double returnValue = entry.getValue() ;
+
+            System.out.printf("%-6d. %-30s %-30s %15.2f DKK %14.2f%%\n",
+                    i + 1,
+                    user.getFullName(),
+                    user.getEmail(),
+                    transactionService.findUserBalance(user) - user.getInitialCashDKK(),
+                    returnValue
+            );
         }
-
-
-
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
-        System.out.println("-*- Top 5 afkast -*-");
+        System.out.println("-*- Rangliste -*-");
     }
 
     public void displayPortfolioOfUser(User user) {
@@ -172,4 +155,5 @@ public final class UserService {
         }
         return null;
     }
+
 }

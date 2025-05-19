@@ -21,6 +21,8 @@ public class Main {
         // TODO: Afkast (OLIVER)
         // TODO: Slet AvgPrice class
 
+        // TODO: Maria Jensen skal lægges tilbage i .csv filen bagefter
+
         Scanner scanner = new Scanner(System.in);
 
         // Repositories
