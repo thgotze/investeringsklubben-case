@@ -6,14 +6,14 @@ import repository.CurrencyRepository;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class CurrencyService {
+public final class CurrencyService {
     private final CurrencyRepository currencyRepository;
 
     public CurrencyService(CurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
     }
 
-    public void showAllCurrencies() {
+    public void displayAllCurrencies() {
         System.out.println("-*- Valutakurser -*-");
         System.out.printf("%-8s %-8s %-16s \n", "Valuta", "Kurs", "Sidst opdateret");
         System.out.println("----------------------------------");

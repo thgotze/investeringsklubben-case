@@ -1,16 +1,12 @@
 package service;
 
-import models.Stock;
-import models.Transaction;
 import models.User;
 import repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
-public class UserService {
+public final class UserService {
     private final UserRepository userRepository;
     private final TransactionService transactionService;
 
@@ -20,17 +16,40 @@ public class UserService {
     }
 
     public void displayTop5UserReturns() {
-        List<Double> userReturns = new ArrayList<>();
+        System.out.println("-*- Rangliste for Afkast -*-");
+        System.out.printf("%-6s %-30s %-30s %19s %14s\n",
+                "Plads", "Navn", "Email", "Gevinst", "Afkast");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
 
+        // Create a map to store User objects and their returns
+        Map<User, Double> userReturnsMap = new HashMap<>();
+
+        // Populate the map with all users and their returns
         for (User user : userRepository.getUsersFromFile()) {
-            userReturns.add(getReturnOfUser(user));
+            double userReturn = getReturnOfUser(user);
+            userReturnsMap.put(user, userReturn);
         }
 
-        userReturns.sort(Comparator.reverseOrder());
+        // Sort users by return value (descending order)
+        List<Map.Entry<User, Double>> sortedReturns = new ArrayList<>(userReturnsMap.entrySet());
+        sortedReturns.sort(Map.Entry.<User, Double>comparingByValue().reversed());
 
-        for (int i = 0; i < Math.min(5, userReturns.size()); i++) {
-            System.out.println((i + 1) + ":" + userReturns.get(i));
+        // Display top 10 users
+        for (int i = 0; i < sortedReturns.size(); i++) {
+            Map.Entry<User, Double> entry = sortedReturns.get(i);
+            User user = entry.getKey();
+            Double returnValue = entry.getValue() ;
+
+            System.out.printf("%-6d. %-30s %-30s %15.2f DKK %14.2f%%\n",
+                    i + 1,
+                    user.getFullName(),
+                    user.getEmail(),
+                    transactionService.findUserBalance(user) - user.getInitialCashDKK(),
+                    returnValue
+            );
         }
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-*- Rangliste -*-");
     }
 
     public void displayPortfolioOfUser(User user) {
@@ -38,7 +57,7 @@ public class UserService {
     }
 
     public double getReturnOfUser(User user) {
-        return transactionService.getReturnOfUser(user);
+        return transactionService.findReturnOfUser(user);
     }
 
     public boolean validatePassword(User user, String password) {
@@ -47,32 +66,26 @@ public class UserService {
 
     public void updateUserName(User user, String newName) {
         user.setFullName(newName);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void updateUserEmail(User user, String newEmail) {
         user.setEmail(newEmail);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void updateUserBirthDate(User user, LocalDate newBirthDate) {
         user.setBirthDate(newBirthDate);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void updateUserPassword(User user, String newPassword) {
         user.setPassword(newPassword);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void makeAdmin(User user) {
         user.setAdmin(true);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void removeAdmin(User user) {
         user.setAdmin(false);
-        user.setLastUpdated(LocalDate.now());
     }
 
     public void saveUser(User user) {
@@ -142,4 +155,5 @@ public class UserService {
         }
         return null;
     }
+
 }

@@ -10,23 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CurrencyRepository {
-
+public final class CurrencyRepository {
+    
     public List<Currency> readCurrencyFile() {
         List<Currency> currencies = new ArrayList<>();
         try {
             File currencyFile = new File("resources/currency.csv");
             Scanner reader = new Scanner(currencyFile);
 
-            boolean isFirstLine = true;
+            reader.nextLine(); // Skip header
+
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-
-                if (isFirstLine) {
-                    isFirstLine = false;
-                    continue;
-                }
-
                 String[] data = line.split(";");
 
                 try {
