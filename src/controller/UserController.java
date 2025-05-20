@@ -78,7 +78,7 @@ public class UserController {
                 break;
 
             case "2": // Rediger oplysninger
-
+                editUser(scanner, user);
                 break;
 
             case "3": // Transaktionshistorik

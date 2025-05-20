@@ -1,5 +1,5 @@
 userId;fullName;email;birthDate;initialCashDKK;createdDate;lastUpdated;admin;password
-1;Maria Jensen;maria.jensen@email.com;12-04-1990;100000.0;01-03-2025;15-05-2025;true;1234
+1;Maria Jensen;maria.jensen@email.com;12-04-1990;100000.0;01-03-2025;20-05-2025;true;1234
 2;Lars Petersen;lars.p@email.com;19-07-1985;100000.0;02-03-2025;15-05-2025;true;2
 3;Jakob Madsen;jakob.madsen@email.com;03-11-1992;100000.0;03-03-2025;03-03-2025;false;1
 4;Sofie Sørensen;sofie.sorensen@email.com;27-02-1994;100000.0;04-03-2025;04-03-2025;false;1
