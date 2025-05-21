@@ -34,6 +34,6 @@ public final class Currency {
 
     @Override
     public String toString() {
-        return "1 " + baseCurrency + " svarer til " + rate + " " + quoteCurrency + ", Sidst updateret: " + lastUpdated;
+        return "1 " + baseCurrency + " = " + rate + " " + quoteCurrency + " - Sidst opdateret: " + lastUpdated;
     }
 }
