@@ -12,12 +12,6 @@ public final class StockService {
         this.stockRepository = stockRepository;
     }
 
-    public void showStocksSortedByPrice(List<Stock> stocks) {
-        stocks.sort(Comparator.comparing(Stock::getPrice).reversed());
-        for (Stock stock : stocks) {
-            System.out.println(stock);
-        }
-    }
 
     public Stock findStockByTicker(String ticker) {
         for (Stock stock : stockRepository.readStockFile()) {
@@ -28,14 +22,6 @@ public final class StockService {
         return null;
     }
 
-    public Stock findStockByName(String name) {
-        for (Stock stock : stockRepository.readStockFile()) {
-            if (stock.getName().equalsIgnoreCase(name)) {
-                return stock;
-            }
-        }
-        return null;
-    }
 
     public List<Stock> findAllStocksBySector(String sector) {
         List<Stock> sectors = new ArrayList<>();
@@ -70,29 +56,30 @@ public final class StockService {
     }
 
     public void showSectorDistribution() {
-        // Henter alle aktier fra repository
         List<Stock> allStocks = stockRepository.readStockFile();
-        // Bruger MAP til at parre (Sektors navn med den samlede pris for aktierne i den sektor)
         Map<String, Double> sectorTotals = new HashMap<>();
 
         // Hele klubbens investeringer
-        double totalInvestement = 0.0;
+        double totalInvestment = 0.0;
 
-        System.out.println("=== Klubinvestering fordelt på sektorer (% af samlet værdi) ===");
+        System.out.println("-*-*- Klubinvestering sektorfordeling -*-*-");
+        System.out.println("-------------------------------------------");
         for (Stock stock : allStocks) {
             String sector = stock.getSector();
             Double price = stock.getPrice();
 
             sectorTotals.put(sector, sectorTotals.getOrDefault(sector, 0.0) + price);
-            totalInvestement += price;
+            totalInvestment += price;
         }
 
         for (Map.Entry<String, Double> entry : sectorTotals.entrySet()) {
             String sector = entry.getKey();
-            double sectorInvestement = entry.getValue();
-            double percentage = (sectorInvestement / totalInvestement) * 100;
+            double sectorInvestment = entry.getValue();
+            double percentage = (sectorInvestment / totalInvestment) * 100;
 
-            System.out.printf("%-20s: %6.2f%%\n", sector, percentage);
+            System.out.printf("%-15s %6.2f%%\n", sector, percentage);
         }
+        System.out.println("-------------------------------------------");
+        System.out.println("-*-*- Klubinvestering sektorfordeling -*-*-");
     }
 }

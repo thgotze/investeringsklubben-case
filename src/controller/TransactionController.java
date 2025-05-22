@@ -109,18 +109,6 @@ public final class TransactionController {
         transactionService.processStockPurchase(user, stock, amountToBuy);
     }
 
-
-    //        if (transactionService.findUserBalance()) {
-    //            System.out.println("Du har ikke råd til at købe " + amountToBuy + " x " + stock.getName() + "(" + (amountToBuy * stock.getPrice()) + " " + stock.getCurrency() + " samlet)" + " - din saldo er kun " + user.getInitialCashDKK());
-    //            return;
-    //        }
-    //        try {
-    //            transactionService.buyStock(user, stock, amountToBuy);
-    //            return;
-    //        } catch (IllegalArgumentException e) {
-    //            System.out.println(e.getMessage());
-    //        }
-
     private void openSellStockMenu(User user) {
         Map<String, Integer> portfolio = transactionService.findPortfolioForUser(user);
 

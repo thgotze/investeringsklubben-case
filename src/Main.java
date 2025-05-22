@@ -35,7 +35,7 @@ public class Main {
         StockService stockService = new StockService(stockRepository);
         CurrencyService currencyService = new CurrencyService(currencyRepository);
         TransactionService transactionService = new TransactionService(transactionRepository, stockService, currencyService);
-        UserService userService = new UserService(userRepository, transactionService);
+        UserService userService = new UserService(userRepository, transactionService, stockService);
 
         // Controllers
         UserController userController = new UserController(userService, scanner);

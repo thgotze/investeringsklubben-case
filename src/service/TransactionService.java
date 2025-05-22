@@ -125,6 +125,7 @@ public final class TransactionService {
         }
 
         System.out.println("Total Værdi: " + totalValue + " DKK");
+        System.out.println("---------------------------------------------------------------------------");
         System.out.println(" -*- " + user.getFullName() + "'s  Portefølje -*-");
     }
 
@@ -172,6 +173,6 @@ public final class TransactionService {
     }
 
     public double findReturnOfUser(User user) {
-        return (findUserBalance(user) / user.getInitialCashDKK() - 1) * 100;
+        return ((findUserBalance(user) + findPortfolioValueOfUser(user)) / user.getInitialCashDKK() - 1) * 100;
     }
 }

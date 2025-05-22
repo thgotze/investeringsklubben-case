@@ -88,10 +88,22 @@ public final class UserController {
                     System.out.println("Du har ingen transaktioner");
                     break;
                 }
+                System.out.println("-*-*- Transaktionshistorik -*-*-");
+                System.out.printf("%-12s %-12s %-12s %-6s %-6s", "Ordretype", "Aktie", "Pris", "Valuta", "Stk");
+                System.out.println("\n--------------------------------------------------");
 
                 for (Transaction transaction : transactions) {
-                    System.out.println("Ordre type: " + transaction.getOrderType() + ", Aktie: " + transaction.getTicker() + ", pris: " + transaction.getPrice() + " " + transaction.getCurrency() + ", Stk: " + transaction.getQuantity());
+                    System.out.printf(
+                            "%-12s %-12s %-12.2f %-6s %-6d\n",
+                            transaction.getOrderType(),
+                            transaction.getTicker(),
+                            transaction.getPrice(),
+                            transaction.getCurrency(),
+                            transaction.getQuantity()
+                    );
                 }
+                System.out.print("--------------------------------------------------\n");
+                System.out.println("-*-*- Transaktionshistorik -*-*-");
                 break;
 
             case "0": // Returner til hovedmenuen
@@ -106,7 +118,7 @@ public final class UserController {
         System.out.println("\n-*-*- Statistik Menu -*-*-");
         System.out.println("> 1. Porteføljeværdi oversigt");
         System.out.println("> 2. Brugerrangliste");
-        System.out.println("> 3. Se fordeling af aktier & sektorer");
+        System.out.println("> 3. Se klubbens investering sektorferdelt");
         System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
@@ -119,7 +131,9 @@ public final class UserController {
                 userService.displayLeaderboard();
                 break;
 
-            case "3": // Se fordeling af aktier & sektorer
+            case "3": // Se klubbens investering sektorfordelt
+                userService.showSectorDistrubution();
+
                 break;
 
             case "0": // Returner til hovedmenuen
@@ -143,7 +157,7 @@ public final class UserController {
                 break;
 
             case "2": // Rediger bruger
-                editUser(user);
+                changeAdminStatus(user);
                 break;
 
             case "3": // Slet bruger
@@ -300,7 +314,7 @@ public final class UserController {
                 case "0":
                     userService.saveUser(user);
                     System.out.println("Bruger opdateret");
-                    break;
+                    return;
                 default:
                     MessagePrinter.printInvalidInputMessage();
             }

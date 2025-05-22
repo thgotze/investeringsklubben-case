@@ -35,26 +35,4 @@ public final class CurrencyService {
         }
         return null;
     }
-
-    public Currency findByQuoteCurrency(String quoteCurrency) {
-        for (Currency currency : currencyRepository.readCurrencyFile()) {
-            if (currency.getQuoteCurrency().equalsIgnoreCase(quoteCurrency)) {
-                return currency;
-            }
-        }
-        return null;
-    }
-
-    public double currencyConverter(Double amount, Currency preferredCurrency) {
-        List<Currency> currencies = currencyRepository.readCurrencyFile();
-
-
-        for (Currency currency : currencies) {
-            if (preferredCurrency.getBaseCurrency().equalsIgnoreCase(currency.getBaseCurrency())) {
-                return amount * currency.getRate();
-            }
-
-        }
-        throw new IllegalArgumentException("Konverteringsraten blev ikke fundet for " + preferredCurrency.getBaseCurrency() + "til " + preferredCurrency.getBaseCurrency());
-    }
 }

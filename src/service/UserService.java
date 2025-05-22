@@ -10,16 +10,18 @@ import java.util.*;
 public final class UserService {
     private final UserRepository userRepository;
     private final TransactionService transactionService;
+    private final StockService stockService;
 
-    public UserService(UserRepository userRepository, TransactionService transactionService) {
+    public UserService(UserRepository userRepository, TransactionService transactionService, StockService stockService) {
         this.userRepository = userRepository;
         this.transactionService = transactionService;
+        this.stockService = stockService;
     }
 
     public void displayPortfolioValueOfAllUsers() {
-        System.out.println("-*- Porteføljeværdi oversigt -*-");
+        System.out.println(" -*- Porteføljeværdi oversigt -*- ");
         System.out.printf("%-6s %-30s %-30s %19s\n", "Plads", "Navn", "Email", "Porteføljeværdi");
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------------------");
 
         Map<User, Double> portfolioValueMap = new HashMap<>();
 
@@ -38,8 +40,13 @@ public final class UserService {
 
             System.out.printf("%-6d. %-30s %-30s %15.2f DKK\n", i + 1, user.getFullName(), user.getEmail(), portfolioValue);
         }
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------------------");
+
         System.out.println("-*- Porteføljeværdi oversigt -*-");
+    }
+
+    public void showSectorDistrubution() {
+        stockService.showSectorDistribution();
     }
 
     public void displayLeaderboard() {
@@ -48,16 +55,15 @@ public final class UserService {
                 "Plads", "Navn", "Email", "Gevinst", "Afkast");
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
 
-        // Create a map to store User objects and their returns
+
         Map<User, Double> userReturnsMap = new HashMap<>();
 
-        // Populate the map with all users and their returns
+
         for (User user : userRepository.getUsersFromFile()) {
             double userReturn = getReturnOfUser(user);
             userReturnsMap.put(user, userReturn);
         }
 
-        // Sort users by return value (descending order)
         List<Map.Entry<User, Double>> sortedReturns = new ArrayList<>(userReturnsMap.entrySet());
         sortedReturns.sort(Map.Entry.<User, Double>comparingByValue().reversed());
 
@@ -137,7 +143,6 @@ public final class UserService {
         if (userToDelete == null) {
             System.out.println("Bruger ikke fundet");
         }
-
         userRepository.removeUserFromFile(userIdToDelete);
     }
 
@@ -184,5 +189,4 @@ public final class UserService {
         }
         return null;
     }
-
 }
