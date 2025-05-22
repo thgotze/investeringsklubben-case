@@ -1,5 +1,6 @@
 package service;
 
+import models.Transaction;
 import models.User;
 import repository.UserRepository;
 
@@ -15,7 +16,33 @@ public final class UserService {
         this.transactionService = transactionService;
     }
 
-    public void displayTop5UserReturns() {
+    public void displayPortfolioValueOfAllUsers() {
+        System.out.println("-*- Porteføljeværdi oversigt -*-");
+        System.out.printf("%-6s %-30s %-30s %19s\n", "Plads", "Navn", "Email", "Porteføljeværdi");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+
+        Map<User, Double> portfolioValueMap = new HashMap<>();
+
+        for (User user : userRepository.getUsersFromFile()) {
+            double userPortfolioValue = transactionService.findPortfolioValueOfUser(user);
+            portfolioValueMap.put(user, userPortfolioValue);
+        }
+
+        List<Map.Entry<User, Double>> sortedPortfolioValues = new ArrayList<>(portfolioValueMap.entrySet());
+        sortedPortfolioValues.sort(Map.Entry.<User, Double>comparingByValue().reversed());
+
+        for (int i = 0; i < sortedPortfolioValues.size(); i++) {
+            Map.Entry<User, Double> entry = sortedPortfolioValues.get(i);
+            User user = entry.getKey();
+            Double portfolioValue = entry.getValue();
+
+            System.out.printf("%-6d. %-30s %-30s %15.2f DKK\n", i + 1, user.getFullName(), user.getEmail(), portfolioValue);
+        }
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("-*- Porteføljeværdi oversigt -*-");
+    }
+
+    public void displayLeaderboard() {
         System.out.println("-*- Rangliste for Afkast -*-");
         System.out.printf("%-6s %-30s %-30s %19s %14s\n",
                 "Plads", "Navn", "Email", "Gevinst", "Afkast");
@@ -34,7 +61,6 @@ public final class UserService {
         List<Map.Entry<User, Double>> sortedReturns = new ArrayList<>(userReturnsMap.entrySet());
         sortedReturns.sort(Map.Entry.<User, Double>comparingByValue().reversed());
 
-        // Display top 10 users
         for (int i = 0; i < sortedReturns.size(); i++) {
             Map.Entry<User, Double> entry = sortedReturns.get(i);
             User user = entry.getKey();
@@ -115,6 +141,10 @@ public final class UserService {
         userRepository.removeUserFromFile(userIdToDelete);
     }
 
+    public List<Transaction> getAllTransactions(User user) {
+        return transactionService.findTransactionsForUser(user);
+    }
+
     public double userBalance(User user) {
         return transactionService.findUserBalance(user);
     }
@@ -127,8 +157,7 @@ public final class UserService {
         }
         return true;
     }
-
-
+    
     public User findUserById(int userId) {
         for (User user : userRepository.getUsersFromFile()) {
             if (user.getUserId() == userId) {

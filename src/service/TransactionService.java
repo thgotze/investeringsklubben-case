@@ -1,5 +1,6 @@
 package service;
 
+import models.Currency;
 import models.Stock;
 import models.Transaction;
 import models.User;
@@ -14,10 +15,16 @@ import java.util.Map;
 public final class TransactionService {
     private final TransactionRepository transactionRepository;
     private final StockService stockService;
+    private final CurrencyService currencyService;
 
-    public TransactionService(TransactionRepository transactionRepository, StockService stockService) {
+    public TransactionService(TransactionRepository transactionRepository, StockService stockService, CurrencyService currencyService) {
         this.transactionRepository = transactionRepository;
         this.stockService = stockService;
+        this.currencyService = currencyService;
+    }
+
+    public Currency findByBaseCurrency(String string) {
+        return currencyService.findByBaseCurrency(string);
     }
 
     public void processStockPurchase(User user, Stock stock, int quantity) {
@@ -43,6 +50,24 @@ public final class TransactionService {
         Transaction transaction = new Transaction(transactionId, user.getUserId(), LocalDate.now(), stock.getTickerName(), stock.getPrice(), stock.getCurrency(), "sell", quantity);
         transactionRepository.addTransactionToFile(transaction);
         displayUserBalance(user);
+    }
+
+    public double findPortfolioValueOfUser(User user) {
+        Map<String, Integer> portfolio = findPortfolioForUser(user);
+        double totalValue = 0.0;
+
+        if (portfolio.isEmpty()) return totalValue;
+
+        for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
+            String ticker = entry.getKey();
+            int quantity = entry.getValue();
+            Stock stock = stockService.findStockByTicker(ticker);
+            if (stock == null) break;
+
+            double subtotal = stock.getPrice() * quantity;
+            totalValue += subtotal;
+        }
+        return totalValue;
     }
 
     public Map<String, Integer> findPortfolioForUser(User user) {
@@ -79,20 +104,24 @@ public final class TransactionService {
             return;
         }
         System.out.println(" -*- " + user.getFullName() + "'s Portefølje -*-");
-        System.out.printf("%-9s %-21s %10s %10s \n", "Ticker", "Navn", "Antal", "Værdi");
-        System.out.println("---------------------------------------------------------");
+        System.out.printf("%-8s %-25s %-8s %-10s %-8s %-18s\n", "Ticker", "Navn", "Antal", "Pris", "Valuta", "Samlet Værdi");
+        System.out.println("---------------------------------------------------------------------------");
 
         double totalValue = 0.0;
         for (Map.Entry<String, Integer> entry : portfolio.entrySet()) {
             String ticker = entry.getKey();
             int quantity = entry.getValue();
-            Stock stock = stockService.findStockByTicker(ticker);
 
-            double subtotal = stock.getPrice() * quantity;
+            Stock stock = stockService.findStockByTicker(ticker);
+            if (stock == null) return;
+            Currency currency = currencyService.findByBaseCurrency(stock.getCurrency());
+            if (currency == null) return;
+
+            double subtotal = currency.getRate() * stock.getPrice() * quantity;
             totalValue += subtotal;
 
-            System.out.printf("%-9s %-21s %10d %10.2f %10.2f\n",
-                    ticker, stock.getName(), quantity, stock.getPrice(), subtotal);
+            System.out.printf("%-8s %-25s %-8d %-10.2f %-8s %-18.2f\n",
+                    ticker, stock.getName(), quantity, stock.getPrice(), stock.getCurrency(), quantity * currency.getRate() * stock.getPrice());
         }
 
         System.out.println("Total Værdi: " + totalValue + " DKK");
@@ -139,9 +168,7 @@ public final class TransactionService {
     }
 
     public List<Stock> findStocksBySectors(String sector) {
-        List<Stock> stockBySector = stockService.findAllStocksBySector(sector);
-
-        return stockBySector;
+        return stockService.findAllStocksBySector(sector);
     }
 
     public double findReturnOfUser(User user) {

@@ -1,5 +1,6 @@
 package controller;
 
+import models.Transaction;
 import models.User;
 import service.UserService;
 import util.MessagePrinter;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
 public final class UserController {
@@ -28,7 +30,8 @@ public final class UserController {
         while (true) {
             String email = scanner.nextLine();
 
-            if (email.equals("0")) return null;
+            if (email.equals("0"))
+                return null;
 
             user = userService.findUserByEmail(email);
 
@@ -80,6 +83,15 @@ public final class UserController {
                 break;
 
             case "3": // Transaktionshistorik
+                List<Transaction> transactions = userService.getAllTransactions(user);
+                if (transactions.isEmpty()) {
+                    System.out.println("Du har ingen transaktioner");
+                    break;
+                }
+
+                for (Transaction transaction : transactions) {
+                    System.out.println("Ordre type: " + transaction.getOrderType() + ", Aktie: " + transaction.getTicker() + ", pris: " + transaction.getPrice() + " " + transaction.getCurrency() + ", Stk: " + transaction.getQuantity());
+                }
                 break;
 
             case "0": // Returner til hovedmenuen
@@ -92,18 +104,19 @@ public final class UserController {
 
     public void openStatisticsMenu() {
         System.out.println("\n-*-*- Statistik Menu -*-*-");
-        System.out.println("> 1. Se brugernes porteføljeværdi");
-        System.out.println("> 2. Top 5 afkast");
+        System.out.println("> 1. Porteføljeværdi oversigt");
+        System.out.println("> 2. Brugerrangliste");
         System.out.println("> 3. Se fordeling af aktier & sektorer");
         System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
         switch (input) {
-            case "1": // Se brugernes porteføljeværdi
+            case "1": // Porteføljeværdi oversigt
+                userService.displayPortfolioValueOfAllUsers();
                 break;
 
-            case "2": // Se top 5 afkast
-                userService.displayTop5UserReturns();
+            case "2": // Brugerrangliste
+                userService.displayLeaderboard();
                 break;
 
             case "3": // Se fordeling af aktier & sektorer
@@ -151,7 +164,8 @@ public final class UserController {
         System.out.println("> 0. Returner til hovedmenu");
 
         String input = scanner.nextLine();
-        if (input.equals("0")) return;
+        if (input.equals("0"))
+            return;
 
         User userToDelete = userService.findUserByFullName(input);
         if (userToDelete != null) {
@@ -166,12 +180,14 @@ public final class UserController {
         System.out.println("Hvad er brugerens fulde navn?");
         System.out.println("> 0. Returner til hovedmenu");
         String fullName = scanner.nextLine();
-        if (fullName.equals("0")) return;
+        if (fullName.equals("0"))
+            return;
 
         System.out.println("Hvad er brugerens e-mail adresse?");
         System.out.println("> 0. Returner til hovedmenu");
         String email = scanner.nextLine();
-        if (email.equals("0")) return;
+        if (email.equals("0"))
+            return;
 
         boolean newMail = userService.emailChecker(email);
         if (!newMail) {
@@ -179,7 +195,8 @@ public final class UserController {
         }
 
         LocalDate birthDay = chooseBirthDay(scanner);
-        if (birthDay == null) return;
+        if (birthDay == null)
+            return;
 
         boolean admin = false;
         while (true) {
@@ -216,7 +233,8 @@ public final class UserController {
         System.out.println("Angiv adgangskode hos brugeren");
         System.out.println("> 0. Returner til hovedmenu");
         String password = scanner.nextLine();
-        if (password.equals("0")) return;
+        if (password.equals("0"))
+            return;
 
         userService.createUser(fullName, email, birthDay, admin, password);
         System.out.println(fullName + " er blevet tilføjet til programmet");
@@ -229,19 +247,13 @@ public final class UserController {
             System.out.println("> 2. Email");
             System.out.println("> 3. Fødselsdato");
             System.out.println("> 4. Adgangskode");
+            System.out.println("> 9. Afbryd ændringer");
             System.out.println("> 0. Gem og afslut");
 
             String input = scanner.nextLine();
-            int choice;
-            try {
-                choice = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                MessagePrinter.printInvalidInputMessage();
-                continue;
-            }
 
-            switch (choice) {
-                case 1:
+            switch (input) {
+                case "1":
                     System.out.println("Indtast nyt navn:");
                     String newName = scanner.nextLine();
 
@@ -252,8 +264,7 @@ public final class UserController {
                     }
                     break;
 
-
-                case 2:
+                case "2":
                     System.out.println("Indtast ny email:");
                     String newEmail = scanner.nextLine();
                     System.out.println("Bekræft valg: Ja/Nej");
@@ -264,7 +275,7 @@ public final class UserController {
                         userService.updateUserEmail(user, newEmail);
                     }
                     break;
-                case 3:
+                case "3":
 
                     LocalDate newBirthDate = chooseBirthDay(scanner);
                     try {
@@ -273,7 +284,7 @@ public final class UserController {
                         System.out.println("Ugyldigt datoformat! Prøv igen.");
                     }
                     break;
-                case 4:
+                case "4":
                     System.out.println("Indtast ny adgangskode:");
                     String newPassword = scanner.nextLine();
                     if (newPassword.equals(user.getPassword())) {
@@ -282,7 +293,11 @@ public final class UserController {
                         userService.updateUserPassword(user, newPassword);
                     }
                     break;
-                case 0:
+
+                case "9":
+                    return;
+
+                case "0":
                     userService.saveUser(user);
                     System.out.println("Bruger opdateret");
                     break;
@@ -297,13 +312,14 @@ public final class UserController {
         System.out.println("> 0. Returner til hovedmenu");
 
         int input = Integer.parseInt(scanner.nextLine());
-        if (input == 0) return;
+        if (input == 0)
+            return;
 
         User userToChange = userService.findUserById(input);
         if (user == userToChange) {
             System.out.println("Kan ikke ændre status på den bruger du er logget ind på!");
             return;
-        } else if (userToChange.isAdmin() == false) {
+        } else if (!userToChange.isAdmin()) {
             System.out.println("Denne bruger er ikke en admin! Kunne du tænke dig at gøre brugeren til admin?");
             System.out.println("> 1. Ja");
             System.out.println("> 2. Nej");
@@ -318,8 +334,7 @@ public final class UserController {
                 default:
                     MessagePrinter.printInvalidInputMessage();
             }
-
-        } else if (userToChange.isAdmin()) {
+        } else {
             System.out.println("Denne bruger er en admin! Kunne du tænke dig at fjerne brugerens admin status?");
             System.out.println("> 1. Ja");
             System.out.println("> 2. Nej");
@@ -352,7 +367,8 @@ public final class UserController {
                 System.out.println("> 0. Returner til hovedmenu");
 
                 String inputYear = scanner.nextLine();
-                if (inputYear.equals("0")) return null;
+                if (inputYear.equals("0"))
+                    return null;
                 int birthyear = Integer.parseInt(inputYear);
 
                 if (birthyear > LocalDate.now().getYear() || birthyear < 1900) {
@@ -365,7 +381,8 @@ public final class UserController {
                 System.out.println("> 0. Returner til hovedmenu");
 
                 String inputMonth = scanner.nextLine();
-                if (inputMonth.equals("0")) return null;
+                if (inputMonth.equals("0"))
+                    return null;
                 int birthMonth = Integer.parseInt(inputMonth);
 
                 if (birthMonth < 1 || birthMonth > 12) {
@@ -380,7 +397,8 @@ public final class UserController {
                 System.out.println("> 0. Returner til hovedmenu");
 
                 String inputDate = scanner.nextLine();
-                if (inputDate.equals("0")) return null;
+                if (inputDate.equals("0"))
+                    return null;
                 int birthDate = Integer.parseInt(inputDate);
 
                 if (birthDate < 1 || birthDate > maxDaysInMonth) {
@@ -400,14 +418,4 @@ public final class UserController {
         }
         return birthDay;
     }
-
-    public void confirmChoice(Scanner scanner) {
-        String input = scanner.nextLine();
-        switch (input) {
-            case "1":
-
-                break;
-        }
-    }
-
 }

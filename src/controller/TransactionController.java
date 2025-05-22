@@ -1,5 +1,6 @@
 package controller;
 
+import models.Currency;
 import models.Stock;
 import models.User;
 import service.TransactionService;
@@ -30,19 +31,19 @@ public final class TransactionController {
             switch (input) {
                 case "1": // Køb aktier
                     openBuyStockMenu(user);
-                    break;
+                    return;
 
                 case "2": // Sælg aktier
                     openSellStockMenu(user);
-                    break;
+                    return;
 
                 case "3": // Vis alle aktier
                     transactionService.findAllStocks();
-                    break;
+                    return;
 
                 case "4": // Søg efter aktier
                     openSearchStockBySectorMenu();
-                    break;
+                    return;
 
                 case "0": // Returner til hovedmenu
                     return;
@@ -51,7 +52,6 @@ public final class TransactionController {
                     MessagePrinter.printInvalidInputMessage();
                     break;
             }
-            break;
         }
     }
 
@@ -64,7 +64,8 @@ public final class TransactionController {
         while (true) {
             String tickerInput = scanner.nextLine();
 
-            if (tickerInput.equals("0")) return;
+            if (tickerInput.equals("0"))
+                return;
 
             stock = transactionService.findStockByTicker(tickerInput);
             if (stock == null) {
@@ -80,7 +81,8 @@ public final class TransactionController {
         while (true) {
             String amountToBuyInput = scanner.nextLine();
 
-            if (amountToBuyInput.equals("0")) return;
+            if (amountToBuyInput.equals("0"))
+                return;
 
             try {
                 amountToBuy = Integer.parseInt(amountToBuyInput);
@@ -94,7 +96,8 @@ public final class TransactionController {
             }
         }
 
-        System.out.println("Er du sikker på at du vil købe: " + amountToBuy + "x " + stock.getName() + "for " + stock.getPrice() * amountToBuy + " " + stock.getCurrency() + "?");
+        Currency currency = transactionService.findByBaseCurrency(stock.getCurrency());
+        System.out.println("Er du sikker på at du vil købe: " + amountToBuy + "x " + stock.getName() + " for " + stock.getPrice() * currency.getRate() * amountToBuy + " DKK?");
         System.out.println("> 1. Ja");
         System.out.println("> 0. Nej");
 
@@ -107,16 +110,16 @@ public final class TransactionController {
     }
 
 
-//        if (transactionService.findUserBalance()) {
-//            System.out.println("Du har ikke råd til at købe " + amountToBuy + " x " + stock.getName() + "(" + (amountToBuy * stock.getPrice()) + " " + stock.getCurrency() + " samlet)" + " - din saldo er kun " + user.getInitialCashDKK());
-//            return;
-//        }
-//        try {
-//            transactionService.buyStock(user, stock, amountToBuy);
-//            return;
-//        } catch (IllegalArgumentException e) {
-//            System.out.println(e.getMessage());
-//        }
+    //        if (transactionService.findUserBalance()) {
+    //            System.out.println("Du har ikke råd til at købe " + amountToBuy + " x " + stock.getName() + "(" + (amountToBuy * stock.getPrice()) + " " + stock.getCurrency() + " samlet)" + " - din saldo er kun " + user.getInitialCashDKK());
+    //            return;
+    //        }
+    //        try {
+    //            transactionService.buyStock(user, stock, amountToBuy);
+    //            return;
+    //        } catch (IllegalArgumentException e) {
+    //            System.out.println(e.getMessage());
+    //        }
 
     private void openSellStockMenu(User user) {
         Map<String, Integer> portfolio = transactionService.findPortfolioForUser(user);
@@ -130,7 +133,8 @@ public final class TransactionController {
         while (true) {
             String input = scanner.nextLine();
 
-            if (input.equals("0")) return;
+            if (input.equals("0"))
+                return;
 
             boolean stockFound = false;
 
@@ -169,8 +173,8 @@ public final class TransactionController {
         System.out.println("Hvor mange " + stock.getName() + " vil du sælge?");
 
         int ownedAmount = portfolio.get(selectedTicker);
-        int amountToSell = 0;
-        double totalPrice = 0.0;
+        int amountToSell;
+        double totalPrice;
 
         while (true) {
             String sellAmount = scanner.nextLine();
